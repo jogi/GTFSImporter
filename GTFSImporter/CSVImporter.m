@@ -18,6 +18,7 @@
 #import "Trip.h"
 #import "StopTime.h"
 #import "Transformations.h"
+#import "Util.h"
 
 @implementation CSVImporter
 
@@ -35,8 +36,7 @@
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSError *error = nil;
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit";
-    NSString *inputPath = [basePath stringByAppendingPathComponent:file];
+    NSString *inputPath = [[Util getTransitFilesBasepath] stringByAppendingPathComponent:file];
 	NSString *csvString = [NSString stringWithContentsOfFile:inputPath encoding:NSUTF8StringEncoding error:&error];
     
 	if (!csvString)
@@ -56,8 +56,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]];
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     [db setShouldCacheStatements:YES];
     if (![db open]) {
         NSLog(@"Could not open db.");
@@ -97,8 +96,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -139,8 +137,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -181,8 +178,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -223,8 +219,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -265,8 +260,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -307,8 +301,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -337,8 +330,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -379,8 +371,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
 
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -429,8 +420,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
     [db setShouldCacheStatements:YES];
     if (![db open]) {
@@ -461,8 +451,7 @@
 	
 	NSDate *startDate = [NSDate date];
     
-    NSString *basePath = @"/Volumes/Data/Projects/San Jose Transit/google_transit/db";
-    FMDatabase *db = [FMDatabase databaseWithPath:[basePath stringByAppendingPathComponent:@"vta_gtfs.db"]]; 
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
     [db setShouldCacheStatements:YES];
     if (![db open]) {
