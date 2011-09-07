@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F8E1D2214173A54002061C7 /* Agency.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1114173A54002061C7 /* Agency.m */; };
+		8F8E1D2314173A54002061C7 /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1314173A54002061C7 /* Calendar.m */; };
+		8F8E1D2414173A54002061C7 /* FareAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1514173A54002061C7 /* FareAttributes.m */; };
+		8F8E1D2514173A54002061C7 /* FareRules.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1714173A54002061C7 /* FareRules.m */; };
+		8F8E1D2614173A54002061C7 /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1914173A54002061C7 /* Route.m */; };
+		8F8E1D2714173A54002061C7 /* Stop.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1B14173A54002061C7 /* Stop.m */; };
+		8F8E1D2814173A54002061C7 /* StopTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1D14173A54002061C7 /* StopTime.m */; };
+		8F8E1D2914173A54002061C7 /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1F14173A54002061C7 /* Transformations.m */; };
+		8F8E1D2A14173A54002061C7 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2114173A54002061C7 /* Trip.m */; };
+		8F8E1D2D14173ADB002061C7 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2C14173ADB002061C7 /* Util.m */; };
+		8F8E1D2F14173E9B002061C7 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2E14173E9A002061C7 /* README */; };
 		8FA6B3491408F30200B2476E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA6B3481408F30200B2476E /* Foundation.framework */; };
 		8FA6B34C1408F30200B2476E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B34B1408F30200B2476E /* main.m */; };
 		8FA6B3501408F30200B2476E /* GTFSImporter.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8FA6B34F1408F30200B2476E /* GTFSImporter.1 */; };
@@ -17,23 +28,6 @@
 		8FA6B36A1408F3B500B2476E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3641408F3B500B2476E /* FMDatabaseAdditions.m */; };
 		8FA6B36B1408F3B500B2476E /* fmdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3651408F3B500B2476E /* fmdb.m */; };
 		8FA6B36C1408F3B500B2476E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3671408F3B500B2476E /* FMResultSet.m */; };
-		8FA6B37F1408F3FC00B2476E /* Agency.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B36E1408F3FC00B2476E /* Agency.m */; };
-		8FA6B3801408F3FC00B2476E /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3701408F3FC00B2476E /* Calendar.m */; };
-		8FA6B3811408F3FC00B2476E /* FareAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3721408F3FC00B2476E /* FareAttributes.m */; };
-		8FA6B3821408F3FC00B2476E /* FareRules.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3741408F3FC00B2476E /* FareRules.m */; };
-		8FA6B3831408F3FC00B2476E /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3761408F3FC00B2476E /* Route.m */; };
-		8FA6B3841408F3FC00B2476E /* Stop.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3781408F3FC00B2476E /* Stop.m */; };
-		8FA6B3851408F3FC00B2476E /* StopTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B37A1408F3FC00B2476E /* StopTime.m */; };
-		8FA6B3861408F3FC00B2476E /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B37C1408F3FC00B2476E /* Transformations.m */; };
-		8FA6B3871408F3FC00B2476E /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B37E1408F3FC00B2476E /* Trip.m */; };
-		8FA6B3941408F90800B2476E /* agency.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B38B1408F5AC00B2476E /* agency.txt */; };
-		8FA6B3951408F90800B2476E /* calendar.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B38C1408F5AC00B2476E /* calendar.txt */; };
-		8FA6B3961408F90800B2476E /* fare_attributes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B38D1408F5AC00B2476E /* fare_attributes.txt */; };
-		8FA6B3971408F90800B2476E /* fare_rules.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B38E1408F5AC00B2476E /* fare_rules.txt */; };
-		8FA6B3981408F90800B2476E /* routes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B38F1408F5AC00B2476E /* routes.txt */; };
-		8FA6B3991408F90800B2476E /* stop_times.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B3901408F5AC00B2476E /* stop_times.txt */; };
-		8FA6B39A1408F90800B2476E /* stops.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B3911408F5AC00B2476E /* stops.txt */; };
-		8FA6B39B1408F90800B2476E /* trips.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6B3921408F5AC00B2476E /* trips.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +44,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8F8E1D1014173A54002061C7 /* Agency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agency.h; sourceTree = "<group>"; };
+		8F8E1D1114173A54002061C7 /* Agency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Agency.m; sourceTree = "<group>"; };
+		8F8E1D1214173A54002061C7 /* Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calendar.h; sourceTree = "<group>"; };
+		8F8E1D1314173A54002061C7 /* Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calendar.m; sourceTree = "<group>"; };
+		8F8E1D1414173A54002061C7 /* FareAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FareAttributes.h; sourceTree = "<group>"; };
+		8F8E1D1514173A54002061C7 /* FareAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FareAttributes.m; sourceTree = "<group>"; };
+		8F8E1D1614173A54002061C7 /* FareRules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FareRules.h; sourceTree = "<group>"; };
+		8F8E1D1714173A54002061C7 /* FareRules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FareRules.m; sourceTree = "<group>"; };
+		8F8E1D1814173A54002061C7 /* Route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route.h; sourceTree = "<group>"; };
+		8F8E1D1914173A54002061C7 /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
+		8F8E1D1A14173A54002061C7 /* Stop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stop.h; sourceTree = "<group>"; };
+		8F8E1D1B14173A54002061C7 /* Stop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stop.m; sourceTree = "<group>"; };
+		8F8E1D1C14173A54002061C7 /* StopTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopTime.h; sourceTree = "<group>"; };
+		8F8E1D1D14173A54002061C7 /* StopTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopTime.m; sourceTree = "<group>"; };
+		8F8E1D1E14173A54002061C7 /* Transformations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transformations.h; sourceTree = "<group>"; };
+		8F8E1D1F14173A54002061C7 /* Transformations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Transformations.m; sourceTree = "<group>"; };
+		8F8E1D2014173A54002061C7 /* Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trip.h; sourceTree = "<group>"; };
+		8F8E1D2114173A54002061C7 /* Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trip.m; sourceTree = "<group>"; };
+		8F8E1D2B14173ADB002061C7 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		8F8E1D2C14173ADB002061C7 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		8F8E1D2E14173E9A002061C7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		8FA6B3441408F30200B2476E /* GTFSImporter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GTFSImporter; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA6B3481408F30200B2476E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8FA6B34B1408F30200B2476E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -67,32 +82,6 @@
 		8FA6B3651408F3B500B2476E /* fmdb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fmdb.m; sourceTree = "<group>"; };
 		8FA6B3661408F3B500B2476E /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		8FA6B3671408F3B500B2476E /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
-		8FA6B36D1408F3FC00B2476E /* Agency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agency.h; sourceTree = "<group>"; };
-		8FA6B36E1408F3FC00B2476E /* Agency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Agency.m; sourceTree = "<group>"; };
-		8FA6B36F1408F3FC00B2476E /* Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calendar.h; sourceTree = "<group>"; };
-		8FA6B3701408F3FC00B2476E /* Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calendar.m; sourceTree = "<group>"; };
-		8FA6B3711408F3FC00B2476E /* FareAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FareAttributes.h; sourceTree = "<group>"; };
-		8FA6B3721408F3FC00B2476E /* FareAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FareAttributes.m; sourceTree = "<group>"; };
-		8FA6B3731408F3FC00B2476E /* FareRules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FareRules.h; sourceTree = "<group>"; };
-		8FA6B3741408F3FC00B2476E /* FareRules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FareRules.m; sourceTree = "<group>"; };
-		8FA6B3751408F3FC00B2476E /* Route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route.h; sourceTree = "<group>"; };
-		8FA6B3761408F3FC00B2476E /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
-		8FA6B3771408F3FC00B2476E /* Stop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stop.h; sourceTree = "<group>"; };
-		8FA6B3781408F3FC00B2476E /* Stop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stop.m; sourceTree = "<group>"; };
-		8FA6B3791408F3FC00B2476E /* StopTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopTime.h; sourceTree = "<group>"; };
-		8FA6B37A1408F3FC00B2476E /* StopTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopTime.m; sourceTree = "<group>"; };
-		8FA6B37B1408F3FC00B2476E /* Transformations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transformations.h; sourceTree = "<group>"; };
-		8FA6B37C1408F3FC00B2476E /* Transformations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Transformations.m; sourceTree = "<group>"; };
-		8FA6B37D1408F3FC00B2476E /* Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trip.h; sourceTree = "<group>"; };
-		8FA6B37E1408F3FC00B2476E /* Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trip.m; sourceTree = "<group>"; };
-		8FA6B38B1408F5AC00B2476E /* agency.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = agency.txt; sourceTree = "<group>"; };
-		8FA6B38C1408F5AC00B2476E /* calendar.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.txt; sourceTree = "<group>"; };
-		8FA6B38D1408F5AC00B2476E /* fare_attributes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fare_attributes.txt; sourceTree = "<group>"; };
-		8FA6B38E1408F5AC00B2476E /* fare_rules.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fare_rules.txt; sourceTree = "<group>"; };
-		8FA6B38F1408F5AC00B2476E /* routes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = routes.txt; sourceTree = "<group>"; };
-		8FA6B3901408F5AC00B2476E /* stop_times.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stop_times.txt; sourceTree = "<group>"; };
-		8FA6B3911408F5AC00B2476E /* stops.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stops.txt; sourceTree = "<group>"; };
-		8FA6B3921408F5AC00B2476E /* trips.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = trips.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +97,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F8E1D0F14173A54002061C7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8F8E1D1014173A54002061C7 /* Agency.h */,
+				8F8E1D1114173A54002061C7 /* Agency.m */,
+				8F8E1D1214173A54002061C7 /* Calendar.h */,
+				8F8E1D1314173A54002061C7 /* Calendar.m */,
+				8F8E1D1414173A54002061C7 /* FareAttributes.h */,
+				8F8E1D1514173A54002061C7 /* FareAttributes.m */,
+				8F8E1D1614173A54002061C7 /* FareRules.h */,
+				8F8E1D1714173A54002061C7 /* FareRules.m */,
+				8F8E1D1814173A54002061C7 /* Route.h */,
+				8F8E1D1914173A54002061C7 /* Route.m */,
+				8F8E1D1A14173A54002061C7 /* Stop.h */,
+				8F8E1D1B14173A54002061C7 /* Stop.m */,
+				8F8E1D1C14173A54002061C7 /* StopTime.h */,
+				8F8E1D1D14173A54002061C7 /* StopTime.m */,
+				8F8E1D1E14173A54002061C7 /* Transformations.h */,
+				8F8E1D1F14173A54002061C7 /* Transformations.m */,
+				8F8E1D2014173A54002061C7 /* Trip.h */,
+				8F8E1D2114173A54002061C7 /* Trip.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		8FA6B3391408F30200B2476E = {
 			isa = PBXGroup;
 			children = (
+				8F8E1D2E14173E9A002061C7 /* README */,
 				8FA6B34A1408F30200B2476E /* GTFSImporter */,
 				8FA6B38A1408F58900B2476E /* Resources */,
 				8FA6B35C1408F3B500B2476E /* Libraries */,
@@ -139,10 +154,12 @@
 		8FA6B34A1408F30200B2476E /* GTFSImporter */ = {
 			isa = PBXGroup;
 			children = (
-				8FA6B3881408F40500B2476E /* Model */,
+				8F8E1D0F14173A54002061C7 /* Model */,
 				8FA6B3581408F34E00B2476E /* CSVImporter.h */,
 				8FA6B3591408F34E00B2476E /* CSVImporter.m */,
 				8FA6B34B1408F30200B2476E /* main.m */,
+				8F8E1D2B14173ADB002061C7 /* Util.h */,
+				8F8E1D2C14173ADB002061C7 /* Util.m */,
 				8FA6B34F1408F30200B2476E /* GTFSImporter.1 */,
 				8FA6B34D1408F30200B2476E /* Supporting Files */,
 			);
@@ -190,42 +207,9 @@
 			path = SQLite;
 			sourceTree = "<group>";
 		};
-		8FA6B3881408F40500B2476E /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				8FA6B36D1408F3FC00B2476E /* Agency.h */,
-				8FA6B36E1408F3FC00B2476E /* Agency.m */,
-				8FA6B36F1408F3FC00B2476E /* Calendar.h */,
-				8FA6B3701408F3FC00B2476E /* Calendar.m */,
-				8FA6B3711408F3FC00B2476E /* FareAttributes.h */,
-				8FA6B3721408F3FC00B2476E /* FareAttributes.m */,
-				8FA6B3731408F3FC00B2476E /* FareRules.h */,
-				8FA6B3741408F3FC00B2476E /* FareRules.m */,
-				8FA6B3751408F3FC00B2476E /* Route.h */,
-				8FA6B3761408F3FC00B2476E /* Route.m */,
-				8FA6B3771408F3FC00B2476E /* Stop.h */,
-				8FA6B3781408F3FC00B2476E /* Stop.m */,
-				8FA6B3791408F3FC00B2476E /* StopTime.h */,
-				8FA6B37A1408F3FC00B2476E /* StopTime.m */,
-				8FA6B37B1408F3FC00B2476E /* Transformations.h */,
-				8FA6B37C1408F3FC00B2476E /* Transformations.m */,
-				8FA6B37D1408F3FC00B2476E /* Trip.h */,
-				8FA6B37E1408F3FC00B2476E /* Trip.m */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		8FA6B38A1408F58900B2476E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8FA6B38B1408F5AC00B2476E /* agency.txt */,
-				8FA6B38C1408F5AC00B2476E /* calendar.txt */,
-				8FA6B38D1408F5AC00B2476E /* fare_attributes.txt */,
-				8FA6B38E1408F5AC00B2476E /* fare_rules.txt */,
-				8FA6B38F1408F5AC00B2476E /* routes.txt */,
-				8FA6B3901408F5AC00B2476E /* stop_times.txt */,
-				8FA6B3911408F5AC00B2476E /* stops.txt */,
-				8FA6B3921408F5AC00B2476E /* trips.txt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -281,14 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FA6B3941408F90800B2476E /* agency.txt in Resources */,
-				8FA6B3951408F90800B2476E /* calendar.txt in Resources */,
-				8FA6B3961408F90800B2476E /* fare_attributes.txt in Resources */,
-				8FA6B3971408F90800B2476E /* fare_rules.txt in Resources */,
-				8FA6B3981408F90800B2476E /* routes.txt in Resources */,
-				8FA6B3991408F90800B2476E /* stop_times.txt in Resources */,
-				8FA6B39A1408F90800B2476E /* stops.txt in Resources */,
-				8FA6B39B1408F90800B2476E /* trips.txt in Resources */,
+				8F8E1D2F14173E9B002061C7 /* README in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,15 +283,16 @@
 				8FA6B36A1408F3B500B2476E /* FMDatabaseAdditions.m in Sources */,
 				8FA6B36B1408F3B500B2476E /* fmdb.m in Sources */,
 				8FA6B36C1408F3B500B2476E /* FMResultSet.m in Sources */,
-				8FA6B37F1408F3FC00B2476E /* Agency.m in Sources */,
-				8FA6B3801408F3FC00B2476E /* Calendar.m in Sources */,
-				8FA6B3811408F3FC00B2476E /* FareAttributes.m in Sources */,
-				8FA6B3821408F3FC00B2476E /* FareRules.m in Sources */,
-				8FA6B3831408F3FC00B2476E /* Route.m in Sources */,
-				8FA6B3841408F3FC00B2476E /* Stop.m in Sources */,
-				8FA6B3851408F3FC00B2476E /* StopTime.m in Sources */,
-				8FA6B3861408F3FC00B2476E /* Transformations.m in Sources */,
-				8FA6B3871408F3FC00B2476E /* Trip.m in Sources */,
+				8F8E1D2214173A54002061C7 /* Agency.m in Sources */,
+				8F8E1D2314173A54002061C7 /* Calendar.m in Sources */,
+				8F8E1D2414173A54002061C7 /* FareAttributes.m in Sources */,
+				8F8E1D2514173A54002061C7 /* FareRules.m in Sources */,
+				8F8E1D2614173A54002061C7 /* Route.m in Sources */,
+				8F8E1D2714173A54002061C7 /* Stop.m in Sources */,
+				8F8E1D2814173A54002061C7 /* StopTime.m in Sources */,
+				8F8E1D2914173A54002061C7 /* Transformations.m in Sources */,
+				8F8E1D2A14173A54002061C7 /* Trip.m in Sources */,
+				8F8E1D2D14173ADB002061C7 /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +381,7 @@
 				8FA6B3551408F30200B2476E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
