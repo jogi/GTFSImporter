@@ -3,7 +3,7 @@
 //  San Jose Transit GTFS
 //
 //  Created by Vashishtha Jogi on 8/26/11.
-//  Copyright 2011 Adobe Systems Inc. All rights reserved.
+//  Copyright 2011 Vashishtha Jogi Inc. All rights reserved.
 //
 
 #import "Transformations.h"

@@ -3,7 +3,7 @@
 //  GTFSImporter
 //
 //  Created by Vashishtha Jogi on 8/27/11.
-//  Copyright 2011 Adobe Systems. All rights reserved.
+//  Copyright 2011 Vashishtha Jogi. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -48,6 +48,7 @@ int main (int argc, const char * argv[])
     NSLog(@"Importing StopTime...");
     [importer addStopTime];
     
+    //Comment this out if you dont want to apply any transformations
     NSLog(@"Sanitizing data...");
     [importer sanitizeData];
     
@@ -57,7 +58,7 @@ int main (int argc, const char * argv[])
     NSLog(@"Reindexing...");
     [importer reindex];
      
-    
+    //For convinience. This will add and extra column routes which will contain comma seperated route numbers passing through this stop
     NSLog(@"Adding routes to stops...");
     [importer addStopRoutes];
     

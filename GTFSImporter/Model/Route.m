@@ -3,7 +3,7 @@
 //  GTFS-VTA
 //
 //  Created by Vashishtha Jogi on 7/31/11.
-//  Copyright (c) 2011 Adobe Systems Inc. All rights reserved.
+//  Copyright (c) 2011 Vashishtha Jogi Inc. All rights reserved.
 //
 
 #import "Route.h"

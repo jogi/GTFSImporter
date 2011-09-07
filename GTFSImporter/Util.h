@@ -3,7 +3,7 @@
 //  GTFSImporter
 //
 //  Created by Vashishtha Jogi on 9/7/11.
-//  Copyright 2011 Adobe Systems. All rights reserved.
+//  Copyright 2011 Vashishtha Jogi. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

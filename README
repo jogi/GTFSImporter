@@ -1,1 +1,14 @@
 Import GTFS csv files to a sqlite database
+
+How to use it?
+->Modify the Util.m file to reflect the correct file paths. See the comments in the file for instructions on how to change the paths.
+
+Thats it! Run the project and you should be fine.
+
+What does it do to the data??
+->It first imports all the data to a sqlite db.
+->Then it applies any transformations if there are any that are needed. In my case (Santa Clara Valley Transportation Authority) the data had several trips which where no longer valid because the date for them had already passed! So i added the queries to sanitize the data appropriately.
+->Then it will add a column routes to stops table which will contain all the route number(to be specific route ids) passing through the stop in a comma seperated format. I wanted this data! So I made this :-)
+->Then it reindexes the data and performs the vaccuum command.
+
+One important NOTE -> Dont remove the indexes that I have added. They are very much needed for fast query performance. Believe me.
