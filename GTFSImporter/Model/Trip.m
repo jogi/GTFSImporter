@@ -94,6 +94,35 @@
     [self addTrip:tripRecord];
 }
 
+- (NSArray *) getAllTripIds
+{
+    NSMutableArray *tripIds = [[[NSMutableArray alloc] init] autorelease];
+    
+    if (db==nil) {
+        db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
+        if (![db open]) {
+            NSLog(@"Could not open db.");
+            db = nil;
+            return nil;
+        }
+        
+        db.shouldCacheStatements=YES;
+    }
+    
+    NSString *query = @"SELECT trip_id from trips";
+    
+    FMResultSet *rs = [db executeQuery:query];
+    while ([rs next]) {
+        [tripIds addObject:[rs objectForColumnName:@"trip_id"]];
+    }
+    // close the result set.
+    [rs close];
+    [db close];
+    
+    //    NSLog(@"getStopTimesByTripId %d", [stop_times count]);
+    return tripIds;
+}
+
 - (void) dealloc
 {
     [db release];

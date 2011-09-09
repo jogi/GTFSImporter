@@ -19,6 +19,7 @@
 - (int) addStop;
 - (int) addStopRoutes;
 - (int) addStopTime;
+- (int) addInterpolatedStopTime;
 - (int) addTrip;
 - (void) sanitizeData;
 - (void) vacuum;

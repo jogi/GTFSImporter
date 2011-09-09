@@ -16,7 +16,7 @@
     NSNumber * stop_sequence;
     NSNumber * trip_id;
     NSNumber * stop_id;
-
+    NSNumber * is_timepoint;
 }
 
 @property (nonatomic, retain) NSString * arrival_time;
@@ -24,12 +24,17 @@
 @property (nonatomic, retain) NSNumber * stop_sequence;
 @property (nonatomic, retain) NSNumber * trip_id;
 @property (nonatomic, retain) NSNumber * stop_id;
+@property (nonatomic, retain) NSNumber * is_timepoint;
 
 - (void)addStopTime:(StopTime *)stopTime;
 - (id) initWithDB:(FMDatabase *)fmdb;
 - (void) cleanupAndCreate;
 - (void) receiveRecord:(NSDictionary *)aRecord;
 - (NSArray *) getStopsForTripId:(NSNumber *)tripId;
+- (void) interpolateStopTimes;
+- (NSArray *) getTimeInterpolatedStopTimesByTripId:(NSNumber *)tripId;
+- (NSArray *) getStopTimesByTripId:(NSNumber *)tripId;
+- (void) updateStopTimes:(NSArray *)interpolatedStopTimes;
 
 
 @end

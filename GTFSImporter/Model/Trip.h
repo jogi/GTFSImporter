@@ -31,5 +31,6 @@
 - (id) initWithDB:(FMDatabase *)fmdb;
 - (void) cleanupAndCreate;
 - (void) receiveRecord:(NSDictionary *)aRecord;
+- (NSArray *) getAllTripIds;
 
 @end

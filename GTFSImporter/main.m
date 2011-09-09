@@ -62,6 +62,9 @@ int main (int argc, const char * argv[])
     NSLog(@"Adding routes to stops...");
     [importer addStopRoutes];
     
+    NSLog(@"Interpolating stop times");
+    [importer addInterpolatedStopTime];
+    
     NSLog(@"Vacumming...");
     [importer vacuum];
     

@@ -316,7 +316,7 @@
     
 	NSDate *endDate = [NSDate date];
     
-	NSLog(@"Stop entries successfully imported in %f seconds.", [endDate timeIntervalSinceDate:startDate]);
+	NSLog(@"Stop entries successfully updated with routes in %f seconds.", [endDate timeIntervalSinceDate:startDate]);
     
     [db close];
     [pool drain];
@@ -361,6 +361,35 @@
     
     [db close];
     [pool drain];
+	
+    return 0;
+}
+
+- (int) addInterpolatedStopTime
+{
+	
+	NSDate *startDate = [NSDate date];
+    
+    FMDatabase *db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
+    
+    [db setShouldCacheStatements:YES];
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        //[db release];
+        return 1;
+    }
+    
+    StopTime *stopTime = [[StopTime alloc] initWithDB:db];
+    
+	[stopTime interpolateStopTimes];
+    
+	NSDate *endDate = [NSDate date];
+    
+	NSLog(@"StopTime entries interpolated successfully in %f seconds.", [endDate timeIntervalSinceDate:startDate]);
+    
+    [db close];
+    
+    [stopTime release];
 	
     return 0;
 }

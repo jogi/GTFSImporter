@@ -127,6 +127,7 @@
 
 - (void) updateRoutes
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSMutableDictionary *stopWithRoutes = [[NSMutableDictionary alloc] init];
     //First get all unique route trips
     Route *route = [[Route alloc] init];
@@ -137,7 +138,7 @@
         NSArray *stops = [stopTime getStopsForTripId:[route objectForKey:@"trip_id"]];
         for (NSString *stopId in stops) {
             if ([stopWithRoutes objectForKey:stopId]==nil) {
-                [stopWithRoutes setValue:[[NSMutableArray alloc] init] forKey:stopId];
+                [stopWithRoutes setValue:[[[NSMutableArray alloc] init] autorelease] forKey:stopId];
             }
             if ([[stopWithRoutes objectForKey:stopId] containsObject:[route objectForKey:@"route_id"]] == NO) {
                 [[stopWithRoutes objectForKey:stopId] addObject:[route objectForKey:@"route_id"]];
@@ -145,12 +146,17 @@
         }
     }
     
+    [stopTime release];
+    [route release];
+    
  //   NSLog(@"%@, %lu", stopWithRoutes, [stopWithRoutes count]);
     
     for (NSString *key in [stopWithRoutes allKeys]) {
 //        NSLog(@"%@ - %@", key, [[stopWithRoutes objectForKey:key] componentsJoinedByString:@","]);
         [self updateStopWithRoutes:[stopWithRoutes objectForKey:key] withStopId:key];
     }
+    [stopWithRoutes release];
+    [pool drain];
 }
 
 - (void) dealloc
