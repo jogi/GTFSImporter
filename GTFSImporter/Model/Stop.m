@@ -140,8 +140,8 @@
             if ([stopWithRoutes objectForKey:stopId]==nil) {
                 [stopWithRoutes setValue:[[[NSMutableArray alloc] init] autorelease] forKey:stopId];
             }
-            if ([[stopWithRoutes objectForKey:stopId] containsObject:[route objectForKey:@"route_id"]] == NO) {
-                [[stopWithRoutes objectForKey:stopId] addObject:[route objectForKey:@"route_id"]];
+            if ([[stopWithRoutes objectForKey:stopId] containsObject:[route objectForKey:@"route_short_name"]] == NO) {
+                [[stopWithRoutes objectForKey:stopId] addObject:[route objectForKey:@"route_short_name"]];
             }
         }
     }
