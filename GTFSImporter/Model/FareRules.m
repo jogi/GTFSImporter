@@ -69,7 +69,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'fare_rules' ('fare_id' INT(11) NOT NULL, 'route_id' INT(11) NOT NULL, 'origin_id' INT(11) NOT NULL, 'destination_id' INT(11) NOT NULL, 'contains_id' INT(11) NOT NULL)";
+    NSString *create = @"CREATE TABLE 'fare_rules' ('fare_id' varchar(11) NOT NULL, 'route_id' varchar(11) NOT NULL, 'origin_id' varchar(11) NOT NULL, 'destination_id' varchar(11) NOT NULL, 'contains_id' varchar(11) NOT NULL)";
     
     [db executeUpdate:create];
     

@@ -84,7 +84,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'calendar' ('service_id' int(11) DEFAULT NULL,'start_date' date DEFAULT NULL,'end_date' date DEFAULT NULL,'monday' tinyint(1) DEFAULT NULL,'tuesday' tinyint(1) DEFAULT NULL,'wednesday' tinyint(1) DEFAULT NULL,'thursday' tinyint(1) DEFAULT NULL,'friday' tinyint(1) DEFAULT NULL,'saturday' tinyint(1) DEFAULT NULL,'sunday' tinyint(1) DEFAULT NULL)";
+    NSString *create = @"CREATE TABLE 'calendar' ('service_id' varchar(20) DEFAULT NULL,'start_date' date DEFAULT NULL,'end_date' date DEFAULT NULL,'monday' tinyint(1) DEFAULT NULL,'tuesday' tinyint(1) DEFAULT NULL,'wednesday' tinyint(1) DEFAULT NULL,'thursday' tinyint(1) DEFAULT NULL,'friday' tinyint(1) DEFAULT NULL,'saturday' tinyint(1) DEFAULT NULL,'sunday' tinyint(1) DEFAULT NULL)";
     NSString *createIndex = @"CREATE INDEX service_id_calendar ON calendar(service_id)";
     
     [db executeUpdate:create];

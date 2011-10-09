@@ -71,7 +71,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'fare_attributes' ('fare_id' INT(11) NOT NULL, 'price' FLOAT DEFAULT 0.0, 'currency_type' varchar(255) DEFAULT NULL, 'payment_method' INT(2), 'transfers' INT(11), 'transfer_duration' INT(11), PRIMARY KEY ('fare_id'))";
+    NSString *create = @"CREATE TABLE 'fare_attributes' ('fare_id' varchar(11) NOT NULL, 'price' FLOAT DEFAULT 0.0, 'currency_type' varchar(255) DEFAULT NULL, 'payment_method' INT(2), 'transfers' INT(11), 'transfer_duration' INT(11), PRIMARY KEY ('fare_id'))";
     
     [db executeUpdate:create];
     

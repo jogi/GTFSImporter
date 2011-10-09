@@ -11,11 +11,11 @@
 
 @interface FareRules : NSObject {
     FMDatabase *db;
-    NSNumber *fare_id;
-    NSNumber *route_id;
-    NSNumber *origin_id;
-    NSNumber *destination_id;
-    NSNumber *contains_id;
+    NSString *fare_id;
+    NSString *route_id;
+    NSString *origin_id;
+    NSString *destination_id;
+    NSString *contains_id;
 }
 
 - (void)addFareRules:(FareRules *)value;
@@ -24,10 +24,10 @@
 - (void) receiveRecord:(NSDictionary *)aRecord;
 
 
-@property (nonatomic, retain) NSNumber *fare_id;
-@property (nonatomic, retain) NSNumber *route_id;
-@property (nonatomic, retain) NSNumber *origin_id;
-@property (nonatomic, retain) NSNumber *destination_id;
-@property (nonatomic, retain) NSNumber *contains_id;
+@property (nonatomic, retain) NSString *fare_id;
+@property (nonatomic, retain) NSString *route_id;
+@property (nonatomic, retain) NSString *origin_id;
+@property (nonatomic, retain) NSString *destination_id;
+@property (nonatomic, retain) NSString *contains_id;
 
 @end

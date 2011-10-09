@@ -12,14 +12,14 @@
 @interface FareAttributes : NSObject {
     FMDatabase *db;
     NSString * currency_type;
-    NSNumber * fare_id;
+    NSString * fare_id;
     NSNumber * payment_method;
     NSNumber * price;
     NSNumber * transfer_duration;
     NSNumber * transfers;
 }
 @property (nonatomic, retain) NSString * currency_type;
-@property (nonatomic, retain) NSNumber * fare_id;
+@property (nonatomic, retain) NSString * fare_id;
 @property (nonatomic, retain) NSNumber * payment_method;
 @property (nonatomic, retain) NSNumber * price;
 @property (nonatomic, retain) NSNumber * transfer_duration;
