@@ -241,6 +241,7 @@
 		8FA6B33B1408F30200B2476E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Adobe Systems";
 			};
 			buildConfigurationList = 8FA6B33E1408F30200B2476E /* Build configuration list for PBXProject "GTFSImporter" */;
