@@ -17,7 +17,7 @@
  */
 + (NSString *) getTransitFilesBasepath
 {
-    return @"/Volumes/Data/Projects/San Jose Transit/google_transit_gohart";
+    return @"/Volumes/Data/Projects/San Jose Transit/google_transit";
 }
 
 /*
@@ -33,7 +33,7 @@
  */
 + (NSString *) getDatabasePath
 {
-    return @"/Volumes/Data/Projects/San Jose Transit/google_transit_gohart/db/gtfs.db";
+    return @"/Volumes/Data/Projects/San Jose Transit/google_transit/db/gtfs.db";
 }
 
 /*Compute approximate distance between two points in meters. Assumes the
