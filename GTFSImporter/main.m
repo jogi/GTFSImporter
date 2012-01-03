@@ -11,6 +11,8 @@
 
 int main (int argc, const char * argv[])
 {
+
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     
     CSVImporter *importer = [[CSVImporter alloc] init];
     
@@ -74,6 +76,7 @@ int main (int argc, const char * argv[])
     
     [importer release];
 
+    [pool drain];
     return 0;
 }
 

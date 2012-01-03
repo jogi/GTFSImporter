@@ -12,19 +12,19 @@
 @interface Trip : NSObject {
     FMDatabase *db;
     NSString * trip_headsign;
-    NSString * trip_id;
-    NSString * route_id;
-    NSString * service_id;
-    NSString * block_id;
+    NSNumber * trip_id;
+    NSNumber * route_id;
+    NSNumber * service_id;
+    NSNumber * block_id;
     NSNumber * direction_id;
 
 }
 
 @property (nonatomic, retain) NSString * trip_headsign;
-@property (nonatomic, retain) NSString * trip_id;
-@property (nonatomic, retain) NSString * route_id;
-@property (nonatomic, retain) NSString * service_id;
-@property (nonatomic, retain) NSString * block_id;
+@property (nonatomic, retain) NSNumber * trip_id;
+@property (nonatomic, retain) NSNumber * route_id;
+@property (nonatomic, retain) NSNumber * service_id;
+@property (nonatomic, retain) NSNumber * block_id;
 @property (nonatomic, retain) NSNumber * direction_id;
 
 - (void)addTrip:(Trip *)trip;

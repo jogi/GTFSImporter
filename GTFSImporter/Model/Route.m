@@ -72,7 +72,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'routes' ('route_long_name' varchar(255) DEFAULT NULL,'route_type' int(2) DEFAULT NULL, 'agency_id' varchar(11) DEFAULT NULL, 'route_id' varchar(11) NOT NULL, 'route_short_name' varchar(50) DEFAULT NULL, PRIMARY KEY ('route_id'))";
+    NSString *create = @"CREATE TABLE 'routes' ('route_long_name' varchar(255) DEFAULT NULL,'route_type' int(2) DEFAULT NULL, 'agency_id' varchar(11) DEFAULT NULL, 'route_id' int(11) NOT NULL, 'route_short_name' varchar(50) DEFAULT NULL, PRIMARY KEY ('route_id'))";
     
     [db executeUpdate:create];
     
@@ -107,7 +107,7 @@
         return nil;
     }
     
-    NSString *query = @"select routes.route_short_name, trips.route_id, trips.trip_headsign, trips.trip_id FROM routes, trips WHERE trips.route_id=routes.route_id";
+    NSString *query = @"select route_id, trip_headsign, trip_id from trips GROUP BY route_id, trip_headsign";
     
     FMResultSet *rs = [localdb executeQuery:query];
     while ([rs next]) {
@@ -116,7 +116,6 @@
         [route setObject:[rs objectForColumnName:@"route_id"] forKey:@"route_id"];
         [route setObject:[rs objectForColumnName:@"trip_headsign"] forKey:@"trip_headsign"];
         [route setObject:[rs objectForColumnName:@"trip_id"] forKey:@"trip_id"];
-        [route setObject:[rs objectForColumnName:@"route_short_name"] forKey:@"route_short_name"];
         
         
         [routes addObject:route];

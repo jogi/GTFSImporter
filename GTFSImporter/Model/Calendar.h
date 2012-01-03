@@ -16,7 +16,7 @@
     NSString * friday;
     NSString * monday;
     NSString * saturday;
-    NSString * service_id;
+    NSNumber * service_id;
     NSString * start_date;
     NSString * sunday;
     NSString * thursday;
@@ -30,7 +30,7 @@
 @property (nonatomic, retain) NSString * friday;
 @property (nonatomic, retain) NSString * monday;
 @property (nonatomic, retain) NSString * saturday;
-@property (nonatomic, retain) NSString * service_id;
+@property (nonatomic, retain) NSNumber * service_id;
 @property (nonatomic, retain) NSString * start_date;
 @property (nonatomic, retain) NSString * sunday;
 @property (nonatomic, retain) NSString * thursday;

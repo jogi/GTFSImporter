@@ -13,14 +13,14 @@
     FMDatabase *db;
     NSString * route_long_name;
     NSNumber * route_type;
-    NSString * route_id;
+    NSNumber * route_id;
     NSString * route_short_name;
     NSString * agency_id;
 
 }
 @property (nonatomic, retain) NSString * route_long_name;
 @property (nonatomic, retain) NSNumber * route_type;
-@property (nonatomic, retain) NSString * route_id;
+@property (nonatomic, retain) NSNumber * route_id;
 @property (nonatomic, retain) NSString * route_short_name;
 @property (nonatomic, retain) NSString * agency_id;
 
