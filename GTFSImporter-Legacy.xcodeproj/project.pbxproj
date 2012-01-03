@@ -65,10 +65,10 @@
 		8F8E1D2B14173ADB002061C7 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		8F8E1D2C14173ADB002061C7 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		8F8E1D2E14173E9A002061C7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		8FA6B3441408F30200B2476E /* GTFSImporter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GTFSImporter; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FA6B3441408F30200B2476E /* GTFSImporter-Legacy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GTFSImporter-Legacy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA6B3481408F30200B2476E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8FA6B34B1408F30200B2476E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8FA6B34E1408F30200B2476E /* GTFSImporter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTFSImporter-Prefix.pch"; sourceTree = "<group>"; };
+		8FA6B34E1408F30200B2476E /* GTFSImporter-Legacy-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTFSImporter-Legacy-Prefix.pch"; sourceTree = "<group>"; };
 		8FA6B34F1408F30200B2476E /* GTFSImporter.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = GTFSImporter.1; sourceTree = "<group>"; };
 		8FA6B3561408F32400B2476E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		8FA6B3581408F34E00B2476E /* CSVImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVImporter.h; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 		8FA6B3451408F30200B2476E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8FA6B3441408F30200B2476E /* GTFSImporter */,
+				8FA6B3441408F30200B2476E /* GTFSImporter-Legacy */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,7 +169,7 @@
 		8FA6B34D1408F30200B2476E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8FA6B34E1408F30200B2476E /* GTFSImporter-Prefix.pch */,
+				8FA6B34E1408F30200B2476E /* GTFSImporter-Legacy-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -217,9 +217,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8FA6B3431408F30200B2476E /* GTFSImporter */ = {
+		8FA6B3431408F30200B2476E /* GTFSImporter-Legacy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8FA6B3531408F30200B2476E /* Build configuration list for PBXNativeTarget "GTFSImporter" */;
+			buildConfigurationList = 8FA6B3531408F30200B2476E /* Build configuration list for PBXNativeTarget "GTFSImporter-Legacy" */;
 			buildPhases = (
 				8FA6B3401408F30200B2476E /* Sources */,
 				8FA6B3411408F30200B2476E /* Frameworks */,
@@ -230,9 +230,9 @@
 			);
 			dependencies = (
 			);
-			name = GTFSImporter;
+			name = "GTFSImporter-Legacy";
 			productName = GTFSImporter;
-			productReference = 8FA6B3441408F30200B2476E /* GTFSImporter */;
+			productReference = 8FA6B3441408F30200B2476E /* GTFSImporter-Legacy */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -244,7 +244,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Adobe Systems";
 			};
-			buildConfigurationList = 8FA6B33E1408F30200B2476E /* Build configuration list for PBXProject "GTFSImporter" */;
+			buildConfigurationList = 8FA6B33E1408F30200B2476E /* Build configuration list for PBXProject "GTFSImporter-Legacy" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -256,7 +256,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8FA6B3431408F30200B2476E /* GTFSImporter */,
+				8FA6B3431408F30200B2476E /* GTFSImporter-Legacy */,
 			);
 		};
 /* End PBXProject section */
@@ -349,8 +349,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Prefix.pch";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Legacy-Prefix.pch";
+				PRODUCT_NAME = "GTFSImporter-Legacy";
 			};
 			name = Debug;
 		};
@@ -358,15 +358,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Prefix.pch";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Legacy-Prefix.pch";
+				PRODUCT_NAME = "GTFSImporter-Legacy";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8FA6B33E1408F30200B2476E /* Build configuration list for PBXProject "GTFSImporter" */ = {
+		8FA6B33E1408F30200B2476E /* Build configuration list for PBXProject "GTFSImporter-Legacy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8FA6B3511408F30200B2476E /* Debug */,
@@ -375,7 +375,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8FA6B3531408F30200B2476E /* Build configuration list for PBXNativeTarget "GTFSImporter" */ = {
+		8FA6B3531408F30200B2476E /* Build configuration list for PBXNativeTarget "GTFSImporter-Legacy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8FA6B3541408F30200B2476E /* Debug */,
