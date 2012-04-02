@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="GTFSImporter : Import GTFS data to SQLite for use in iOS and Android apps" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>GTFSImporter</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/jvashishtha/GTFSImporter">Fork Me on GitHub</a>
+
+          <h1 id="project_title">GTFSImporter</h1>
+          <h2 id="project_tagline">Import GTFS data to SQLite for use in iOS and Android apps</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/jvashishtha/GTFSImporter/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/jvashishtha/GTFSImporter/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>Welcome!</h3>
+
+<p>Import GTFS csv files to a sqlite database</p>
+
+<h3>How to use it?</h3>
+
+<p>Modify the <code>Util.m</code> file to reflect the correct file paths. See the comments in the file for instructions on how to change the paths.</p>
+
+<p>Thats it! Run the project and you should be fine.</p>
+
+<hr><h3>What does it do to the data??</h3>
+
+<ul>
+<li>It first imports all the data to a sqlite db.</li>
+<li>Then it applies any transformations if there are any that are needed. In my case --<strong>Santa Clara Valley Transportation Authority</strong>-- the data had several trips which where no longer valid because the date for them had already passed! So i added the queries to sanitize the data appropriately.</li>
+<li>Then it will add a column routes to stops table which will contain all the route number (to be specific route ids) passing through the stop in a comma seperated format. I wanted this data! So I made this :-)</li>
+<li>Then it reindexes the data and performs the vaccuum command.</li>
+<li>One very important feature that I have added is time interpolation for all the stops which originally din't have times. Yups. Time interpolation. All the stops will have arrival times filled up by default based on the the stop times already there. An extra column <code>is_timepoint</code> is added to the <code>stop_times</code> table which allows you to distinguish between original times and interpolated times. 1 is original and 0 is interpolated stop.</li>
+</ul><h3>One important NOTE</h3>
+
+<p>Dont remove the indexes that I have added. They are very much needed for fast query performance. Believe me.</p>
+
+<h3>Authors and Contributors</h3>
+
+<p>Vashishtha Jogi (<a href="http://github.com/jvashishtha">@jvashishtha</a>).</p>
+
+<h3>Support or Contact</h3>
+
+<p>Having trouble with <strong>GTFSImporter</strong>? Create an issue or email me directly at vashishthajogi@gmail.com and I will help you sort it out.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">GTFSImporter maintained by <a href="https://github.com/jvashishtha">jvashishtha</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
