@@ -10,21 +10,16 @@
 #import "FMDatabase.h"
 
 
-@interface Agency : NSObject {
-    FMDatabase *db;
-    NSString *agency_id;
-    NSString *agency_name;
-    NSString *agency_timezone;
-    NSString *agency_url;
-}
-@property (nonatomic, retain) NSString * agency_id;
-@property (nonatomic, retain) NSString * agency_name;
-@property (nonatomic, retain) NSString * agency_timezone;
-@property (nonatomic, retain) NSString * agency_url;
+@interface Agency : NSObject
 
-- (void) addAgency:(Agency *)agency;
-- (id) initWithDB:(FMDatabase *)fmdb;
-- (void) cleanupAndCreate;
-- (void) receiveRecord:(NSDictionary *)aRecord;
+@property (nonatomic, strong) NSString * agencyId;
+@property (nonatomic, strong) NSString * agencyName;
+@property (nonatomic, strong) NSString * agencyTimezone;
+@property (nonatomic, strong) NSString * agencyUrl;
+
+- (void)addAgency:(Agency *)agency;
+- (id)initWithDB:(FMDatabase *)fmdb;
+- (void)cleanupAndCreate;
+- (void)receiveRecord:(NSDictionary *)aRecord;
 
 @end

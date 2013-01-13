@@ -13,17 +13,21 @@
 #import "StopTime.h"
 #import "Util.h"
 
+@interface Stop ()
+{
+    FMDatabase *db;
+}
+
+@end
 
 @implementation Stop
-@synthesize stop_lat, stop_lon, stop_id, stop_name, stop_desc, zone_id, location_type, routes;
 
-
-- (id) initWithDB:(FMDatabase *)fmdb
+- (id)initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -34,19 +38,18 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into stops(stop_lat,zone_id,stop_lon,stop_id,stop_desc,stop_name,location_type) values(?, ?, ?, ?, ?, ?, ?)",
-     stop.stop_lat,
-     stop.zone_id,
-     stop.stop_lon,
-     stop.stop_id,
-     stop.stop_desc,
-     stop.stop_name,
-     stop.location_type];
+     stop.stopLat,
+     stop.zoneId,
+     stop.stopLon,
+     stop.stopId,
+     stop.stopDesc,
+     stop.stopName,
+     stop.locationType];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -54,13 +57,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -89,26 +91,26 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    Stop *stopRecord = [[[Stop alloc] init] autorelease];
-    stopRecord.stop_id = [aRecord objectForKey:@"stop_id"];
-    stopRecord.stop_lat = [aRecord objectForKey:@"stop_lat"];
-    stopRecord.stop_lon = [aRecord objectForKey:@"stop_lon"];
-    stopRecord.stop_name = [aRecord objectForKey:@"stop_name"];
-    stopRecord.stop_desc = [aRecord objectForKey:@"stop_desc"];
-    stopRecord.zone_id = [aRecord objectForKey:@"zone_id"];
-    stopRecord.location_type = [aRecord objectForKey:@"location_type"];
+    Stop *stopRecord = [[Stop alloc] init];
+    stopRecord.stopId = aRecord[@"stop_id"];
+    stopRecord.stopLat = aRecord[@"stop_lat"];
+    stopRecord.stopLon = aRecord[@"stop_lon"];
+    stopRecord.stopName = aRecord[@"stop_name"];
+    stopRecord.stopDesc = aRecord[@"stop_desc"];
+    stopRecord.zoneId = aRecord[@"zone_id"];
+    stopRecord.locationType = aRecord[@"location_type"];
+    
     [self addStop:stopRecord];
 }
 
-- (void) updateStopWithRoutes:(NSArray *)route withStopId:(NSString *)stopId
+- (void)updateStopWithRoutes:(NSArray *)route withStopId:(NSString *)stopId
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -125,52 +127,36 @@
     }
 }
 
-- (void) updateRoutes
+- (void)updateRoutes
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSMutableDictionary *stopWithRoutes = [[NSMutableDictionary alloc] init];
-    //First get all unique route trips
-    Route *route = [[Route alloc] init];
-    NSArray *routeArray = [route getAllRoutes];
-    StopTime *stopTime = [[StopTime alloc] init];
-    
-    for (NSDictionary *route in routeArray) {
-        NSArray *stops = [stopTime getStopsForTripId:[route objectForKey:@"trip_id"]];
-        for (NSString *stopId in stops) {
-            if ([stopWithRoutes objectForKey:stopId]==nil) {
-                [stopWithRoutes setValue:[[[NSMutableArray alloc] init] autorelease] forKey:stopId];
-            }
-            if ([[stopWithRoutes objectForKey:stopId] containsObject:[route objectForKey:@"route_short_name"]] == NO) {
-                [[stopWithRoutes objectForKey:stopId] addObject:[route objectForKey:@"route_short_name"]];
+    @autoreleasepool {
+        NSMutableDictionary *stopWithRoutes = [[NSMutableDictionary alloc] init];
+        //First get all unique route trips
+        Route *route = [[Route alloc] init];
+        NSArray *routeArray = [route getAllRoutes];
+        StopTime *stopTime = [[StopTime alloc] init];
+        
+        for (NSDictionary *route in routeArray) {
+            NSArray *stops = [stopTime getStopsForTripId:route[@"trip_id"]];
+            for (NSString *stopId in stops) {
+                if (stopWithRoutes[stopId]==nil) {
+                    [stopWithRoutes setValue:[[NSMutableArray alloc] init] forKey:stopId];
+                }
+                if ([stopWithRoutes[stopId] containsObject:route[@"route_short_name"]] == NO) {
+                    [stopWithRoutes[stopId] addObject:route[@"route_short_name"]];
+                }
             }
         }
-    }
-    
-    [stopTime release];
-    [route release];
-    
+        
+        
  //   NSLog(@"%@, %lu", stopWithRoutes, [stopWithRoutes count]);
-    
-    for (NSString *key in [stopWithRoutes allKeys]) {
+        
+        for (NSString *key in [stopWithRoutes allKeys]) {
 //        NSLog(@"%@ - %@", key, [[stopWithRoutes objectForKey:key] componentsJoinedByString:@","]);
-        [self updateStopWithRoutes:[stopWithRoutes objectForKey:key] withStopId:key];
+            [self updateStopWithRoutes:stopWithRoutes[key] withStopId:key];
+        }
     }
-    [stopWithRoutes release];
-    [pool drain];
 }
 
-- (void) dealloc
-{
-    [db release];
-    [stop_id release];
-    [stop_lat release];
-    [stop_lon release];
-    [stop_name release];
-    [stop_desc release];
-    [zone_id release];
-    [location_type release];
-    [routes release];
-    [super dealloc];
-}
 
 @end

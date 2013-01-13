@@ -17,17 +17,19 @@
 		8F8E1D2914173A54002061C7 /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D1F14173A54002061C7 /* Transformations.m */; };
 		8F8E1D2A14173A54002061C7 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2114173A54002061C7 /* Trip.m */; };
 		8F8E1D2D14173ADB002061C7 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2C14173ADB002061C7 /* Util.m */; };
-		8F8E1D2F14173E9B002061C7 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8F8E1D2E14173E9A002061C7 /* README */; };
 		8FA6B3491408F30200B2476E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA6B3481408F30200B2476E /* Foundation.framework */; };
 		8FA6B34C1408F30200B2476E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B34B1408F30200B2476E /* main.m */; };
 		8FA6B3501408F30200B2476E /* GTFSImporter.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8FA6B34F1408F30200B2476E /* GTFSImporter.1 */; };
 		8FA6B3571408F32400B2476E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA6B3561408F32400B2476E /* libsqlite3.dylib */; };
 		8FA6B35A1408F34E00B2476E /* CSVImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3591408F34E00B2476E /* CSVImporter.m */; };
-		8FA6B3681408F3B500B2476E /* CSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B35F1408F3B500B2476E /* CSVParser.m */; };
-		8FA6B3691408F3B500B2476E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3621408F3B500B2476E /* FMDatabase.m */; };
-		8FA6B36A1408F3B500B2476E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3641408F3B500B2476E /* FMDatabaseAdditions.m */; };
-		8FA6B36B1408F3B500B2476E /* fmdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3651408F3B500B2476E /* fmdb.m */; };
-		8FA6B36C1408F3B500B2476E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3671408F3B500B2476E /* FMResultSet.m */; };
+		8FA6B3681408F3B500B2476E /* CSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B35F1408F3B500B2476E /* CSVParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8FA6B3691408F3B500B2476E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3621408F3B500B2476E /* FMDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8FA6B36A1408F3B500B2476E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3641408F3B500B2476E /* FMDatabaseAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8FA6B36B1408F3B500B2476E /* fmdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3651408F3B500B2476E /* fmdb.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8FA6B36C1408F3B500B2476E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6B3671408F3B500B2476E /* FMResultSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D447A6CF16A0910B00E4A74D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D447A6CE16A0910B00E4A74D /* README.md */; };
+		D447A6D416A092D700E4A74D /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = D447A6D116A092D700E4A74D /* FMDatabasePool.m */; };
+		D447A6D516A092D700E4A74D /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D447A6D316A092D700E4A74D /* FMDatabaseQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,7 +66,6 @@
 		8F8E1D2114173A54002061C7 /* Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trip.m; sourceTree = "<group>"; };
 		8F8E1D2B14173ADB002061C7 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		8F8E1D2C14173ADB002061C7 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
-		8F8E1D2E14173E9A002061C7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		8FA6B3441408F30200B2476E /* GTFSImporter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GTFSImporter; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA6B3481408F30200B2476E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8FA6B34B1408F30200B2476E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -82,6 +83,11 @@
 		8FA6B3651408F3B500B2476E /* fmdb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fmdb.m; sourceTree = "<group>"; };
 		8FA6B3661408F3B500B2476E /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		8FA6B3671408F3B500B2476E /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		D447A6CE16A0910B00E4A74D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		D447A6D016A092D700E4A74D /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		D447A6D116A092D700E4A74D /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		D447A6D216A092D700E4A74D /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		D447A6D316A092D700E4A74D /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +131,7 @@
 		8FA6B3391408F30200B2476E = {
 			isa = PBXGroup;
 			children = (
-				8F8E1D2E14173E9A002061C7 /* README */,
+				D447A6CE16A0910B00E4A74D /* README.md */,
 				8FA6B34A1408F30200B2476E /* GTFSImporter */,
 				8FA6B38A1408F58900B2476E /* Resources */,
 				8FA6B35C1408F3B500B2476E /* Libraries */,
@@ -196,6 +202,10 @@
 		8FA6B3601408F3B500B2476E /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
+				D447A6D016A092D700E4A74D /* FMDatabasePool.h */,
+				D447A6D116A092D700E4A74D /* FMDatabasePool.m */,
+				D447A6D216A092D700E4A74D /* FMDatabaseQueue.h */,
+				D447A6D316A092D700E4A74D /* FMDatabaseQueue.m */,
 				8FA6B3611408F3B500B2476E /* FMDatabase.h */,
 				8FA6B3621408F3B500B2476E /* FMDatabase.m */,
 				8FA6B3631408F3B500B2476E /* FMDatabaseAdditions.h */,
@@ -266,7 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F8E1D2F14173E9B002061C7 /* README in Resources */,
+				D447A6CF16A0910B00E4A74D /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,6 +304,8 @@
 				8F8E1D2914173A54002061C7 /* Transformations.m in Sources */,
 				8F8E1D2A14173A54002061C7 /* Trip.m in Sources */,
 				8F8E1D2D14173ADB002061C7 /* Util.m in Sources */,
+				D447A6D416A092D700E4A74D /* FMDatabasePool.m in Sources */,
+				D447A6D516A092D700E4A74D /* FMDatabaseQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +360,7 @@
 		8FA6B3541408F30200B2476E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -357,6 +370,7 @@
 		8FA6B3551408F30200B2476E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GTFSImporter/GTFSImporter-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";

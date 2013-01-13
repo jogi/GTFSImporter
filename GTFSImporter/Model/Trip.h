@@ -9,28 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "FMDatabase.h"
 
-@interface Trip : NSObject {
-    FMDatabase *db;
-    NSString * trip_headsign;
-    NSString * trip_id;
-    NSString * route_id;
-    NSString * service_id;
-    NSString * block_id;
-    NSNumber * direction_id;
+@interface Trip : NSObject
 
-}
-
-@property (nonatomic, retain) NSString * trip_headsign;
-@property (nonatomic, retain) NSString * trip_id;
-@property (nonatomic, retain) NSString * route_id;
-@property (nonatomic, retain) NSString * service_id;
-@property (nonatomic, retain) NSString * block_id;
-@property (nonatomic, retain) NSNumber * direction_id;
+@property (nonatomic, strong) NSString *tripHeadsign;
+@property (nonatomic, strong) NSString *tripId;
+@property (nonatomic, strong) NSString *routeId;
+@property (nonatomic, strong) NSString *serviceId;
+@property (nonatomic, strong) NSString *blockId;
+@property (nonatomic, strong) NSNumber *directionId;
 
 - (void)addTrip:(Trip *)trip;
-- (id) initWithDB:(FMDatabase *)fmdb;
-- (void) cleanupAndCreate;
-- (void) receiveRecord:(NSDictionary *)aRecord;
-- (NSArray *) getAllTripIds;
+- (id)initWithDB:(FMDatabase *)fmdb;
+- (void)cleanupAndCreate;
+- (void)receiveRecord:(NSDictionary *)aRecord;
+- (NSArray *)getAllTripIds;
 
 @end

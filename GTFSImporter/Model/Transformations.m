@@ -11,6 +11,13 @@
 #import "CSVParser.h"
 #import "Util.h"
 
+@interface Transformations ()
+{
+    FMDatabase *db;
+}
+
+@end
+
 @implementation Transformations
 
 -(void) applyTransformationsFromCSV
@@ -20,11 +27,9 @@
     
     if (![db open]) {
         NSLog(@"Could not open db.");
-        [db release];
         return;
     }
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSError *error = nil;
 
     NSString *inputPath = [Util getTransformationsFilePath];
@@ -32,16 +37,13 @@
     
 	if (!csvString)
 	{
-		NSLog(@"Couldn't read file at path %s\n. Error: %s",
-              [inputPath UTF8String],
-              [[error localizedDescription] ? [error localizedDescription] : [error description] UTF8String]);
-		[pool drain];
+		NSLog(@"Couldn't read file at path %s\n. Error: %s", [inputPath UTF8String], [[error localizedDescription] ? [error localizedDescription] : [error description] UTF8String]);
 		exit(1);
 	}
 	
 	NSDate *startDate = [NSDate date];
 	
-	CSVParser *parser =[[[CSVParser alloc] initWithString:csvString separator:@";" hasHeader:NO fieldNames:nil] autorelease];
+	CSVParser *parser =[[CSVParser alloc] initWithString:csvString separator:@";" hasHeader:NO fieldNames:nil];
     NSArray *parsed = [parser arrayOfParsedRows];
     
     
@@ -64,7 +66,6 @@
 	NSLog(@"Transformations successfully done in %f seconds.", [endDate timeIntervalSinceDate:startDate]);
     
     [db close];
-    [pool release];
 }
 
 @end

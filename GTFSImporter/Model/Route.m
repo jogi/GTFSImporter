@@ -11,17 +11,21 @@
 #import "FMDatabase.h"
 #import "Util.h"
 
+@interface Route ()
+{
+    FMDatabase *db;
+}
+
+@end
+
 @implementation Route
-
-@synthesize route_long_name, route_id, route_short_name, agency_id, route_type;
-
 
 - (id) initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -32,17 +36,16 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into routes(route_long_name,route_type,agency_id,route_id,route_short_name) values(?, ?, ?, ?, ?)",
-     route.route_long_name,
-     route.route_type,
-     route.agency_id,
-     route.route_id,
-     route.route_short_name];
+     route.routeLongName,
+     route.routeType,
+     route.agencyId,
+     route.routeId,
+     route.routeShortName];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -50,13 +53,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -82,21 +84,22 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    Route *routeRecord = [[[Route alloc] init] autorelease];
-    [routeRecord setRoute_id:[aRecord objectForKey:@"route_id"]];
-    [routeRecord setRoute_long_name:[aRecord objectForKey:@"route_long_name"]];
-    [routeRecord setRoute_short_name:[aRecord objectForKey:@"route_short_name"]];
-    [routeRecord setRoute_type:[aRecord objectForKey:@"route_type"]];
-    [routeRecord setAgency_id:[aRecord objectForKey:@"agency_id"]];
+    Route *routeRecord = [[Route alloc] init];
+    routeRecord.routeId = aRecord[@"route_id"];
+    routeRecord.routeLongName = aRecord[@"route_long_name"];
+    routeRecord.routeShortName = aRecord[@"route_short_name"];
+    routeRecord.routeType = aRecord[@"route_type"];
+    routeRecord.agencyId = aRecord[@"agency_id"];
+    
     [self addRoute:routeRecord];
 }
 
-- (NSArray *) getAllRoutes
+- (NSArray *)getAllRoutes
 {
     
-    NSMutableArray *routes = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *routes = [[NSMutableArray alloc] init];
     
     FMDatabase *localdb = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
@@ -113,15 +116,14 @@
     while ([rs next]) {
         // just print out what we've got in a number of formats.
         NSMutableDictionary *route = [[NSMutableDictionary alloc] init];
-        [route setObject:[rs objectForColumnName:@"route_id"] forKey:@"route_id"];
-        [route setObject:[rs objectForColumnName:@"trip_headsign"] forKey:@"trip_headsign"];
-        [route setObject:[rs objectForColumnName:@"trip_id"] forKey:@"trip_id"];
-        [route setObject:[rs objectForColumnName:@"route_short_name"] forKey:@"route_short_name"];
+        route[@"route_id"] = [rs objectForColumnName:@"route_id"];
+        route[@"trip_headsign"] = [rs objectForColumnName:@"trip_headsign"];
+        route[@"trip_id"] = [rs objectForColumnName:@"trip_id"];
+        route[@"route_short_name"] = [rs objectForColumnName:@"route_short_name"];
         
         
         [routes addObject:route];
         
-        [route release];
     }
     // close the result set.
     [rs close];
@@ -131,15 +133,5 @@
     
 }
 
--(void) dealloc
-{
-    [db release];
-    [route_id release];
-    [route_long_name release];
-    [route_short_name release];
-    [route_type release];
-    [agency_id release];
-    [super dealloc];
-}
 
 @end

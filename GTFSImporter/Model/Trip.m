@@ -11,16 +11,21 @@
 #import "CSVParser.h"
 #import "Util.h"
 
-@implementation Trip
-@synthesize trip_headsign, trip_id, route_id, service_id, block_id, direction_id;
+@interface Trip ()
+{
+    FMDatabase *db;
+}
 
+@end
+
+@implementation Trip
 
 - (id) initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -31,18 +36,17 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into trips(block_id,route_id,direction_id,trip_headsign,service_id,trip_id) values(?, ?, ?, ?, ?, ?)",
-     trip.block_id,
-     trip.route_id,
-     trip.direction_id,
-     trip.trip_headsign,
-     trip.service_id,
-     trip.trip_id];
+     trip.blockId,
+     trip.routeId,
+     trip.directionId,
+     trip.tripHeadsign,
+     trip.serviceId,
+     trip.tripId];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -50,13 +54,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -85,21 +88,22 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    Trip *tripRecord = [[[Trip alloc] init] autorelease];
-    [tripRecord setBlock_id:[aRecord objectForKey:@"block_id"]];
-    [tripRecord setRoute_id:[aRecord objectForKey:@"route_id"]];
-    [tripRecord setDirection_id:[aRecord objectForKey:@"direction_id"]];
-    [tripRecord setTrip_headsign:[aRecord objectForKey:@"trip_headsign"]];
-    [tripRecord setService_id:[aRecord objectForKey:@"service_id"]];
-    [tripRecord setTrip_id:[aRecord objectForKey:@"trip_id"]];
+    Trip *tripRecord = [[Trip alloc] init];
+    tripRecord.blockId = aRecord[@"block_id"];
+    tripRecord.routeId = aRecord[@"route_id"];
+    tripRecord.directionId = aRecord[@"direction_id"];
+    tripRecord.tripHeadsign = aRecord[@"trip_headsign"];
+    tripRecord.serviceId = aRecord[@"service_id"];
+    tripRecord.tripId = aRecord[@"trip_id"];
+    
     [self addTrip:tripRecord];
 }
 
-- (NSArray *) getAllTripIds
+- (NSArray *)getAllTripIds
 {
-    NSMutableArray *tripIds = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *tripIds = [[NSMutableArray alloc] init];
     
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
@@ -126,16 +130,5 @@
     return tripIds;
 }
 
-- (void) dealloc
-{
-    [db release];
-    [trip_id release];
-    [trip_headsign release];
-    [route_id release];
-    [service_id release];
-    [direction_id release];
-    [block_id release];
-    [super dealloc];
-}
 
 @end

@@ -10,9 +10,6 @@
 #import "FMDatabase.h"
 
 @interface Transformations : NSObject
-{
-    FMDatabase *db;
-}
 
 -(void) applyTransformationsFromCSV;
 

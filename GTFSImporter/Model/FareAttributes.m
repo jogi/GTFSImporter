@@ -11,16 +11,21 @@
 #import "FMDatabase.h"
 #import "Util.h"
 
+@interface FareAttributes ()
+{
+    FMDatabase *db;
+}
+
+@end
 
 @implementation FareAttributes
-@synthesize currency_type, fare_id, payment_method, price, transfer_duration, transfers;
 
-- (id) initWithDB:(FMDatabase *)fmdb
+- (id)initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -30,18 +35,17 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into fare_attributes(fare_id,price,currency_type,payment_method,transfers,transfer_duration) values(?, ?, ?, ?, ?, ?)",
-                        value.fare_id,
+                        value.fareId,
                         value.price,
-                        value.currency_type,
-                        value.payment_method,
+                        value.currencyType,
+                        value.paymentMethod,
                         value.transfers,
-                        value.transfer_duration];
+                        value.transferDuration];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -49,13 +53,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -81,29 +84,18 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    FareAttributes *fareAttributesRecord = [[[FareAttributes alloc] init] autorelease];
-    [fareAttributesRecord setFare_id:[aRecord objectForKey:@"fare_id"]];
-    [fareAttributesRecord setPrice:[aRecord objectForKey:@"price"]];
-    [fareAttributesRecord setCurrency_type:[aRecord objectForKey:@"currency_type"]];
-    [fareAttributesRecord setPayment_method:[aRecord objectForKey:@"payment_type"]];
-    [fareAttributesRecord setTransfers:[aRecord objectForKey:@"transfers"]];
-    [fareAttributesRecord setTransfer_duration:[aRecord objectForKey:@"transfer_duration"]];
+    FareAttributes *fareAttributesRecord = [[FareAttributes alloc] init];
+    fareAttributesRecord.fareId = aRecord[@"fare_id"];
+    fareAttributesRecord.price = aRecord[@"price"];
+    fareAttributesRecord.currencyType = aRecord[@"currency_type"];
+    fareAttributesRecord.paymentMethod = aRecord[@"payment_type"];
+    fareAttributesRecord.transfers = aRecord[@"transfers"];
+    fareAttributesRecord.transferDuration = aRecord[@"transfer_duration"];
     
     [self addFareAttributesObject:fareAttributesRecord];
 }
 
-- (void) dealloc
-{
-    [db release];
-    [fare_id release];
-    [currency_type release];
-    [payment_method release];
-    [price release];
-    [transfers release];
-    [transfer_duration release];
-    [super dealloc];
-}
 
 @end

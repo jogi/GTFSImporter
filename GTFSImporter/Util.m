@@ -60,8 +60,8 @@
 
 + (double) ApproximateDistanceBetweenStop1:(Stop *)stop1 stop2:(Stop *)stop2
 {
-    return [Util ApproximateDistanceWithLat1:[stop1.stop_lat doubleValue] withLon1:[stop1.stop_lon doubleValue]
-                                    withLat2:[stop2.stop_lat doubleValue] withLon2:[stop2.stop_lon doubleValue]];
+    return [Util ApproximateDistanceWithLat1:[stop1.stopLat doubleValue] withLon1:[stop1.stopLon doubleValue]
+                                    withLat2:[stop2.stopLat doubleValue] withLon2:[stop2.stopLon doubleValue]];
 }
 
 /*
@@ -74,7 +74,7 @@
 + (NSNumber *) TimeToSecondsSinceMidnight:(NSString *)time
 {
     NSArray *timeArray = [time componentsSeparatedByString:@":"];
-    return [NSNumber numberWithInt:[[timeArray objectAtIndex:0] intValue] * 3600 + [[timeArray objectAtIndex:1] intValue] * 60 + [[timeArray objectAtIndex:2] intValue]];;
+    return @([timeArray[0] intValue] * 3600 + [timeArray[1] intValue] * 60 + [timeArray[2] intValue]);;
 }
 
 // Formats an int number of seconds past midnight into a string as "HH:MM:SS".
@@ -94,7 +94,6 @@
     // extracting components from date
     NSDateComponents *components = [calendar components:units fromDate:date];
     
-    [calendar release];
     
     switch ([components weekday]) {
         case 1:
@@ -127,7 +126,7 @@
 //Converts NSDate to specified format, Default yyyy-MM-dd if nil is passed for format
 + (NSString *) getDateStringFromDate:(NSDate *)date withFormat:(NSString *)format
 {
-    NSDateFormatter *sDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *sDateFormatter = [[NSDateFormatter alloc] init];
     if (format==nil)
         [sDateFormatter setDateFormat:@"yyyy-MM-dd"];
     else
@@ -140,7 +139,7 @@
 //Converts NSDate to specified format, Default hh:mm:ss if nil is passed for format
 + (NSString *) getTimeStringFromDate:(NSDate *)date withFormat:(NSString *)format
 {
-    NSDateFormatter *sDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *sDateFormatter = [[NSDateFormatter alloc] init];
     if (format==nil)
         [sDateFormatter setDateFormat:@"HH:mm:ss"];
     else

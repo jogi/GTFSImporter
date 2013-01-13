@@ -9,25 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "FMDatabase.h"
 
-@interface FareAttributes : NSObject {
-    FMDatabase *db;
-    NSString * currency_type;
-    NSString * fare_id;
-    NSNumber * payment_method;
-    NSNumber * price;
-    NSNumber * transfer_duration;
-    NSNumber * transfers;
-}
-@property (nonatomic, retain) NSString * currency_type;
-@property (nonatomic, retain) NSString * fare_id;
-@property (nonatomic, retain) NSNumber * payment_method;
-@property (nonatomic, retain) NSNumber * price;
-@property (nonatomic, retain) NSNumber * transfer_duration;
-@property (nonatomic, retain) NSNumber * transfers;
+@interface FareAttributes : NSObject
+
+@property (nonatomic, strong) NSString * currencyType;
+@property (nonatomic, strong) NSString * fareId;
+@property (nonatomic, strong) NSNumber * paymentMethod;
+@property (nonatomic, strong) NSNumber * price;
+@property (nonatomic, strong) NSNumber * transferDuration;
+@property (nonatomic, strong) NSNumber * transfers;
 
 - (void)addFareAttributesObject:(FareAttributes *)value;
-- (id) initWithDB:(FMDatabase *)fmdb;
-- (void) cleanupAndCreate;
-- (void) receiveRecord:(NSDictionary *)aRecord;
+- (id)initWithDB:(FMDatabase *)fmdb;
+- (void)cleanupAndCreate;
+- (void)receiveRecord:(NSDictionary *)aRecord;
 
 @end

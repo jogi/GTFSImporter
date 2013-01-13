@@ -11,15 +11,21 @@
 #import "FMDatabase.h"
 #import "Util.h"
 
+@interface FareRules ()
+{
+    FMDatabase *db;
+}
+
+@end
+
 @implementation FareRules
-@synthesize fare_id,route_id,origin_id,destination_id,contains_id;
 
 - (id) initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -29,17 +35,16 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into fare_rules(fare_id,route_id,origin_id,destination_id,contains_id) values(?, ?, ?, ?, ?)",
-     value.fare_id,
-     value.route_id,
-     value.origin_id,
-     value.destination_id,
-     value.contains_id];
+     value.fareId,
+     value.routeId,
+     value.originId,
+     value.destinationId,
+     value.containsId];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -47,13 +52,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -79,26 +83,17 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    FareRules *fareRulesRecord = [[[FareRules alloc] init] autorelease];
-    [fareRulesRecord setFare_id:[aRecord objectForKey:@"fare_id"]];
-    [fareRulesRecord setRoute_id:[aRecord objectForKey:@"route_id"]];
-    [fareRulesRecord setOrigin_id:[aRecord objectForKey:@"origin_id"]];
-    [fareRulesRecord setDestination_id:[aRecord objectForKey:@"destination_id"]];
-    [fareRulesRecord setContains_id:[aRecord objectForKey:@"contains_id"]];
+    FareRules *fareRulesRecord = [[FareRules alloc] init];
+    fareRulesRecord.fareId = aRecord[@"fare_id"];
+    fareRulesRecord.routeId = aRecord[@"route_id"];
+    fareRulesRecord.originId = aRecord[@"origin_id"];
+    fareRulesRecord.destinationId = aRecord[@"destination_id"];
+    fareRulesRecord.containsId = aRecord[@"contains_id"];
+    
     [self addFareRules:fareRulesRecord];
 }
 
-- (void) dealloc
-{
-    [db release];
-    [fare_id release];
-    [route_id release];
-    [origin_id release];
-    [destination_id release];
-    [contains_id release];
-    [super dealloc];
-}
 
 @end

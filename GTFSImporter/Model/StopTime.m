@@ -12,17 +12,21 @@
 #import "CSVParser.h"
 #import "Util.h"
 
+@interface StopTime ()
+{
+    FMDatabase *db;
+}
+
+@end
 
 @implementation StopTime
-@synthesize arrival_time, departure_time, stop_sequence, trip_id, stop_id, is_timepoint;
 
-
-- (id) initWithDB:(FMDatabase *)fmdb
+- (id)initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
 	}
 	return self;
 }
@@ -37,17 +41,16 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into stop_times(trip_id,arrival_time,departure_time,stop_id,stop_sequence) values(?, ?, ?, ?, ?)",
-     stopTime.trip_id,
-     stopTime.arrival_time,
-     stopTime.departure_time,
-     stopTime.stop_id,
-     stopTime.stop_sequence];
+     stopTime.tripId,
+     stopTime.arrivalTime,
+     stopTime.departureTime,
+     stopTime.stopId,
+     stopTime.stopSequence];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -55,13 +58,12 @@
     }
 }
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -92,20 +94,21 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
-    StopTime *stopTimeRecord = [[[StopTime alloc] init] autorelease];
-    [stopTimeRecord setTrip_id:[aRecord objectForKey:@"trip_id"]];
-    [stopTimeRecord setDeparture_time:[aRecord objectForKey:@"departure_time"]];
-    [stopTimeRecord setArrival_time:[aRecord objectForKey:@"arrival_time"]];
-    [stopTimeRecord setStop_id:[aRecord objectForKey:@"stop_id"]];
-    [stopTimeRecord setStop_sequence:[aRecord objectForKey:@"stop_sequence"]];
+    StopTime *stopTimeRecord = [[StopTime alloc] init];
+    stopTimeRecord.tripId = aRecord[@"trip_id"];
+    stopTimeRecord.departureTime = aRecord[@"departure_time"];
+    stopTimeRecord.arrivalTime = aRecord[@"arrival_time"];
+    stopTimeRecord.stopId = aRecord[@"stop_id"];
+    stopTimeRecord.stopSequence = aRecord[@"stop_sequence"];
+    
     [self addStopTime:stopTimeRecord];
 }
 
-- (NSArray *) getStopsForTripId:(NSString *)tripId
+- (NSArray *)getStopsForTripId:(NSString *)tripId
 {
-    NSMutableArray *stops = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *stops = [[NSMutableArray alloc] init];
     
     FMDatabase *localdb = [FMDatabase databaseWithPath:[Util getDatabasePath]];
     
@@ -130,13 +133,12 @@
     return stops;
 }
 
-- (void) interpolateStopTimes
+- (void)interpolateStopTimes
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -144,7 +146,6 @@
     //First get all trip ids
     Trip *trip = [[Trip alloc] init];
     NSArray *tripIds = [trip getAllTripIds];
-    [trip release];
     
     //for each trip id interpolate stop times and update database
     for (NSString *tripId in tripIds) {
@@ -152,9 +153,9 @@
     }
 }
 
-- (NSArray *) getTimeInterpolatedStopTimesByTripId:(NSString *)tripId
+- (NSArray *)getTimeInterpolatedStopTimesByTripId:(NSString *)tripId
 {
-    NSMutableArray *stop_times_i = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *stop_times_i = [[NSMutableArray alloc] init];
     
     NSArray *stop_times = [self getStopTimesByTripId:tripId];
     // If there are no stoptimes [] is the correct return value but if the start
@@ -169,8 +170,8 @@
     
     for (int i=0; i < [stop_times count]; i++)
     {
-        NSMutableDictionary *st = [stop_times objectAtIndex:i];
-        if ([st objectForKey:@"arrival_time"] != nil && ![[st objectForKey:@"arrival_time"] isEqualToString:@""])
+        NSMutableDictionary *st = stop_times[i];
+        if (st[@"arrival_time"] != nil && ![st[@"arrival_time"] isEqualToString:@""])
         {
             cur_timepoint = st;
             distance_between_timepoints = 0;
@@ -178,48 +179,47 @@
             if (i + 1 < [stop_times count])
             {
                 int k = i + 1;
-                distance_between_timepoints += [Util ApproximateDistanceWithLat1:[[[stop_times objectAtIndex:k-1] objectForKey:@"stop_lat"] doubleValue] 
-                                                                        withLon1:[[[stop_times objectAtIndex:k-1] objectForKey:@"stop_lon"] doubleValue] 
-                                                                        withLat2:[[[stop_times objectAtIndex:k] objectForKey:@"stop_lat"] doubleValue] 
-                                                                        withLon2:[[[stop_times objectAtIndex:k] objectForKey:@"stop_lon"] doubleValue]];
-                while ([[stop_times objectAtIndex:k] objectForKey:@"arrival_time"] == nil || [[[stop_times objectAtIndex:k] objectForKey:@"arrival_time"] isEqualToString:@""])
+                distance_between_timepoints += [Util ApproximateDistanceWithLat1:[stop_times[k-1][@"stop_lat"] doubleValue] 
+                                                                        withLon1:[stop_times[k-1][@"stop_lon"] doubleValue] 
+                                                                        withLat2:[stop_times[k][@"stop_lat"] doubleValue] 
+                                                                        withLon2:[stop_times[k][@"stop_lon"] doubleValue]];
+                while (stop_times[k][@"arrival_time"] == nil || [stop_times[k][@"arrival_time"] isEqualToString:@""])
                 {
                     k += 1;
-                    distance_between_timepoints += [Util ApproximateDistanceWithLat1:[[[stop_times objectAtIndex:k-1] objectForKey:@"stop_lat"] doubleValue] 
-                                                                            withLon1:[[[stop_times objectAtIndex:k-1] objectForKey:@"stop_lon"] doubleValue] 
-                                                                            withLat2:[[[stop_times objectAtIndex:k] objectForKey:@"stop_lat"] doubleValue] 
-                                                                            withLon2:[[[stop_times objectAtIndex:k] objectForKey:@"stop_lon"] doubleValue]];
+                    distance_between_timepoints += [Util ApproximateDistanceWithLat1:[stop_times[k-1][@"stop_lat"] doubleValue] 
+                                                                            withLon1:[stop_times[k-1][@"stop_lon"] doubleValue] 
+                                                                            withLat2:[stop_times[k][@"stop_lat"] doubleValue] 
+                                                                            withLon2:[stop_times[k][@"stop_lon"] doubleValue]];
                 }
-                next_timepoint = [stop_times objectAtIndex:k];
+                next_timepoint = stop_times[k];
             }
-            NSMutableDictionary *temp_dict = [[[NSMutableDictionary alloc] init] autorelease];
-            [temp_dict setObject:[Util TimeToSecondsSinceMidnight:[st objectForKey:@"arrival_time"]] forKey:@"arrival_time"];
-            [temp_dict setObject:[st objectForKey:@"stop_id"] forKey:@"stop_id"];
-            [temp_dict setObject:[st objectForKey:@"trip_id"] forKey:@"trip_id"];
-            [temp_dict setObject:[st objectForKey:@"stop_sequence"] forKey:@"stop_sequence"];
-            [temp_dict setObject:[NSNumber numberWithBool:YES] forKey:@"is_timepoint"];
+            NSMutableDictionary *temp_dict = [[NSMutableDictionary alloc] init];
+            temp_dict[@"arrival_time"] = [Util TimeToSecondsSinceMidnight:st[@"arrival_time"]];
+            temp_dict[@"stop_id"] = st[@"stop_id"];
+            temp_dict[@"trip_id"] = st[@"trip_id"];
+            temp_dict[@"stop_sequence"] = st[@"stop_sequence"];
+            temp_dict[@"is_timepoint"] = @YES;
             [stop_times_i addObject:temp_dict];
         }
         else
         {
-            distance_traveled_between_timepoints += [Util ApproximateDistanceWithLat1:[[[stop_times objectAtIndex:i-1] objectForKey:@"stop_lat"] doubleValue] 
-                                                                             withLon1:[[[stop_times objectAtIndex:i-1] objectForKey:@"stop_lon"] doubleValue] 
-                                                                             withLat2:[[st objectForKey:@"stop_lat"] doubleValue] 
-                                                                             withLon2:[[st objectForKey:@"stop_lon"] doubleValue]];
+            distance_traveled_between_timepoints += [Util ApproximateDistanceWithLat1:[stop_times[i-1][@"stop_lat"] doubleValue] 
+                                                                             withLon1:[stop_times[i-1][@"stop_lon"] doubleValue] 
+                                                                             withLat2:[st[@"stop_lat"] doubleValue] 
+                                                                             withLon2:[st[@"stop_lon"] doubleValue]];
             float distance_percent = distance_traveled_between_timepoints / distance_between_timepoints;
-            int next_time = [[Util TimeToSecondsSinceMidnight:[next_timepoint objectForKey:@"arrival_time"]] intValue];
-            int cur_time = [[Util TimeToSecondsSinceMidnight:[cur_timepoint objectForKey:@"arrival_time"]] intValue];
+            int next_time = [[Util TimeToSecondsSinceMidnight:next_timepoint[@"arrival_time"]] intValue];
+            int cur_time = [[Util TimeToSecondsSinceMidnight:cur_timepoint[@"arrival_time"]] intValue];
             int total_time = next_time - cur_time;
 //            NSLog(@"next- %d, cur - %d, total - %d, cur_timepoint- %@, D: %f, %f", next_time, cur_time, total_time, [cur_timepoint objectForKey:@"arrival_time"], distance_between_timepoints, distance_traveled_between_timepoints);
-            float time_estimate = distance_percent * total_time + [[Util TimeToSecondsSinceMidnight:[cur_timepoint objectForKey:@"arrival_time"]] intValue];
+            float time_estimate = distance_percent * total_time + [[Util TimeToSecondsSinceMidnight:cur_timepoint[@"arrival_time"]] intValue];
             NSMutableDictionary *temp_dict = [[NSMutableDictionary alloc] init];
-            [temp_dict setObject:[NSNumber numberWithInt:(int)round(time_estimate)] forKey:@"arrival_time"];
-            [temp_dict setObject:[st objectForKey:@"stop_id"] forKey:@"stop_id"];
-            [temp_dict setObject:[st objectForKey:@"trip_id"] forKey:@"trip_id"];
-            [temp_dict setObject:[st objectForKey:@"stop_sequence"] forKey:@"stop_sequence"];
-            [temp_dict setObject:[NSNumber numberWithBool:NO] forKey:@"is_timepoint"];
+            temp_dict[@"arrival_time"] = @((int)round(time_estimate));
+            temp_dict[@"stop_id"] = st[@"stop_id"];
+            temp_dict[@"trip_id"] = st[@"trip_id"];
+            temp_dict[@"stop_sequence"] = st[@"stop_sequence"];
+            temp_dict[@"is_timepoint"] = @NO;
             [stop_times_i addObject:temp_dict];
-            [temp_dict release];
         }
     }
     
@@ -227,9 +227,9 @@
     return stop_times_i;
 }
 
-- (NSArray *) getStopTimesByTripId:(NSString *)tripId
+- (NSArray *)getStopTimesByTripId:(NSString *)tripId
 {
-    NSMutableArray *stop_times = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *stop_times = [[NSMutableArray alloc] init];
     
     NSString *query = @"SELECT stops.stop_lat, stops.stop_lon, stop_times.trip_id, stop_times.arrival_time, stop_times.stop_id, stop_times.stop_sequence FROM stop_times, stops WHERE stop_times.trip_id=? AND stops.stop_id=stop_times.stop_id ORDER BY stop_times.stop_sequence";
     
@@ -238,15 +238,14 @@
         // just print out what we've got in a number of formats.
         NSMutableDictionary *stop_time = [[NSMutableDictionary alloc] init];
         
-        [stop_time setObject:[rs objectForColumnName:@"stop_lat"] forKey:@"stop_lat"];
-        [stop_time setObject:[rs objectForColumnName:@"stop_lon"] forKey:@"stop_lon"];
-        [stop_time setObject:[rs objectForColumnName:@"stop_id"] forKey:@"stop_id"];
-        [stop_time setObject:[rs objectForColumnName:@"trip_id"] forKey:@"trip_id"];
-        [stop_time setObject:[rs objectForColumnName:@"arrival_time"] forKey:@"arrival_time"];
-        [stop_time setObject:[rs objectForColumnName:@"stop_sequence"] forKey:@"stop_sequence"];
+        stop_time[@"stop_lat"] = [rs objectForColumnName:@"stop_lat"];
+        stop_time[@"stop_lon"] = [rs objectForColumnName:@"stop_lon"];
+        stop_time[@"stop_id"] = [rs objectForColumnName:@"stop_id"];
+        stop_time[@"trip_id"] = [rs objectForColumnName:@"trip_id"];
+        stop_time[@"arrival_time"] = [rs objectForColumnName:@"arrival_time"];
+        stop_time[@"stop_sequence"] = [rs objectForColumnName:@"stop_sequence"];
         
         [stop_times addObject:stop_time];
-        [stop_time release];
     }
     // close the result set.
     [rs close];
@@ -254,13 +253,12 @@
     return stop_times;
 }
 
-- (void) updateStopTimes:(NSArray *)interpolatedStopTimes
+- (void)updateStopTimes:(NSArray *)interpolatedStopTimes
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -269,11 +267,11 @@
     
     for (NSDictionary *stopTime in interpolatedStopTimes) {
         [db executeUpdate:@"UPDATE stop_times SET arrival_time=?, is_timepoint=? WHERE trip_id=? AND stop_id=? AND stop_sequence=?",
-         [Util FormatSecondsSinceMidnight:[stopTime objectForKey:@"arrival_time"]],
-         [stopTime objectForKey:@"is_timepoint"],
-         [stopTime objectForKey:@"trip_id"],
-         [stopTime objectForKey:@"stop_id"],
-         [stopTime objectForKey:@"stop_sequence"]];
+         [Util FormatSecondsSinceMidnight:stopTime[@"arrival_time"]],
+         stopTime[@"is_timepoint"],
+         stopTime[@"trip_id"],
+         stopTime[@"stop_id"],
+         stopTime[@"stop_sequence"]];
     }
     
     [db commit];
@@ -284,16 +282,5 @@
     }
 }
 
-- (void) dealloc
-{
-    [db release];
-    [arrival_time release];
-    [departure_time release];
-    [stop_id release];
-    [stop_sequence release];
-    [trip_id release];
-    [is_timepoint release];
-    [super dealloc];
-}
 
 @end

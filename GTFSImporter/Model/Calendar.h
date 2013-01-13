@@ -10,38 +10,22 @@
 #import "FMDatabase.h"
 
 
-@interface Calendar : NSObject {
-    FMDatabase *db;
-    NSString * end_date;
-    NSString * friday;
-    NSString * monday;
-    NSString * saturday;
-    NSString * service_id;
-    NSString * start_date;
-    NSString * sunday;
-    NSString * thursday;
-    NSString * tuesday;
-    NSString * wednesday;
-    NSDateFormatter *dateFormat;
-    NSDateFormatter *dateFormat2;
+@interface Calendar : NSObject
 
-}
-@property (nonatomic, retain) NSString * end_date;
-@property (nonatomic, retain) NSString * friday;
-@property (nonatomic, retain) NSString * monday;
-@property (nonatomic, retain) NSString * saturday;
-@property (nonatomic, retain) NSString * service_id;
-@property (nonatomic, retain) NSString * start_date;
-@property (nonatomic, retain) NSString * sunday;
-@property (nonatomic, retain) NSString * thursday;
-@property (nonatomic, retain) NSString * tuesday;
-@property (nonatomic, retain) NSString * wednesday;
-@property (nonatomic, retain) NSDateFormatter *dateFormat;
-@property (nonatomic, retain) NSDateFormatter *dateFormat2;
+@property (nonatomic, strong) NSString * endDate;
+@property (nonatomic, strong) NSString * friday;
+@property (nonatomic, strong) NSString * monday;
+@property (nonatomic, strong) NSString * saturday;
+@property (nonatomic, strong) NSString * serviceId;
+@property (nonatomic, strong) NSString * startDate;
+@property (nonatomic, strong) NSString * sunday;
+@property (nonatomic, strong) NSString * thursday;
+@property (nonatomic, strong) NSString * tuesday;
+@property (nonatomic, strong) NSString * wednesday;
 
-- (id) initWithDB:(FMDatabase *)fmdb;
-- (void) addCalendar:(Calendar *)calendar;
-- (void) cleanupAndCreate;
-- (void) receiveRecord:(NSDictionary *)aRecord;
+- (id)initWithDB:(FMDatabase *)fmdb;
+- (void)addCalendar:(Calendar *)calendar;
+- (void)cleanupAndCreate;
+- (void)receiveRecord:(NSDictionary *)aRecord;
 
 @end

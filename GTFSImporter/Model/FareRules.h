@@ -9,25 +9,17 @@
 #import <Foundation/Foundation.h>
 #import "FMDatabase.h"
 
-@interface FareRules : NSObject {
-    FMDatabase *db;
-    NSString *fare_id;
-    NSString *route_id;
-    NSString *origin_id;
-    NSString *destination_id;
-    NSString *contains_id;
-}
+@interface FareRules : NSObject
+
+@property (nonatomic, strong) NSString *fareId;
+@property (nonatomic, strong) NSString *routeId;
+@property (nonatomic, strong) NSString *originId;
+@property (nonatomic, strong) NSString *destinationId;
+@property (nonatomic, strong) NSString *containsId;
 
 - (void)addFareRules:(FareRules *)value;
-- (id) initWithDB:(FMDatabase *)fmdb;
-- (void) cleanupAndCreate;
-- (void) receiveRecord:(NSDictionary *)aRecord;
-
-
-@property (nonatomic, retain) NSString *fare_id;
-@property (nonatomic, retain) NSString *route_id;
-@property (nonatomic, retain) NSString *origin_id;
-@property (nonatomic, retain) NSString *destination_id;
-@property (nonatomic, retain) NSString *contains_id;
+- (id)initWithDB:(FMDatabase *)fmdb;
+- (void)cleanupAndCreate;
+- (void)receiveRecord:(NSDictionary *)aRecord;
 
 @end

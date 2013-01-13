@@ -11,16 +11,22 @@
 #import "CSVParser.h"
 #import "Util.h"
 
+@interface Calendar ()
+{
+    FMDatabase *db;
+    NSDateFormatter *dateFormat, *dateFormat2;
+}
+
+@end
 
 @implementation Calendar
-@synthesize end_date, friday, monday, saturday, service_id, start_date, sunday, thursday, tuesday, wednesday, dateFormat, dateFormat2;
 
-- (id) initWithDB:(FMDatabase *)fmdb
+- (id)initWithDB:(FMDatabase *)fmdb
 {
     self = [super init];
 	if (self)
 	{
-		db = [fmdb retain];
+		db = fmdb;
         dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyyMMdd"];
         dateFormat2 = [[NSDateFormatter alloc] init];
@@ -29,7 +35,7 @@
 	return self;
 }
 
-- (void) addCalendar:(Calendar *)calendar
+- (void)addCalendar:(Calendar *)calendar
 {
 //    NSLog(@"Calendar %@, %@", calendar.start_date, calendar.end_date);
     
@@ -37,18 +43,17 @@
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
     
     [db executeUpdate:@"INSERT into calendar(end_date, friday, monday, saturday, service_id, start_date, sunday, thursday, tuesday, wednesday) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-     calendar.end_date,
+     calendar.endDate,
      calendar.friday,
      calendar.monday,
      calendar.saturday,
-     calendar.service_id,
-     calendar.start_date,
+     calendar.serviceId,
+     calendar.startDate,
      calendar.sunday,
      calendar.thursday,
      calendar.tuesday,
@@ -62,13 +67,12 @@
 
 
 
-- (void) cleanupAndCreate
+- (void)cleanupAndCreate
 {
     if (db==nil) {
         db = [FMDatabase databaseWithPath:[Util getDatabasePath]];
         if (![db open]) {
             NSLog(@"Could not open db.");
-            [db release];
             return;
         }
     }
@@ -96,42 +100,24 @@
     }
 }
 
-- (void) receiveRecord:(NSDictionary *)aRecord
+- (void)receiveRecord:(NSDictionary *)aRecord
 {
     
     Calendar *calendarRecord = [[Calendar alloc] init];
-    [calendarRecord setService_id:[aRecord objectForKey:@"service_id"]];
-    [calendarRecord setSunday:[aRecord objectForKey:@"sunday"]];
-    [calendarRecord setMonday:[aRecord objectForKey:@"monday"]];
-    [calendarRecord setTuesday:[aRecord objectForKey:@"tuesday"]];
-    [calendarRecord setWednesday:[aRecord objectForKey:@"wednesday"]];
-    [calendarRecord setThursday:[aRecord objectForKey:@"thursday"]];
-    [calendarRecord setFriday:[aRecord objectForKey:@"friday"]];
-    [calendarRecord setSaturday:[aRecord objectForKey:@"saturday"]];
+    calendarRecord.serviceId = aRecord[@"service_id"];
+    calendarRecord.sunday = aRecord[@"sunday"];
+    calendarRecord.monday = aRecord[@"monday"];
+    calendarRecord.tuesday = aRecord[@"tuesday"];
+    calendarRecord.wednesday = aRecord[@"wednesday"];
+    calendarRecord.thursday = aRecord[@"thursday"];
+    calendarRecord.friday = aRecord[@"friday"];
+    calendarRecord.saturday = aRecord[@"saturday"];
     //Date format is wrong, so correct it now
-    [calendarRecord setStart_date:[dateFormat2 stringFromDate:[dateFormat dateFromString:[aRecord objectForKey:@"start_date"]]]];
-    [calendarRecord setEnd_date:[dateFormat2 stringFromDate:[dateFormat dateFromString:[aRecord objectForKey:@"end_date"]]]];
+    calendarRecord.startDate = [dateFormat2 stringFromDate:[dateFormat dateFromString:aRecord[@"start_date"]]];
+    calendarRecord.endDate = [dateFormat2 stringFromDate:[dateFormat dateFromString:aRecord[@"end_date"]]];
     
     [self addCalendar:calendarRecord];
-    [calendarRecord release];
 }
 
-- (void) dealloc
-{
-    [db release];
-    [dateFormat release];
-    [dateFormat2 release];
-    [end_date release];
-    [start_date release];
-    [service_id release];
-    [monday release];
-    [tuesday release];
-    [wednesday release];
-    [thursday release];
-    [friday release];
-    [saturday release];
-    [sunday release];
-    [super dealloc];
-}
 
 @end
