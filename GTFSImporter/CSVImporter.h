@@ -17,6 +17,7 @@
 - (int) addFareAttributes;
 - (int) addFareRules;
 - (int) addRoute;
+- (int) addShape;
 - (int) addStop;
 - (int) addStopRoutes;
 - (int) addStopTime;
