@@ -30,6 +30,8 @@
 		D447A6CF16A0910B00E4A74D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D447A6CE16A0910B00E4A74D /* README.md */; };
 		D447A6D416A092D700E4A74D /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = D447A6D116A092D700E4A74D /* FMDatabasePool.m */; };
 		D447A6D516A092D700E4A74D /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D447A6D316A092D700E4A74D /* FMDatabaseQueue.m */; };
+		D499172117822E5300D791AA /* CalendarDate.m in Sources */ = {isa = PBXBuildFile; fileRef = D499171E17822E5300D791AA /* CalendarDate.m */; };
+		D499172217822E5300D791AA /* Shape.m in Sources */ = {isa = PBXBuildFile; fileRef = D499172017822E5300D791AA /* Shape.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,6 +90,10 @@
 		D447A6D116A092D700E4A74D /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		D447A6D216A092D700E4A74D /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
 		D447A6D316A092D700E4A74D /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		D499171D17822E5300D791AA /* CalendarDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarDate.h; sourceTree = "<group>"; };
+		D499171E17822E5300D791AA /* CalendarDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarDate.m; sourceTree = "<group>"; };
+		D499171F17822E5300D791AA /* Shape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shape.h; sourceTree = "<group>"; };
+		D499172017822E5300D791AA /* Shape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shape.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,12 +116,16 @@
 				8F8E1D1114173A54002061C7 /* Agency.m */,
 				8F8E1D1214173A54002061C7 /* Calendar.h */,
 				8F8E1D1314173A54002061C7 /* Calendar.m */,
+				D499171D17822E5300D791AA /* CalendarDate.h */,
+				D499171E17822E5300D791AA /* CalendarDate.m */,
 				8F8E1D1414173A54002061C7 /* FareAttributes.h */,
 				8F8E1D1514173A54002061C7 /* FareAttributes.m */,
 				8F8E1D1614173A54002061C7 /* FareRules.h */,
 				8F8E1D1714173A54002061C7 /* FareRules.m */,
 				8F8E1D1814173A54002061C7 /* Route.h */,
 				8F8E1D1914173A54002061C7 /* Route.m */,
+				D499171F17822E5300D791AA /* Shape.h */,
+				D499172017822E5300D791AA /* Shape.m */,
 				8F8E1D1A14173A54002061C7 /* Stop.h */,
 				8F8E1D1B14173A54002061C7 /* Stop.m */,
 				8F8E1D1C14173A54002061C7 /* StopTime.h */,
@@ -306,6 +316,8 @@
 				8F8E1D2D14173ADB002061C7 /* Util.m in Sources */,
 				D447A6D416A092D700E4A74D /* FMDatabasePool.m in Sources */,
 				D447A6D516A092D700E4A74D /* FMDatabaseQueue.m in Sources */,
+				D499172117822E5300D791AA /* CalendarDate.m in Sources */,
+				D499172217822E5300D791AA /* Shape.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
