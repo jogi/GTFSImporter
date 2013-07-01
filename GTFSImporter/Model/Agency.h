@@ -14,8 +14,11 @@
 
 @property (nonatomic, strong) NSString * agencyId;
 @property (nonatomic, strong) NSString * agencyName;
-@property (nonatomic, strong) NSString * agencyTimezone;
 @property (nonatomic, strong) NSString * agencyUrl;
+@property (nonatomic, strong) NSString * agencyTimezone;
+@property (nonatomic, strong) NSString * agencyLang;
+@property (nonatomic, strong) NSString * agencyPhone;
+
 
 - (void)addAgency:(Agency *)agency;
 - (id)initWithDB:(FMDatabase *)fmdb;

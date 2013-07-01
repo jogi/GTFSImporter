@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *routeId;
 @property (nonatomic, strong) NSString *serviceId;
 @property (nonatomic, strong) NSString *blockId;
+@property (nonatomic, strong) NSString *shapeId;
 @property (nonatomic, strong) NSNumber *directionId;
 
 - (void)addTrip:(Trip *)trip;
