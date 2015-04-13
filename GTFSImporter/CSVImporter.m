@@ -37,7 +37,7 @@
 - (NSString *)parseForFile:(NSString *)file
 {
     NSError *error = nil;
-    NSString *inputPath = [[Util getTransitFilesBasepath] stringByAppendingPathComponent:file];
+    NSString *inputPath = [[[Util getTransitFilesBasepath] stringByAppendingPathComponent:file] stringByAppendingPathExtension:@"txt"];
     NSString *csvString = [NSString stringWithContentsOfFile:inputPath encoding:NSUTF8StringEncoding error:&error];
 
     if (!csvString)
