@@ -14,7 +14,6 @@ int main (int argc, const char * argv[])
     
     CSVImporter *importer = [[CSVImporter alloc] init];
     
-    
     NSLog(@"Importing Agency...");
     [importer addAgency];
     

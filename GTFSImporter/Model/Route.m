@@ -88,8 +88,8 @@
 {
     Route *routeRecord = [[Route alloc] init];
     routeRecord.routeId = aRecord[@"route_id"];
-    routeRecord.routeLongName = aRecord[@"route_long_name"];
-    routeRecord.routeShortName = aRecord[@"route_short_name"];
+    routeRecord.routeLongName = [aRecord[@"route_long_name"] capitalizedString];
+    routeRecord.routeShortName = [aRecord[@"route_short_name"] capitalizedString];
     routeRecord.routeType = aRecord[@"route_type"];
     routeRecord.agencyId = aRecord[@"agency_id"];
     

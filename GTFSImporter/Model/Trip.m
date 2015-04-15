@@ -93,10 +93,22 @@
     Trip *tripRecord = [[Trip alloc] init];
     tripRecord.blockId = aRecord[@"block_id"];
     tripRecord.routeId = aRecord[@"route_id"];
-    tripRecord.directionId = aRecord[@"direction_id"];
-    tripRecord.tripHeadsign = aRecord[@"trip_headsign"];
+    tripRecord.tripHeadsign = [aRecord[@"trip_headsign"] capitalizedString];
     tripRecord.serviceId = aRecord[@"service_id"];
     tripRecord.tripId = aRecord[@"trip_id"];
+    
+    // if direction_id is empty, try to derive it
+    if ([aRecord[@"direction_id"] length] == 0) {
+        if ([aRecord[@"trip_headsign"] rangeOfString:@" NB "].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@" WB "].location != NSNotFound) {
+            tripRecord.directionId = @0;
+        } else if ([aRecord[@"trip_headsign"] rangeOfString:@" SB "].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@" EB "].location != NSNotFound) {
+            tripRecord.directionId = @1;
+        } else {
+            tripRecord.directionId = @2;
+        }
+    } else {
+        tripRecord.directionId = aRecord[@"direction_id"];
+    }
     
     [self addTrip:tripRecord];
 }

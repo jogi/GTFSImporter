@@ -97,7 +97,7 @@
     stopRecord.stopId = aRecord[@"stop_id"];
     stopRecord.stopLat = aRecord[@"stop_lat"];
     stopRecord.stopLon = aRecord[@"stop_lon"];
-    stopRecord.stopName = aRecord[@"stop_name"];
+    stopRecord.stopName = [aRecord[@"stop_name"] capitalizedString];
     stopRecord.stopDesc = aRecord[@"stop_desc"];
     stopRecord.zoneId = aRecord[@"zone_id"];
     stopRecord.locationType = aRecord[@"location_type"];
