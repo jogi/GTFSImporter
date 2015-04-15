@@ -13,9 +13,11 @@
 - (NSString *)parseForFile:(NSString *)file;
 - (int) addAgency;
 - (int) addCalendar;
+- (int) addCalendarDate;
 - (int) addFareAttributes;
 - (int) addFareRules;
 - (int) addRoute;
+- (int) addShape;
 - (int) addStop;
 - (int) addStopRoutes;
 - (int) addStopTime;

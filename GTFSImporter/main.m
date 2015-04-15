@@ -46,9 +46,9 @@ int main (int argc, const char * argv[])
     [importer addStopTime];
     
     //Comment this out if you dont want to apply any transformations
-    NSLog(@"Sanitizing data...");
-    [importer sanitizeData];
-    
+//    NSLog(@"Sanitizing data...");
+//    [importer sanitizeData];
+	
     NSLog(@"Vacumming...");
     [importer vacuum];
     
