@@ -37,24 +37,30 @@ int main (int argc, const char * argv[])
     NSLog(@"Importing Stops...");
     [importer addStop];
     
-    
+
     NSLog(@"Importing Trips...");
     [importer addTrip];
+    
+    
+    NSLog(@"Importing Shapes...");
+    [importer addShape];
     
     
     NSLog(@"Importing StopTime...");
     [importer addStopTime];
     
     //Comment this out if you dont want to apply any transformations
-//    NSLog(@"Sanitizing data...");
-//    [importer sanitizeData];
+    //NSLog(@"Sanitizing data...");
+    //[importer sanitizeData];
 	
     NSLog(@"Vacumming...");
     [importer vacuum];
     
+    
     NSLog(@"Reindexing...");
     [importer reindex];
-     
+    
+    
     //For convinience. This will add and extra column routes which will contain comma seperated route numbers passing through this stop
     NSLog(@"Adding routes to stops...");
     [importer addStopRoutes];

@@ -40,13 +40,14 @@
         }
     }
     
-    [db executeUpdate:@"INSERT into trips(block_id,route_id,direction_id,trip_headsign,service_id,trip_id) values(?, ?, ?, ?, ?, ?)",
+    [db executeUpdate:@"INSERT into trips(block_id,route_id,direction_id,trip_headsign,service_id,trip_id,shape_id) values(?, ?, ?, ?, ?, ?, ?)",
      trip.blockId,
      trip.routeId,
      trip.directionId,
      trip.tripHeadsign,
      trip.serviceId,
-     trip.tripId];
+     trip.tripId,
+     trip.shapeId];
     
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -75,7 +76,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'trips' ('block_id' varchar(11) DEFAULT NULL, 'route_id' varchar(11) DEFAULT NULL, 'direction_id' tinyint(1) DEFAULT NULL, 'trip_headsign' varchar(255) DEFAULT NULL, 'service_id' varchar(11) DEFAULT NULL, 'trip_id' varchar(11) NOT NULL, PRIMARY KEY ('trip_id'))";
+    NSString *create = @"CREATE TABLE 'trips' ('block_id' TEXT DEFAULT NULL, 'route_id' TEXT DEFAULT NULL, 'direction_id' tinyint(1) DEFAULT NULL, 'trip_headsign' TEXT DEFAULT NULL, 'service_id' TEXT DEFAULT NULL, 'trip_id' TEXT NOT NULL, 'shape_id' TEXT NOT NULL, PRIMARY KEY ('trip_id'))";
     
     NSString *createIndex = @"CREATE INDEX route_id_trips ON trips(route_id)";
     
@@ -93,15 +94,20 @@
     Trip *tripRecord = [[Trip alloc] init];
     tripRecord.blockId = aRecord[@"block_id"];
     tripRecord.routeId = aRecord[@"route_id"];
-    tripRecord.tripHeadsign = [aRecord[@"trip_headsign"] capitalizedString];
     tripRecord.serviceId = aRecord[@"service_id"];
     tripRecord.tripId = aRecord[@"trip_id"];
+    tripRecord.shapeId = aRecord[@"shape_id"];
+    
+    if (aRecord[@"trip_headsign"]) {
+        NSString *headsign = [[[aRecord[@"trip_headsign"] localizedCapitalizedString] stringByReplacingOccurrencesOfString:aRecord[@"route_id"] withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        tripRecord.tripHeadsign = headsign;
+    }
     
     // if direction_id is empty, try to derive it
     if ([aRecord[@"direction_id"] length] == 0) {
-        if ([aRecord[@"trip_headsign"] rangeOfString:@" NB "].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@" WB "].location != NSNotFound) {
+        if ([aRecord[@"trip_headsign"] rangeOfString:@"NB"].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@"WB"].location != NSNotFound) {
             tripRecord.directionId = @0;
-        } else if ([aRecord[@"trip_headsign"] rangeOfString:@" SB "].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@" EB "].location != NSNotFound) {
+        } else if ([aRecord[@"trip_headsign"] rangeOfString:@"SB"].location != NSNotFound || [aRecord[@"trip_headsign"] rangeOfString:@"EB"].location != NSNotFound) {
             tripRecord.directionId = @1;
         } else {
             tripRecord.directionId = @2;

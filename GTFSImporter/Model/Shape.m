@@ -38,7 +38,7 @@
         }
     }
     
-    [db executeUpdate:@"INSERT into shape(shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence,shape_dist_traveled) values(?, ?, ?, ?, ?)",
+    [db executeUpdate:@"INSERT into shapes(shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence,shape_dist_traveled) values(?, ?, ?, ?, ?)",
      shape.shapeId,
      shape.shapePtLat,
      shape.shapePtLon,
@@ -63,7 +63,7 @@
     }
     
     //Drop table if it exists
-    NSString *dropShape = @"DROP TABLE IF EXISTS shape";
+    NSString *dropShape = @"DROP TABLE IF EXISTS shapes";
     
     [db executeUpdate:dropShape];
     
@@ -73,9 +73,9 @@
     }
     
     //Create table
-    NSString *createShape = @"CREATE TABLE 'shape' ('shape_id' varchar(20) NOT NULL, 'shape_pt_lat' varchar(30) NOT NULL, 'shape_pt_lon' varchar(30) NOT NULL, 'shape_pt_sequence' varchar(30) NOT NULL, 'shape_dist_traveled' varchar(30) DEFAULT NULL)";
+    NSString *createShape = @"CREATE TABLE 'shapes' ('shape_id' TEXT NOT NULL, 'shape_pt_lat' decimal(9,6) DEFAULT NULL, 'shape_pt_lon' decimal(9,6) DEFAULT NULL, 'shape_pt_sequence' INTEGER NOT NULL, 'shape_dist_traveled' decimal(9,6) DEFAULT NULL)";
     
-    NSString *createIndex = @"CREATE INDEX shape_id_shape ON shape(shape_id)";
+    NSString *createIndex = @"CREATE INDEX shape_id_shape ON shapes(shape_id)";
     
     [db executeUpdate:createShape];
     [db executeUpdate:createIndex];

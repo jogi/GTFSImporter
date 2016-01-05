@@ -74,7 +74,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'routes' ('route_long_name' varchar(255) DEFAULT NULL,'route_type' int(2) DEFAULT NULL, 'agency_id' varchar(11) DEFAULT NULL, 'route_id' varchar(11) NOT NULL, 'route_short_name' varchar(50) DEFAULT NULL, PRIMARY KEY ('route_id'))";
+    NSString *create = @"CREATE TABLE 'routes' ('route_long_name' TEXT DEFAULT NULL,'route_type' int(2) DEFAULT NULL, 'agency_id' TEXT DEFAULT NULL, 'route_id' TEXT NOT NULL, 'route_short_name' TEXT DEFAULT NULL, PRIMARY KEY ('route_id'))";
     
     [db executeUpdate:create];
     
@@ -88,8 +88,8 @@
 {
     Route *routeRecord = [[Route alloc] init];
     routeRecord.routeId = aRecord[@"route_id"];
-    routeRecord.routeLongName = [aRecord[@"route_long_name"] capitalizedString];
-    routeRecord.routeShortName = [aRecord[@"route_short_name"] capitalizedString];
+    routeRecord.routeLongName = [aRecord[@"route_long_name"] localizedCapitalizedString];
+    routeRecord.routeShortName = [aRecord[@"route_short_name"] localizedCapitalizedString];
     routeRecord.routeType = aRecord[@"route_type"];
     routeRecord.agencyId = aRecord[@"agency_id"];
     

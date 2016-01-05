@@ -77,7 +77,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'calendar_dates' ('service_id' varchar(20) NOT NULL,'date' date NOT NULL,'exception_type' tinyint(2) NOT NULL)";
+    NSString *create = @"CREATE TABLE 'calendar_dates' ('service_id' TEXT NOT NULL,'date' date NOT NULL,'exception_type' tinyint(2) NOT NULL)";
     NSString *createIndex = @"CREATE INDEX service_id_calendar_dates ON calendar_dates(service_id)";
     
     [db executeUpdate:create];

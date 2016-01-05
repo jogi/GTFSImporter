@@ -78,7 +78,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'stops' ('stop_lat' decimal(8,6) DEFAULT NULL, 'zone_id' varchar(11) DEFAULT NULL, 'stop_lon' decimal(9,6) DEFAULT NULL, 'stop_id' varchar(11) NOT NULL, 'stop_desc' varchar(255) DEFAULT NULL, 'stop_name' varchar(255) DEFAULT NULL, 'location_type' int(2) DEFAULT NULL, 'routes' varchar(255) DEFAULT NULL, PRIMARY KEY ('stop_id'))";
+    NSString *create = @"CREATE TABLE 'stops' ('stop_lat' decimal(8,6) DEFAULT NULL, 'zone_id' TEXT DEFAULT NULL, 'stop_lon' decimal(9,6) DEFAULT NULL, 'stop_id' TEXT NOT NULL, 'stop_desc' TEXT DEFAULT NULL, 'stop_name' TEXT DEFAULT NULL, 'location_type' int(2) DEFAULT NULL, 'routes' TEXT DEFAULT NULL, PRIMARY KEY ('stop_id'))";
     
     NSString *createIndex = @"CREATE INDEX stop_lat_lon_stops ON stops(stop_lat, stop_lon)";
     
@@ -97,7 +97,7 @@
     stopRecord.stopId = aRecord[@"stop_id"];
     stopRecord.stopLat = aRecord[@"stop_lat"];
     stopRecord.stopLon = aRecord[@"stop_lon"];
-    stopRecord.stopName = [aRecord[@"stop_name"] capitalizedString];
+    stopRecord.stopName = [aRecord[@"stop_name"] localizedCapitalizedString];
     stopRecord.stopDesc = aRecord[@"stop_desc"];
     stopRecord.zoneId = aRecord[@"zone_id"];
     stopRecord.locationType = aRecord[@"location_type"];
@@ -115,7 +115,7 @@
         }
     }
     
-    NSString *routeString = [route componentsJoinedByString:@","];
+    NSString *routeString = [route componentsJoinedByString:@", "];
     
     [db executeUpdate:@"UPDATE stops SET routes=? where stop_id=?",
      routeString,

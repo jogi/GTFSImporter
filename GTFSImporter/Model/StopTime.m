@@ -79,7 +79,7 @@
     }
     
     //Create table
-    NSString *create = @"CREATE TABLE 'stop_times' ('trip_id' varchar(11) DEFAULT NULL, 'arrival_time' time DEFAULT NULL, 'departure_time' time DEFAULT NULL, 'stop_id' varchar(11) DEFAULT NULL, 'stop_sequence' int(11) DEFAULT NULL, 'is_timepoint' tinyint(1) DEFAULT NULL )";
+    NSString *create = @"CREATE TABLE 'stop_times' ('trip_id' TEXT DEFAULT NULL, 'arrival_time' time DEFAULT NULL, 'departure_time' time DEFAULT NULL, 'stop_id' TEXT DEFAULT NULL, 'stop_sequence' int(11) DEFAULT NULL, 'is_timepoint' tinyint(1) DEFAULT NULL, 'is_laststop' tinyint(1) DEFAULT NULL )";
     
     NSString *createIndex = @"CREATE INDEX stop_id_stop_times ON stop_times(stop_id)";
     NSString *createIndex1 = @"CREATE INDEX trip_id_stop_times ON stop_times(trip_id)";
@@ -199,6 +199,7 @@
             temp_dict[@"trip_id"] = st[@"trip_id"];
             temp_dict[@"stop_sequence"] = st[@"stop_sequence"];
             temp_dict[@"is_timepoint"] = @YES;
+            temp_dict[@"is_laststop"] = @NO;
             [stop_times_i addObject:temp_dict];
         }
         else
@@ -219,9 +220,13 @@
             temp_dict[@"trip_id"] = st[@"trip_id"];
             temp_dict[@"stop_sequence"] = st[@"stop_sequence"];
             temp_dict[@"is_timepoint"] = @NO;
+            temp_dict[@"is_laststop"] = @NO;
             [stop_times_i addObject:temp_dict];
         }
     }
+    
+    // update the last one
+    [stop_times_i lastObject][@"is_laststop"] = @YES;
     
     //    NSLog(@"getTimeInterpolatedStopTimesByTripId %d", [stop_times_i count]);
     return stop_times_i;
@@ -266,9 +271,10 @@
     [db beginTransaction];
     
     for (NSDictionary *stopTime in interpolatedStopTimes) {
-        [db executeUpdate:@"UPDATE stop_times SET arrival_time=?, is_timepoint=? WHERE trip_id=? AND stop_id=? AND stop_sequence=?",
+        [db executeUpdate:@"UPDATE stop_times SET arrival_time=?, is_timepoint=?, is_laststop=? WHERE trip_id=? AND stop_id=? AND stop_sequence=?",
          [Util FormatSecondsSinceMidnight:stopTime[@"arrival_time"]],
          stopTime[@"is_timepoint"],
+         stopTime[@"is_laststop"],
          stopTime[@"trip_id"],
          stopTime[@"stop_id"],
          stopTime[@"stop_sequence"]];

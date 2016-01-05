@@ -74,7 +74,7 @@
     }
     
     //Create table
-    NSString *createAgency = @"CREATE TABLE 'agency' ('agency_url' varchar(255) DEFAULT NULL, 'agency_name' varchar(255) DEFAULT NULL, 'agency_timezone' varchar(50) DEFAULT NULL, 'agency_id' varchar(50) NOT NULL, PRIMARY KEY ('agency_id'))";
+    NSString *createAgency = @"CREATE TABLE 'agency' ('agency_url' TEXT DEFAULT NULL, 'agency_name' TEXT DEFAULT NULL, 'agency_timezone' TEXT DEFAULT NULL, 'agency_id' TEXT NOT NULL, PRIMARY KEY ('agency_id'))";
     
     [db executeUpdate:createAgency];
     

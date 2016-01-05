@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *serviceId;
 @property (nonatomic, strong) NSString *blockId;
 @property (nonatomic, strong) NSNumber *directionId;
+@property (nonatomic, strong) NSString *shapeId;
 
 - (void)addTrip:(Trip *)trip;
 - (id)initWithDB:(FMDatabase *)fmdb;

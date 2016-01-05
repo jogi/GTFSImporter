@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *tripId;
 @property (nonatomic, strong) NSString *stopId;
 @property (nonatomic, strong) NSNumber *isTimepoint;
+@property (nonatomic, strong) NSNumber *isLastStop;
 
 - (void)addStopTime:(StopTime *)stopTime;
 - (id)initWithDB:(FMDatabase *)fmdb;

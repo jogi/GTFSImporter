@@ -13,8 +13,8 @@
 @property (nonatomic, strong) NSString * shapeId;
 @property (nonatomic, strong) NSString * shapePtLat;
 @property (nonatomic, strong) NSString * shapePtLon;
-@property (nonatomic, strong) NSString * shapePtSequence;
-@property (nonatomic, strong) NSString * shapeDistTraveled;
+@property (nonatomic, strong) NSNumber * shapePtSequence;
+@property (nonatomic, strong) NSNumber * shapeDistTraveled;
 
 
 - (void)addShape:(Shape *)shape;
