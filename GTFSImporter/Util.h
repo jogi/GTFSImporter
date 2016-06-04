@@ -22,5 +22,8 @@
 + (NSString *) getDateStringFromDate:(NSDate *)date withFormat:(NSString *)format;
 + (NSString *) getTimeStringFromDate:(NSDate *)date withFormat:(NSString *)format;
 
++ (void) setTransitFilesBasepath:(NSString *)transitFilesBasepath;
++ (void) setTransformationsFilePath:(NSString *)transformationsFilePath;
++ (void) setDatabasePath:(NSString *)databasePath;
 
 @end

@@ -12,12 +12,30 @@
 
 @implementation Util
 
+static NSString *kTransitFilesBasepath;
+static NSString *kTransformationsFilePath;
+static NSString *kDatabasePath;
+
++ (void)initialize
+{
+    if (self == [Util class]) {
+        kTransitFilesBasepath = @"~/Desktop/gtfs_source";
+        kTransformationsFilePath = @"~/Desktop/gtfs_transformations.txt";
+        kDatabasePath = @"~/Desktop/gtfs.db";
+    }
+}
+
 /*
  This is root directory where all the gtfs files live. This directory will contain agency.txt, routes.txt, etc.
  */
 + (NSString *) getTransitFilesBasepath
 {
-    return @"/Users/Jogi/Development/San Jose Transit/GTFS/google_transit";
+    return [kTransitFilesBasepath stringByExpandingTildeInPath];
+}
+
++ (void) setTransitFilesBasepath:(NSString *)transitFilesBasepath
+{
+    kTransitFilesBasepath = transitFilesBasepath;
 }
 
 /*
@@ -25,7 +43,12 @@
  */
 + (NSString *) getTransformationsFilePath
 {
-    return @"/Users/Jogi/Development/San Jose Transit/GTFS/google_transit/db/transformations.txt";
+    return [kTransformationsFilePath stringByExpandingTildeInPath];
+}
+
++ (void) setTransformationsFilePath:(NSString *)transformationsFilePath
+{
+    kTransformationsFilePath = transformationsFilePath;
 }
 
 /*
@@ -33,7 +56,12 @@
  */
 + (NSString *) getDatabasePath
 {
-    return @"/Users/Jogi/Development/San Jose Transit/GTFS/google_transit/db/gtfs.db";
+    return [kDatabasePath stringByExpandingTildeInPath];
+}
+
++ (void) setDatabasePath:(NSString *)databasePath
+{
+    kDatabasePath = databasePath;
 }
 
 /*Compute approximate distance between two points in meters. Assumes the
