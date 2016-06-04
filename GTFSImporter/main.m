@@ -12,6 +12,11 @@
 
 int main (int argc, const char * argv[])
 {
+    NSLog(@"Originally built by Vashishtha Jogi -> https://github.com/jvashishtha.");
+    NSLog(@"Modified by Connect Think LLC -> www.connectthink.com ");
+    NSLog(@"Source available at https://github.com/ConnectThink/GTFSImporter");
+    NSLog(@"=========================");
+    
     // SET PATH OVERRIDES
     if (argc >= 2) {
         NSString *sourcePath = [NSString stringWithUTF8String:argv[1]];
