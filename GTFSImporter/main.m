@@ -8,10 +8,22 @@
 
 #import <Foundation/Foundation.h>
 #import "CSVImporter.h"
+#import "Util.h"
 
 int main (int argc, const char * argv[])
 {
+    // SET PATH OVERRIDES
+    if (argc >= 2) {
+        NSString *sourcePath = [NSString stringWithUTF8String:argv[1]];
+        [Util setTransitFilesBasepath:sourcePath];
+    }
     
+    if (argc >= 3) {
+        NSString *destinationPath = [NSString stringWithUTF8String:argv[2]];
+        [Util setDatabasePath:destinationPath];
+    }
+    
+    // IMPORT
     CSVImporter *importer = [[CSVImporter alloc] init];
     
     NSLog(@"Importing Agency...");
@@ -80,8 +92,5 @@ int main (int argc, const char * argv[])
     
     NSLog(@"Import complete!");
     
-    
-
     return 0;
 }
-
