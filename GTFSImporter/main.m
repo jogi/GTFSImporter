@@ -30,6 +30,10 @@ int main (int argc, const char * argv[])
     [importer addCalendar];
     
     
+    NSLog(@"Importing Calendar Dates...");
+    [importer addCalendarDate];
+    
+    
     NSLog(@"Importing Routes...");
     [importer addRoute];
     
