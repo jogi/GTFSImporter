@@ -21,6 +21,8 @@
 //     distribution.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface CSVParser : NSObject
 {
 	NSString *csvString;
