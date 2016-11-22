@@ -17,9 +17,8 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"GTFS Caltrain Devs" ofType:@"zip"];
+- (void)importGFTSDataAtPath:(NSString *)path {
+    
     NSString *libraryDirectory = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
     NSError *error = nil;
     NSString *destinationPath = libraryDirectory;
@@ -28,11 +27,12 @@
     if (error) {
         NSLog(@"error occured while creating directory! %@", error);
     }
-    [SSZipArchive unzipFileAtPath:sourcePath toDestination:destinationPath];
-    
-    NSString *gtfsSourcePath = [destinationPath stringByAppendingPathComponent:@"GTFS Caltrain Devs"];
+    [SSZipArchive unzipFileAtPath:path toDestination:destinationPath];
+    NSArray <NSString *> *lastPathComponents = [[path lastPathComponent] componentsSeparatedByString:@"."];
+    NSString *filename = [lastPathComponents firstObject];
+    NSString *gtfsSourcePath = [destinationPath stringByAppendingPathComponent:filename];
     [Util setTransitFilesBasepath:gtfsSourcePath];
-    [Util setDatabasePath:[gtfsSourcePath stringByAppendingPathComponent:@"gtfs.db"]];
+    [Util setDatabasePath:[destinationPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.db", filename]]];
     
     // IMPORT
     CSVImporter *importer = [[CSVImporter alloc] init];
@@ -103,7 +103,16 @@
     
     NSLog(@"Import complete!");
     
-    NSLog(@"database written to: %@", gtfsSourcePath);
+    NSLog(@"database written to: %@", destinationPath);
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    
+    NSArray *filePaths = [NSBundle pathsForResourcesOfType:@"zip" inDirectory:[[NSBundle mainBundle] bundlePath]];
+    for (NSString *path in filePaths) {
+        [self importGFTSDataAtPath:path];
+    }
     
     return YES;
 }

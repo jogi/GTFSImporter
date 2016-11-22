@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933DB41A1DE43E24001182F7 /* capitol_corridor_google_transit.zip in Resources */ = {isa = PBXBuildFile; fileRef = 933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */; };
 		93BA29111D83EDFC008674E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29101D83EDFC008674E7 /* main.m */; };
 		93BA29141D83EDFC008674E7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29131D83EDFC008674E7 /* AppDelegate.m */; };
 		93BA29171D83EDFC008674E7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29161D83EDFC008674E7 /* ViewController.m */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = capitol_corridor_google_transit.zip; sourceTree = "<group>"; };
 		93BA290C1D83EDFC008674E7 /* GTFSImporteriOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GTFSImporteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93BA29101D83EDFC008674E7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		93BA29121D83EDFC008674E7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		93BA29281D83EF8B008674E7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */,
 				93BA29291D83EF8B008674E7 /* GTFS Caltrain Devs.zip */,
 			);
 			path = Resources;
@@ -341,6 +344,7 @@
 				93BA295C1D83F0B1008674E7 /* Info.plist in Resources */,
 				93BA291C1D83EDFC008674E7 /* Assets.xcassets in Resources */,
 				93BA29AE1D84C3D5008674E7 /* GTFSImporter in Resources */,
+				933DB41A1DE43E24001182F7 /* capitol_corridor_google_transit.zip in Resources */,
 				93BA291A1D83EDFC008674E7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -540,6 +544,7 @@
 				93BA29251D83EDFC008674E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
