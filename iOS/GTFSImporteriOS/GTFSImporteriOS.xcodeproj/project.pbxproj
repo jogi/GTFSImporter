@@ -1,0 +1,552 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		933DB41A1DE43E24001182F7 /* capitol_corridor_google_transit.zip in Resources */ = {isa = PBXBuildFile; fileRef = 933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */; };
+		93BA29111D83EDFC008674E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29101D83EDFC008674E7 /* main.m */; };
+		93BA29141D83EDFC008674E7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29131D83EDFC008674E7 /* AppDelegate.m */; };
+		93BA29171D83EDFC008674E7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29161D83EDFC008674E7 /* ViewController.m */; };
+		93BA291A1D83EDFC008674E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93BA29181D83EDFC008674E7 /* Main.storyboard */; };
+		93BA291C1D83EDFC008674E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93BA291B1D83EDFC008674E7 /* Assets.xcassets */; };
+		93BA291F1D83EDFC008674E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93BA291D1D83EDFC008674E7 /* LaunchScreen.storyboard */; };
+		93BA292A1D83EF8B008674E7 /* GTFS Caltrain Devs.zip in Resources */ = {isa = PBXBuildFile; fileRef = 93BA29291D83EF8B008674E7 /* GTFS Caltrain Devs.zip */; };
+		93BA29531D83F0B1008674E7 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29301D83F0B1008674E7 /* aescrypt.c */; };
+		93BA29541D83F0B1008674E7 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29311D83F0B1008674E7 /* aeskey.c */; };
+		93BA29551D83F0B1008674E7 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29331D83F0B1008674E7 /* aestab.c */; };
+		93BA29561D83F0B1008674E7 /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29371D83F0B1008674E7 /* entropy.c */; };
+		93BA29571D83F0B1008674E7 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29391D83F0B1008674E7 /* fileenc.c */; };
+		93BA29581D83F0B1008674E7 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA293B1D83F0B1008674E7 /* hmac.c */; };
+		93BA29591D83F0B1008674E7 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA293D1D83F0B1008674E7 /* prng.c */; };
+		93BA295A1D83F0B1008674E7 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA293F1D83F0B1008674E7 /* pwd2key.c */; };
+		93BA295B1D83F0B1008674E7 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29411D83F0B1008674E7 /* sha1.c */; };
+		93BA295C1D83F0B1008674E7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93BA29431D83F0B1008674E7 /* Info.plist */; };
+		93BA295D1D83F0B1008674E7 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29461D83F0B1008674E7 /* ioapi.c */; };
+		93BA295E1D83F0B1008674E7 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29481D83F0B1008674E7 /* mztools.c */; };
+		93BA295F1D83F0B1008674E7 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA294A1D83F0B1008674E7 /* unzip.c */; };
+		93BA29601D83F0B1008674E7 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93BA294C1D83F0B1008674E7 /* zip.c */; };
+		93BA29621D83F0B1008674E7 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29501D83F0B1008674E7 /* SSZipArchive.m */; };
+		93BA29641D83F149008674E7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BA29631D83F149008674E7 /* libz.tbd */; };
+		93BA29AA1D83F98B008674E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BA29A91D83F98B008674E7 /* Foundation.framework */; };
+		93BA29AC1D83F9B0008674E7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BA29AB1D83F9B0008674E7 /* libsqlite3.tbd */; };
+		93BA29AE1D84C3D5008674E7 /* GTFSImporter in Resources */ = {isa = PBXBuildFile; fileRef = 93BA29AD1D84C3D5008674E7 /* GTFSImporter */; };
+		93BA29B11D84C505008674E7 /* CSVImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29AF1D84C505008674E7 /* CSVImporter.m */; };
+		93BA29B21D84C505008674E7 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B01D84C505008674E7 /* Util.m */; };
+		93BA29BE1D84C53D008674E7 /* Agency.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B31D84C53D008674E7 /* Agency.m */; };
+		93BA29BF1D84C53D008674E7 /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B41D84C53D008674E7 /* Calendar.m */; };
+		93BA29C01D84C53D008674E7 /* CalendarDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B51D84C53D008674E7 /* CalendarDate.m */; };
+		93BA29C11D84C53D008674E7 /* FareAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B61D84C53D008674E7 /* FareAttributes.m */; };
+		93BA29C21D84C53D008674E7 /* FareRules.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B71D84C53D008674E7 /* FareRules.m */; };
+		93BA29C31D84C53D008674E7 /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B81D84C53D008674E7 /* Route.m */; };
+		93BA29C41D84C53D008674E7 /* Shape.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29B91D84C53D008674E7 /* Shape.m */; };
+		93BA29C51D84C53D008674E7 /* Stop.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29BA1D84C53D008674E7 /* Stop.m */; };
+		93BA29C61D84C53D008674E7 /* StopTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29BB1D84C53D008674E7 /* StopTime.m */; };
+		93BA29C71D84C53D008674E7 /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29BC1D84C53D008674E7 /* Transformations.m */; };
+		93BA29C81D84C53D008674E7 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29BD1D84C53D008674E7 /* Trip.m */; };
+		93BA29CF1D84C560008674E7 /* CSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29C91D84C560008674E7 /* CSVParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		93BA29D01D84C560008674E7 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29CA1D84C560008674E7 /* FMDatabase.m */; };
+		93BA29D11D84C560008674E7 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29CB1D84C560008674E7 /* FMDatabaseAdditions.m */; };
+		93BA29D21D84C560008674E7 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29CC1D84C560008674E7 /* FMDatabasePool.m */; };
+		93BA29D31D84C560008674E7 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29CD1D84C560008674E7 /* FMDatabaseQueue.m */; };
+		93BA29D41D84C560008674E7 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BA29CE1D84C560008674E7 /* FMResultSet.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = capitol_corridor_google_transit.zip; sourceTree = "<group>"; };
+		93BA290C1D83EDFC008674E7 /* GTFSImporteriOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GTFSImporteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		93BA29101D83EDFC008674E7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		93BA29121D83EDFC008674E7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		93BA29131D83EDFC008674E7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		93BA29151D83EDFC008674E7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		93BA29161D83EDFC008674E7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		93BA29191D83EDFC008674E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		93BA291B1D83EDFC008674E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		93BA291E1D83EDFC008674E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		93BA29201D83EDFC008674E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		93BA29291D83EF8B008674E7 /* GTFS Caltrain Devs.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "GTFS Caltrain Devs.zip"; sourceTree = "<group>"; };
+		93BA292E1D83F0B1008674E7 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		93BA292F1D83F0B1008674E7 /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_via_ace.h; sourceTree = "<group>"; };
+		93BA29301D83F0B1008674E7 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		93BA29311D83F0B1008674E7 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		93BA29321D83F0B1008674E7 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		93BA29331D83F0B1008674E7 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		93BA29341D83F0B1008674E7 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		93BA29351D83F0B1008674E7 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		93BA29361D83F0B1008674E7 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
+		93BA29371D83F0B1008674E7 /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = entropy.c; sourceTree = "<group>"; };
+		93BA29381D83F0B1008674E7 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
+		93BA29391D83F0B1008674E7 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
+		93BA293A1D83F0B1008674E7 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
+		93BA293B1D83F0B1008674E7 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		93BA293C1D83F0B1008674E7 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		93BA293D1D83F0B1008674E7 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
+		93BA293E1D83F0B1008674E7 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
+		93BA293F1D83F0B1008674E7 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
+		93BA29401D83F0B1008674E7 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
+		93BA29411D83F0B1008674E7 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		93BA29421D83F0B1008674E7 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		93BA29431D83F0B1008674E7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		93BA29451D83F0B1008674E7 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		93BA29461D83F0B1008674E7 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		93BA29471D83F0B1008674E7 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		93BA29481D83F0B1008674E7 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		93BA29491D83F0B1008674E7 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		93BA294A1D83F0B1008674E7 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		93BA294B1D83F0B1008674E7 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		93BA294C1D83F0B1008674E7 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		93BA294D1D83F0B1008674E7 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		93BA294F1D83F0B1008674E7 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		93BA29501D83F0B1008674E7 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		93BA29511D83F0B1008674E7 /* SSZipCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipCommon.h; sourceTree = "<group>"; };
+		93BA29521D83F0B1008674E7 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		93BA29631D83F149008674E7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		93BA29A91D83F98B008674E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		93BA29AB1D83F9B0008674E7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		93BA29AD1D84C3D5008674E7 /* GTFSImporter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GTFSImporter; path = ../../GTFSImporter; sourceTree = "<group>"; };
+		93BA29AF1D84C505008674E7 /* CSVImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSVImporter.m; path = ../../GTFSImporter/CSVImporter.m; sourceTree = "<group>"; };
+		93BA29B01D84C505008674E7 /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = ../../GTFSImporter/Util.m; sourceTree = "<group>"; };
+		93BA29B31D84C53D008674E7 /* Agency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Agency.m; path = ../../GTFSImporter/Model/Agency.m; sourceTree = "<group>"; };
+		93BA29B41D84C53D008674E7 /* Calendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Calendar.m; path = ../../GTFSImporter/Model/Calendar.m; sourceTree = "<group>"; };
+		93BA29B51D84C53D008674E7 /* CalendarDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CalendarDate.m; path = ../../GTFSImporter/Model/CalendarDate.m; sourceTree = "<group>"; };
+		93BA29B61D84C53D008674E7 /* FareAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FareAttributes.m; path = ../../GTFSImporter/Model/FareAttributes.m; sourceTree = "<group>"; };
+		93BA29B71D84C53D008674E7 /* FareRules.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FareRules.m; path = ../../GTFSImporter/Model/FareRules.m; sourceTree = "<group>"; };
+		93BA29B81D84C53D008674E7 /* Route.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Route.m; path = ../../GTFSImporter/Model/Route.m; sourceTree = "<group>"; };
+		93BA29B91D84C53D008674E7 /* Shape.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Shape.m; path = ../../GTFSImporter/Model/Shape.m; sourceTree = "<group>"; };
+		93BA29BA1D84C53D008674E7 /* Stop.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Stop.m; path = ../../GTFSImporter/Model/Stop.m; sourceTree = "<group>"; };
+		93BA29BB1D84C53D008674E7 /* StopTime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = StopTime.m; path = ../../GTFSImporter/Model/StopTime.m; sourceTree = "<group>"; };
+		93BA29BC1D84C53D008674E7 /* Transformations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Transformations.m; path = ../../GTFSImporter/Model/Transformations.m; sourceTree = "<group>"; };
+		93BA29BD1D84C53D008674E7 /* Trip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Trip.m; path = ../../GTFSImporter/Model/Trip.m; sourceTree = "<group>"; };
+		93BA29C91D84C560008674E7 /* CSVParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSVParser.m; path = ../../GTFSImporter/Libraries/CSVParser/CSVParser.m; sourceTree = "<group>"; };
+		93BA29CA1D84C560008674E7 /* FMDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = ../../GTFSImporter/Libraries/SQLite/FMDatabase.m; sourceTree = "<group>"; };
+		93BA29CB1D84C560008674E7 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = ../../GTFSImporter/Libraries/SQLite/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		93BA29CC1D84C560008674E7 /* FMDatabasePool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = ../../GTFSImporter/Libraries/SQLite/FMDatabasePool.m; sourceTree = "<group>"; };
+		93BA29CD1D84C560008674E7 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = ../../GTFSImporter/Libraries/SQLite/FMDatabaseQueue.m; sourceTree = "<group>"; };
+		93BA29CE1D84C560008674E7 /* FMResultSet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = ../../GTFSImporter/Libraries/SQLite/FMResultSet.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		93BA29091D83EDFC008674E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93BA29AC1D83F9B0008674E7 /* libsqlite3.tbd in Frameworks */,
+				93BA29AA1D83F98B008674E7 /* Foundation.framework in Frameworks */,
+				93BA29641D83F149008674E7 /* libz.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		93BA29031D83EDFC008674E7 = {
+			isa = PBXGroup;
+			children = (
+				93BA29C91D84C560008674E7 /* CSVParser.m */,
+				93BA29CA1D84C560008674E7 /* FMDatabase.m */,
+				93BA29CB1D84C560008674E7 /* FMDatabaseAdditions.m */,
+				93BA29CC1D84C560008674E7 /* FMDatabasePool.m */,
+				93BA29CD1D84C560008674E7 /* FMDatabaseQueue.m */,
+				93BA29CE1D84C560008674E7 /* FMResultSet.m */,
+				93BA29B31D84C53D008674E7 /* Agency.m */,
+				93BA29B41D84C53D008674E7 /* Calendar.m */,
+				93BA29B51D84C53D008674E7 /* CalendarDate.m */,
+				93BA29B61D84C53D008674E7 /* FareAttributes.m */,
+				93BA29B71D84C53D008674E7 /* FareRules.m */,
+				93BA29B81D84C53D008674E7 /* Route.m */,
+				93BA29B91D84C53D008674E7 /* Shape.m */,
+				93BA29BA1D84C53D008674E7 /* Stop.m */,
+				93BA29BB1D84C53D008674E7 /* StopTime.m */,
+				93BA29BC1D84C53D008674E7 /* Transformations.m */,
+				93BA29BD1D84C53D008674E7 /* Trip.m */,
+				93BA29AF1D84C505008674E7 /* CSVImporter.m */,
+				93BA29B01D84C505008674E7 /* Util.m */,
+				93BA29AB1D83F9B0008674E7 /* libsqlite3.tbd */,
+				93BA29A91D83F98B008674E7 /* Foundation.framework */,
+				93BA29631D83F149008674E7 /* libz.tbd */,
+				93BA29AD1D84C3D5008674E7 /* GTFSImporter */,
+				93BA290E1D83EDFC008674E7 /* GTFSImporteriOS */,
+				93BA290D1D83EDFC008674E7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		93BA290D1D83EDFC008674E7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				93BA290C1D83EDFC008674E7 /* GTFSImporteriOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		93BA290E1D83EDFC008674E7 /* GTFSImporteriOS */ = {
+			isa = PBXGroup;
+			children = (
+				93BA292B1D83F0B1008674E7 /* External Libraries */,
+				93BA29281D83EF8B008674E7 /* Resources */,
+				93BA29121D83EDFC008674E7 /* AppDelegate.h */,
+				93BA29131D83EDFC008674E7 /* AppDelegate.m */,
+				93BA29151D83EDFC008674E7 /* ViewController.h */,
+				93BA29161D83EDFC008674E7 /* ViewController.m */,
+				93BA29181D83EDFC008674E7 /* Main.storyboard */,
+				93BA291B1D83EDFC008674E7 /* Assets.xcassets */,
+				93BA291D1D83EDFC008674E7 /* LaunchScreen.storyboard */,
+				93BA29201D83EDFC008674E7 /* Info.plist */,
+				93BA290F1D83EDFC008674E7 /* Supporting Files */,
+			);
+			path = GTFSImporteriOS;
+			sourceTree = "<group>";
+		};
+		93BA290F1D83EDFC008674E7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				93BA29101D83EDFC008674E7 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		93BA29281D83EF8B008674E7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				933DB4171DE43E24001182F7 /* capitol_corridor_google_transit.zip */,
+				93BA29291D83EF8B008674E7 /* GTFS Caltrain Devs.zip */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		93BA292B1D83F0B1008674E7 /* External Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				93BA292C1D83F0B1008674E7 /* SSZipArchive */,
+			);
+			path = "External Libraries";
+			sourceTree = "<group>";
+		};
+		93BA292C1D83F0B1008674E7 /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				93BA292D1D83F0B1008674E7 /* aes */,
+				93BA29431D83F0B1008674E7 /* Info.plist */,
+				93BA29441D83F0B1008674E7 /* minizip */,
+				93BA294F1D83F0B1008674E7 /* SSZipArchive.h */,
+				93BA29501D83F0B1008674E7 /* SSZipArchive.m */,
+				93BA29511D83F0B1008674E7 /* SSZipCommon.h */,
+				93BA29521D83F0B1008674E7 /* ZipArchive.h */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		93BA292D1D83F0B1008674E7 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				93BA292E1D83F0B1008674E7 /* aes.h */,
+				93BA292F1D83F0B1008674E7 /* aes_via_ace.h */,
+				93BA29301D83F0B1008674E7 /* aescrypt.c */,
+				93BA29311D83F0B1008674E7 /* aeskey.c */,
+				93BA29321D83F0B1008674E7 /* aesopt.h */,
+				93BA29331D83F0B1008674E7 /* aestab.c */,
+				93BA29341D83F0B1008674E7 /* aestab.h */,
+				93BA29351D83F0B1008674E7 /* brg_endian.h */,
+				93BA29361D83F0B1008674E7 /* brg_types.h */,
+				93BA29371D83F0B1008674E7 /* entropy.c */,
+				93BA29381D83F0B1008674E7 /* entropy.h */,
+				93BA29391D83F0B1008674E7 /* fileenc.c */,
+				93BA293A1D83F0B1008674E7 /* fileenc.h */,
+				93BA293B1D83F0B1008674E7 /* hmac.c */,
+				93BA293C1D83F0B1008674E7 /* hmac.h */,
+				93BA293D1D83F0B1008674E7 /* prng.c */,
+				93BA293E1D83F0B1008674E7 /* prng.h */,
+				93BA293F1D83F0B1008674E7 /* pwd2key.c */,
+				93BA29401D83F0B1008674E7 /* pwd2key.h */,
+				93BA29411D83F0B1008674E7 /* sha1.c */,
+				93BA29421D83F0B1008674E7 /* sha1.h */,
+			);
+			path = aes;
+			sourceTree = "<group>";
+		};
+		93BA29441D83F0B1008674E7 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				93BA29451D83F0B1008674E7 /* crypt.h */,
+				93BA29461D83F0B1008674E7 /* ioapi.c */,
+				93BA29471D83F0B1008674E7 /* ioapi.h */,
+				93BA29481D83F0B1008674E7 /* mztools.c */,
+				93BA29491D83F0B1008674E7 /* mztools.h */,
+				93BA294A1D83F0B1008674E7 /* unzip.c */,
+				93BA294B1D83F0B1008674E7 /* unzip.h */,
+				93BA294C1D83F0B1008674E7 /* zip.c */,
+				93BA294D1D83F0B1008674E7 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		93BA290B1D83EDFC008674E7 /* GTFSImporteriOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93BA29231D83EDFC008674E7 /* Build configuration list for PBXNativeTarget "GTFSImporteriOS" */;
+			buildPhases = (
+				93BA29081D83EDFC008674E7 /* Sources */,
+				93BA29091D83EDFC008674E7 /* Frameworks */,
+				93BA290A1D83EDFC008674E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GTFSImporteriOS;
+			productName = GTFSImporteriOS;
+			productReference = 93BA290C1D83EDFC008674E7 /* GTFSImporteriOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		93BA29041D83EDFC008674E7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Aaron Jubbal";
+				TargetAttributes = {
+					93BA290B1D83EDFC008674E7 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 93BA29071D83EDFC008674E7 /* Build configuration list for PBXProject "GTFSImporteriOS" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 93BA29031D83EDFC008674E7;
+			productRefGroup = 93BA290D1D83EDFC008674E7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				93BA290B1D83EDFC008674E7 /* GTFSImporteriOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		93BA290A1D83EDFC008674E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93BA292A1D83EF8B008674E7 /* GTFS Caltrain Devs.zip in Resources */,
+				93BA291F1D83EDFC008674E7 /* LaunchScreen.storyboard in Resources */,
+				93BA295C1D83F0B1008674E7 /* Info.plist in Resources */,
+				93BA291C1D83EDFC008674E7 /* Assets.xcassets in Resources */,
+				93BA29AE1D84C3D5008674E7 /* GTFSImporter in Resources */,
+				933DB41A1DE43E24001182F7 /* capitol_corridor_google_transit.zip in Resources */,
+				93BA291A1D83EDFC008674E7 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		93BA29081D83EDFC008674E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93BA295B1D83F0B1008674E7 /* sha1.c in Sources */,
+				93BA295D1D83F0B1008674E7 /* ioapi.c in Sources */,
+				93BA29621D83F0B1008674E7 /* SSZipArchive.m in Sources */,
+				93BA29591D83F0B1008674E7 /* prng.c in Sources */,
+				93BA295A1D83F0B1008674E7 /* pwd2key.c in Sources */,
+				93BA295E1D83F0B1008674E7 /* mztools.c in Sources */,
+				93BA29571D83F0B1008674E7 /* fileenc.c in Sources */,
+				93BA295F1D83F0B1008674E7 /* unzip.c in Sources */,
+				93BA29171D83EDFC008674E7 /* ViewController.m in Sources */,
+				93BA29551D83F0B1008674E7 /* aestab.c in Sources */,
+				93BA29601D83F0B1008674E7 /* zip.c in Sources */,
+				93BA29141D83EDFC008674E7 /* AppDelegate.m in Sources */,
+				93BA29531D83F0B1008674E7 /* aescrypt.c in Sources */,
+				93BA29111D83EDFC008674E7 /* main.m in Sources */,
+				93BA29581D83F0B1008674E7 /* hmac.c in Sources */,
+				93BA29541D83F0B1008674E7 /* aeskey.c in Sources */,
+				93BA29561D83F0B1008674E7 /* entropy.c in Sources */,
+				93BA29B11D84C505008674E7 /* CSVImporter.m in Sources */,
+				93BA29B21D84C505008674E7 /* Util.m in Sources */,
+				93BA29BE1D84C53D008674E7 /* Agency.m in Sources */,
+				93BA29BF1D84C53D008674E7 /* Calendar.m in Sources */,
+				93BA29C01D84C53D008674E7 /* CalendarDate.m in Sources */,
+				93BA29C11D84C53D008674E7 /* FareAttributes.m in Sources */,
+				93BA29C21D84C53D008674E7 /* FareRules.m in Sources */,
+				93BA29C31D84C53D008674E7 /* Route.m in Sources */,
+				93BA29C41D84C53D008674E7 /* Shape.m in Sources */,
+				93BA29C51D84C53D008674E7 /* Stop.m in Sources */,
+				93BA29C61D84C53D008674E7 /* StopTime.m in Sources */,
+				93BA29C71D84C53D008674E7 /* Transformations.m in Sources */,
+				93BA29C81D84C53D008674E7 /* Trip.m in Sources */,
+				93BA29CF1D84C560008674E7 /* CSVParser.m in Sources */,
+				93BA29D01D84C560008674E7 /* FMDatabase.m in Sources */,
+				93BA29D11D84C560008674E7 /* FMDatabaseAdditions.m in Sources */,
+				93BA29D21D84C560008674E7 /* FMDatabasePool.m in Sources */,
+				93BA29D31D84C560008674E7 /* FMDatabaseQueue.m in Sources */,
+				93BA29D41D84C560008674E7 /* FMResultSet.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		93BA29181D83EDFC008674E7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93BA29191D83EDFC008674E7 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		93BA291D1D83EDFC008674E7 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93BA291E1D83EDFC008674E7 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		93BA29211D83EDFC008674E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		93BA29221D83EDFC008674E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		93BA29241D83EDFC008674E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = GTFSImporteriOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sample.GTFSImporteriOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "\"$(PROJECT_DIR)/../../GTFSImporter\"/**";
+			};
+			name = Debug;
+		};
+		93BA29251D83EDFC008674E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = GTFSImporteriOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sample.GTFSImporteriOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "\"$(PROJECT_DIR)/../../GTFSImporter\"/**";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		93BA29071D83EDFC008674E7 /* Build configuration list for PBXProject "GTFSImporteriOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93BA29211D83EDFC008674E7 /* Debug */,
+				93BA29221D83EDFC008674E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93BA29231D83EDFC008674E7 /* Build configuration list for PBXNativeTarget "GTFSImporteriOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93BA29241D83EDFC008674E7 /* Debug */,
+				93BA29251D83EDFC008674E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 93BA29041D83EDFC008674E7 /* Project object */;
+}

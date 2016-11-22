@@ -8,10 +8,27 @@
 
 #import <Foundation/Foundation.h>
 #import "CSVImporter.h"
+#import "Util.h"
 
 int main (int argc, const char * argv[])
 {
+    NSLog(@"Originally built by Vashishtha Jogi -> https://github.com/jvashishtha.");
+    NSLog(@"Modified by Connect Think LLC -> www.connectthink.com ");
+    NSLog(@"Source available at https://github.com/ConnectThink/GTFSImporter");
+    NSLog(@"=========================");
     
+    // SET PATH OVERRIDES
+    if (argc >= 2) {
+        NSString *sourcePath = [NSString stringWithUTF8String:argv[1]];
+        [Util setTransitFilesBasepath:sourcePath];
+    }
+    
+    if (argc >= 3) {
+        NSString *destinationPath = [NSString stringWithUTF8String:argv[2]];
+        [Util setDatabasePath:destinationPath];
+    }
+    
+    // IMPORT
     CSVImporter *importer = [[CSVImporter alloc] init];
     
     NSLog(@"Importing Agency...");
@@ -28,6 +45,10 @@ int main (int argc, const char * argv[])
     
     NSLog(@"Importing Calendar...");
     [importer addCalendar];
+    
+    
+    NSLog(@"Importing Calendar Dates...");
+    [importer addCalendarDate];
     
     
     NSLog(@"Importing Routes...");
@@ -76,8 +97,5 @@ int main (int argc, const char * argv[])
     
     NSLog(@"Import complete!");
     
-    
-
     return 0;
 }
-
