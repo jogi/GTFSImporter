@@ -16,6 +16,7 @@ final class gtfs_importerTests: XCTestCase {
 
         let process = Process()
         process.executableURL = fooBinary
+        process.arguments = ["--path", "Tests/testData"]
 
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -26,7 +27,7 @@ final class gtfs_importerTests: XCTestCase {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
 
-        XCTAssertEqual(output, "Hello, world!\n")
+        XCTAssertEqual(output, "Importing from Tests/testData\nImporting from agency.txt\n")
     }
 
     /// Returns path to the built products directory.

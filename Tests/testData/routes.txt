@@ -1,0 +1,79 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,direction_name0,direction_name1,ext_route_type
+BlueN,VTA,Blue Line N,Metro/Airport - Baypointe,Use the substitute bus bridge in place due to maintenance work,0,https://www.vta.org/go/routes/blue-line,4cb4e7,000000,1,,,110
+BlueS,VTA,Blue Line S,Santa Teresa - Civic Center,Use the substitute bus bridge in place due to maintenance work,0,https://www.vta.org/go/routes/blue-line,4cb4e7,000000,1,,,110
+Blue,VTA,Blue Line,Baypointe - Santa Teresa,,0,https://www.vta.org/go/routes/blue-line,4cb4e7,000000,1,Northbound,Southbound,900
+GrenN,VTA,Green Line N,Metro/Airport - Old Ironsides,Use the substitute bus bridge in place due to maintenance work,0,https://www.vta.org/go/routes/green-line,73c92d,000000,2,,,110
+GrenS,VTA,Green Line S,Winchester - Civic Center,Use the substitute bus bridge in place due to maintenance work,0,https://www.vta.org/go/routes/green-line,73c92d,000000,2,,,110
+Green,VTA,Green Line,Old Ironsides - Winchester,,0,https://www.vta.org/go/routes/green-line,73c92d,000000,2,Northbound,Southbound,900
+Ornge,VTA,Orange Line,Mountain View - Alum Rock,,0,https://www.vta.org/go/routes/orange-line,ff8300,000000,3,Eastbound,Westbound,900
+500,VTA,Rapid 500,San Jose Diridon Station - Berryessa BART,"Rapid buses may depart up to five minutes earlier than the time shown, if traffic allows.",3,https://www.vta.org/go/routes/rapid-500,e4002b,FFFFFF,4,Eastbound,Westbound,702
+522,VTA,Rapid 522,Palo Alto Transit Center - Eastridge,"Rapid buses may depart up to five minutes earlier than the time shown, if traffic allows.",3,https://www.vta.org/go/routes/rapid-522,e4002b,FFFFFF,5,Eastbound,Westbound,702
+523,VTA,Rapid 523,Berryessa BART -  Lockheed Martin via De Anza College,"Rapid buses may depart up to five minutes earlier than the time shown, if traffic allows.",3,https://www.vta.org/go/routes/rapid-523,e4002b,FFFFFF,6,Eastbound,Westbound,702
+BBGBS,VTA,Blue/Green South,San Antonio - Tamien - San Fernando - Children's Discovery Museum Bus Bridge,Substitute bus bridge in place due to maintenance work,3,https://www.vta.org/alerts,29588c,FFFFFF,9,,,714
+BBGBN,VTA,Blue/Green North,Civic Center - Karina Bus Bridge,Substitute bus bridge in place due to maintenance work,3,https://www.vta.org/alerts,29588c,FFFFFF,10,,,714
+20,VTA,20,Milpitas BART - Sunnyvale Transit Center,,3,https://www.vta.org/go/routes/20,29588c,FFFFFF,20,Eastbound,Westbound,704
+21,VTA,21,Stanford Shopping Center - Santa Clara Transit Center,,3,https://www.vta.org/go/routes/21,29588c,FFFFFF,21,Eastbound,Westbound,704
+22,VTA,22,Palo Alto Transit Center - Eastridge,,3,https://www.vta.org/go/routes/22,e4002b,FFFFFF,22,Eastbound,Westbound,702
+23,VTA,23,De Anza College - Alum Rock Station via Stevens Creek,,3,https://www.vta.org/go/routes/23,e4002b,FFFFFF,23,Eastbound,Westbound,702
+25,VTA,25,De Anza College - Alum Rock Station via Valley Med,,3,https://www.vta.org/go/routes/25,e4002b,FFFFFF,25,Eastbound,Westbound,702
+26,VTA,26,West Valley College - Eastridge,,3,https://www.vta.org/go/routes/26,e4002b,FFFFFF,26,Eastbound,Westbound,702
+27,VTA,27,Winchester Station - Kaiser San Jose via Downtown Los Gatos,,3,https://www.vta.org/go/routes/27,29588c,FFFFFF,27,Eastbound,Westbound,704
+31,VTA,31,Evergreen Valley College - Eastridge,,3,https://www.vta.org/go/routes/31,29588c,FFFFFF,31,Eastbound,Westbound,704
+37,VTA,37,West Valley College - Capitol Station,,3,https://www.vta.org/go/routes/37,29588c,FFFFFF,37,Eastbound,Westbound,704
+39,VTA,39,Eastridge - The Villages,,3,https://www.vta.org/go/routes/39,29588c,FFFFFF,39,Northbound,Southbound,704
+40,VTA,40,Foothill College - Mountain View Transit Center via North Bayshore,,3,https://www.vta.org/go/routes/40,29588c,FFFFFF,40,Northbound,Southbound,704
+42,VTA,42,Evergreen Valley College - Santa Teresa Station,,3,https://www.vta.org/go/routes/42,29588c,FFFFFF,42,Northbound,Southbound,704
+44,VTA,44,Milpitas BART - McCarthy Ranch via Tasman & Alder,,3,https://www.vta.org/go/routes/44,29588c,FFFFFF,44,Northbound,Southbound,704
+47,VTA,47,Milpitas BART - McCarthy Ranch via Park Victoria,,3,https://www.vta.org/go/routes/47,29588c,FFFFFF,47,Northbound,Southbound,704
+51,VTA,51,Moffett Field/Ames Center - West Valley College,,3,https://www.vta.org/go/routes/51,29588c,FFFFFF,50,Northbound,Southbound,704
+52,VTA,52,Foothill College - Mountain View Transit Center via El Monte,,3,https://www.vta.org/go/routes/52,29588c,FFFFFF,52,Northbound,Southbound,704
+53,VTA,53,Sunnyvale Transit Center - Santa Clara Transit Center,,3,https://www.vta.org/go/routes/53,29588c,FFFFFF,53,Eastbound,Westbound,704
+55,VTA,55,Old Ironsides Station - De Anza College,,3,https://www.vta.org/go/routes/55,29588c,FFFFFF,55,Northbound,Southbound,704
+56,VTA,56,Lockheed Martin - Tamien Station,,3,https://www.vta.org/go/routes/56,29588c,FFFFFF,56,Northbound,Southbound,704
+57,VTA,57,Old Ironsides Station - West Valley College,,3,https://www.vta.org/go/routes/57,e4002b,FFFFFF,57,Northbound,Southbound,702
+59,VTA,59,Valley Fair - Baypointe Station via Alviso,,3,https://www.vta.org/go/routes/59,29588c,FFFFFF,59,Northbound,Southbound,704
+60,VTA,60,Milpitas BART - Winchester Station via SJC Airport,,3,https://www.vta.org/go/routes/60,e4002b,FFFFFF,60,Northbound,Southbound,702
+61,VTA,61,Sierra & Piedmont - Good Samaritan Hospital,,3,https://www.vta.org/go/routes/61,e4002b,FFFFFF,61,Northbound,Southbound,702
+64A,VTA,64A,McKee & White - Ohlone-Chynoweth Station,,3,https://www.vta.org/go/routes/64A,e4002b,FFFFFF,64,Northbound,Southbound,702
+64B,VTA,64B,McKee & White - Almaden Expressway & Camden,,3,https://www.vta.org/go/routes/64B,e4002b,FFFFFF,65,Northbound,Southbound,702
+66,VTA,66,North Milpitas - Kaiser San Jose,,3,https://www.vta.org/go/routes/66,e4002b,FFFFFF,66,Northbound,Southbound,702
+68,VTA,68,San Jose Diridon Station - Gilroy Transit Center,,3,https://www.vta.org/go/routes/68,e4002b,FFFFFF,68,Northbound,Southbound,702
+70,VTA,70,Milpitas BART - Eastridge via Jackson,,3,https://www.vta.org/go/routes/70,e4002b,FFFFFF,70,Northbound,Southbound,702
+71,VTA,71,Milpitas BART - Capitol Station,,3,https://www.vta.org/go/routes/71,29588c,FFFFFF,71,Northbound,Southbound,704
+72,VTA,72,Downtown San Jose - Senter & Monterey via McLaughlin,,3,https://www.vta.org/go/routes/72,e4002b,FFFFFF,72,Northbound,Southbound,702
+73,VTA,73,Downtown San Jose - Senter & Monterey via Senter,,3,https://www.vta.org/go/routes/73,e4002b,FFFFFF,73,Northbound,Southbound,702
+77,VTA,77,Milpitas BART - Eastridge via King,,3,https://www.vta.org/go/routes/77,e4002b,FFFFFF,77,Northbound,Southbound,702
+83,VTA,83,Almaden & McKean - Ohlone-Chynoweth Station,,3,https://www.vta.org/go/routes/83,29588c,FFFFFF,83,Northbound,Southbound,704
+84,VTA,84,Gilroy Transit Center - Saint Louise Hospital via Gilroy Outlets,,3,https://www.vta.org/go/routes/84,29588c,FFFFFF,84,Northbound,Southbound,704
+85,VTA,85,Gilroy Transit Center - Saint Louise Hospital via west Gilroy,,3,https://www.vta.org/go/routes/85,29588c,FFFFFF,85,Northbound,Southbound,704
+86,VTA,86,Gavilan College - Gilroy Transit Center,,3,https://www.vta.org/go/routes/86,29588c,FFFFFF,86,Northbound,Southbound,704
+87,VTA,87,Morgan Hill Civic Center - Burnett Avenue,,3,https://www.vta.org/go/routes/87,29588c,FFFFFF,87,Northbound,Southbound,704
+89,VTA,89,"California Avenue Caltrain - Palo Alto VA Hospital ",,3,https://www.vta.org/go/routes/89,29588c,FFFFFF,89,Northbound,Southbound,704
+101,VTA,Express 101,Camden & Highway 85 - Stanford Research Park,,3,https://www.vta.org/go/routes/101,00b140,000000,101,Northbound,Southbound,701
+102,VTA,Express 102,South San Jose - Stanford Research Park,,3,https://www.vta.org/go/routes/102,00b140,000000,102,Northbound,Southbound,701
+103,VTA,Express 103,Eastridge - Stanford Research Park,,3,https://www.vta.org/go/routes/103,00b140,000000,103,Eastbound,Westbound,701
+104,VTA,Express 104,Milpitas BART - Stanford Research Park,,3,https://www.vta.org/go/routes/104,00b140,000000,104,Eastbound,Westbound,701
+121,VTA,Express 121,Gilroy/Morgan Hill - Lockheed Martin,,3,https://www.vta.org/go/routes/121,00b140,000000,121,Northbound,Southbound,701
+168,VTA,Express 168,Gilroy/Morgan Hill - San Jose Diridon,,3,https://www.vta.org/go/routes/168,00b140,000000,168,Northbound,Southbound,701
+181,VTA,Express 181,San Jose Diridon Station - Warm Springs BART,,3,http://www.vta.org/routes/rt181,00B140,000000,181,Northbound,Southbound,701
+246,VTA,School 246,Milpitas High School - Yellowstone & Butano,,3,https://www.vta.org/go/routes/246,29588c,FFFFFF,246,Eastbound,Westbound,713
+247,VTA,School 247,Milpitas High School - Landess & Park Victoria,,3,https://www.vta.org/go/routes/247,29588c,FFFFFF,247,Eastbound,Westbound,713
+256,VTA,School 256,Willow Glen High School - Keyes & First,,3,https://www.vta.org/go/routes/256,29588c,FFFFFF,256,Eastbound,Westbound,713
+270,VTA,School 270,Independence High School - Landess & Park Victoria,,3,https://www.vta.org/go/routes/270,29588c,FFFFFF,270,Northbound,,713
+287,VTA,School 287,Live Oak High School - Monterey & San Martin,,3,https://www.vta.org/go/routes/287,29588c,FFFFFF,287,Southbound,,713
+288,VTA,School 288,Gunn High School - Middlefield & Colorado via Charleston,,3,https://www.vta.org/go/routes/288,29588c,FFFFFF,288,Northbound,Southbound,713
+288L,VTA,School 288L,Gunn High School - Louis & Fielding,,3,https://www.vta.org/go/routes/288L,29588c,FFFFFF,289,Northbound,Southbound,713
+288M,VTA,School 288M,Gunn High School - Middlefield & Colorado via Waverley,,3,https://www.vta.org/go/routes/288M,29588c,FFFFFF,290,Northbound,Southbound,713
+822,VTA,ACE Gray,Great America ACE Station -  South Sunnyvale,,3,,939598,FFFFFF,822,Northbound,Southbound,711
+823,VTA,ACE Green,Great America ACE Station -  North Santa Clara,,3,,0e9972,FFFFFF,823,Eastbound,Westbound,711
+824,VTA,ACE Orange,Great America ACE Station -  Mountain View,,3,,f69238,FFFFFF,824,Eastbound,Westbound,711
+825,VTA,ACE Purple,Great America ACE Station -  West Milpitas,,3,,263996,FFFFFF,825,Eastbound,Westbound,711
+826,VTA,ACE Red,Great America ACE Station -  North Sunnyvale,,3,,d60e51,FFFFFF,826,Eastbound,Westbound,711
+827,VTA,ACE Yellow,Great America ACE Station -  South Santa Clara,,3,,ffe601,000000,827,Northbound,Southbound,711
+828,VTA,ACE Brown,Great America ACE Station -  South Sunnyvale,,3,,6d4739,FFFFFF,828,Eastbound,Westbound,711
+831,VTA,ACE Violet,Great America ACE Station -  VTA Light Rail,,3,,bbb7da,000000,831,Eastbound,Westbound,711
+911,VTA,Levi's - Santa Teresa,Levi's Express from Santa Teresa,,0,https://www.vta.org/go/events/levis-stadium,4cb4e7,000000,911,,,111
+912,VTA,Levi's - Mtn View,Levi's Express from Mountain View,,0,https://www.vta.org/go/events/levis-stadium,ff8300,000000,912,,,111
+913,VTA,Levi's - Alum Rock,Levi's Express from Alum Rock,,0,https://www.vta.org/go/events/levis-stadium,ff8300,000000,913,,,111
+914,VTA,Levi's - Winchester,Levi's Express from Winchester,,0,https://www.vta.org/go/events/levis-stadium,73c92d,000000,914,,,111
+920,VTA,920,HISTORIC TROLLEY - WINTER ONLY,,3,,C0C0C0,000000,,,,

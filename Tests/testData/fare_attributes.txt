@@ -1,0 +1,6 @@
+fare_id,price,currency_type,payment_method,transfers,transfer_duration
+1,2.50000000,USD,0,0,
+2,5.00000000,USD,0,0,
+3,2.50000000,USD,1,0,
+4,5.00000000,USD,1,0,
+5,0.00000000,USD,0,0,

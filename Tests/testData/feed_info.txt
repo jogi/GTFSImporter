@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,feed_contact_email,feed_contact_url
+Santa Clara Valley Transportation Authority,https://www.vta.org,EN,20200608,20200809,2020-05-29_13:03,customer.service@vta.org,https://www.vta.org/about/contact

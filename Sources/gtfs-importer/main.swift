@@ -5,7 +5,6 @@ struct GTFSImporter: ParsableCommand {
     var path: String
 
     func run() throws {
-        print("Recreating tables and cleaning up 🧹")
         let databaseHelper = try DatabaseHelper()
         
         print("Importing from \(path)")
