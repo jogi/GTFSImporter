@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'GTFSImporter' target in the 'GTFSImporter' project
-//
-
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-#endif

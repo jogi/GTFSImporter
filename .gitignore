@@ -17,3 +17,5 @@ profile
 DerivedData
 .idea/
 *.hmap
+gtfs.sqlite
+Package.resolved
