@@ -1,5 +1,10 @@
-language: objective-c
-os: osx
-osx_image: xcode9.2
-  
-xcode_project: GTFSImporter.xcodeproj # path to your xcodeproj folder
+os:
+  - osx
+language: swift
+osx_image: xcode11
+env:
+  - PROJECT_NAME=gtfs-importer
+install: (cd $PROJECT_NAME && swift package update)
+script:
+  - (cd $PROJECT_NAME && swift build)
+  - (cd $PROJECT_NAME && swift test)
