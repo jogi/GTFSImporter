@@ -1,7 +1,7 @@
 os:
   - osx
 language: swift
-osx_image: xcode11
+osx_image: xcode11.5
 install: (swift package update)
 script:
   - (swift build)
