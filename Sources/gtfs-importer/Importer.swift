@@ -81,6 +81,8 @@ struct Importer {
     func importAllFiles() throws {
         try Agency.importFile(from: path)
         try Calendar.importFile(from: path)
+        try CalendarDates.importFile(from: path)
+        try FareAttributes.importFile(from: path)
     }
 }
 

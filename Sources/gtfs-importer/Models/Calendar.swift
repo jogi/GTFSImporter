@@ -10,22 +10,28 @@ import CSV
 import GRDB
 
 struct Calendar {
+    enum Availability: Int, Codable {
+        case unavailable = 0
+        case available = 1
+    }
     var serviceIdentifier: String
-    var startDate: String
-    var endDate: String
-    var monday: Int
-    var tuesday: Int
-    var wednesday: Int
-    var thursday: Int
-    var friday: Int
-    var saturday: Int
-    var sunday: Int
+    var startDate: Date
+    var endDate: Date
+    var monday: Availability
+    var tuesday: Availability
+    var wednesday: Availability
+    var thursday: Availability
+    var friday: Availability
+    var saturday: Availability
+    var sunday: Availability
 }
 
 // For diffing
 extension Calendar: Hashable {}
 
 extension Calendar: Codable, PersistableRecord {
+    static let databaseDateEncodingStrategy: DatabaseDateEncodingStrategy = .formatted(DateFormatter.yyyyMMddDash)
+    
     private enum Columns {
         static let serviceIdentifier = Column(CodingKeys.serviceIdentifier)
         static let startDate = Column(CodingKeys.startDate)
@@ -63,6 +69,15 @@ extension Calendar: ImporterImporting {
         return try? DatabaseQueue(path: "./gtfs.sqlite")
     }
     
+    static func receiveImport(from reader: CSVReader, with db: Database) throws {
+        do {
+            let decoder = CSVRowDecoder()
+            decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMdd)
+            let record = try decoder.decode(Self.self, from: reader)
+            try record.insert(db)
+        }
+    }
+    
     // MARK:- DatabaseCreating
     static func createTable() throws {
         try dbQueue?.write { db in
@@ -75,8 +90,8 @@ extension Calendar: ImporterImporting {
             // now create new table
             try db.create(table: "calendar") { t in
                 t.column("service_id", .text).notNull().indexed()
-                t.column("start_date", .text).notNull()
-                t.column("end_date", .text).notNull()
+                t.column("start_date", .date).notNull()
+                t.column("end_date", .date).notNull()
                 t.column("monday", .integer).notNull()
                 t.column("tuesday", .integer).notNull()
                 t.column("wednesday", .integer).notNull()
