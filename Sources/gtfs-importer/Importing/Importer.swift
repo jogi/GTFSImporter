@@ -11,14 +11,11 @@ import GRDB
 
 enum ImporterError: LocalizedError {
     case invalidStream(path: String)
-    case missingColumns
     
     var errorDescription: String? {
         switch self {
         case let .invalidStream(path):
             return "Cannot create an InputStream for file at path \(path)"
-        case .missingColumns:
-            return "Missing one of required columns - id, name"
         }
     }
 }
@@ -48,15 +45,15 @@ extension ImporterImporting {
         print("Importing from \(fileName)")
         
         do {
-            let startTime = Date()
-            
-            // First let's cleanup the table
-            try self.createTable()
-            
             let fileURL = URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent(fileName)
             guard let stream = InputStream(url: fileURL) else {
                 throw ImporterError.invalidStream(path: fileURL.path)
             }
+            
+            let startTime = Date()
+            
+            // First let's cleanup the table
+            try self.createTable()
             
             let reader = try CSVReader(stream: stream, hasHeaderRow: true)
             
@@ -81,8 +78,15 @@ struct Importer {
     func importAllFiles() throws {
         try Agency.importFile(from: path)
         try Calendar.importFile(from: path)
-        try CalendarDates.importFile(from: path)
-        try FareAttributes.importFile(from: path)
+        try CalendarDate.importFile(from: path)
+        try FareAttribute.importFile(from: path)
+        try FareRule.importFile(from: path)
+        try Direction.importFile(from: path)
+        try Stop.importFile(from: path)
+        try Route.importFile(from: path)
+        try Shape.importFile(from: path)
+        try StopTime.importFile(from: path)
+        try Trip.importFile(from: path)
     }
 }
 

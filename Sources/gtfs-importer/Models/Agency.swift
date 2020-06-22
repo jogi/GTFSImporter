@@ -1,12 +1,11 @@
 //
-//  File.swift
+//  Agency.swift
 //  
 //
 //  Created by Vashishtha Jogi on 6/14/20.
 //
 
 import Foundation
-import CSV
 import GRDB
 
 struct Agency {
@@ -44,40 +43,6 @@ extension Agency: Codable, PersistableRecord {
         case phone = "agency_phone"
         case fareURL = "agency_fare_url"
         case email = "agency_email"
-    }
-}
-
-extension Agency: ImporterImporting {
-    // MARK: - ImporterImporting
-    static var fileName: String {
-        return "agency.txt"
-    }
-    
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
-    // MARK:- DatabaseCreating
-    static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: "agency")
-            } catch {
-                print("Table agency does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: "agency") { t in
-                t.column("agency_id", .text).notNull().primaryKey()
-                t.column("agency_name", .text).notNull()
-                t.column("agency_url", .text).notNull()
-                t.column("agency_timezone", .text).notNull()
-                t.column("agency_lang", .text)
-                t.column("agency_phone", .text)
-                t.column("agency_fare_url", .text)
-                t.column("agency_email", .text)
-            }
-        }
     }
 }
 

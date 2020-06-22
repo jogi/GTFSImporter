@@ -1,15 +1,14 @@
 //
-//  FareAttributes.swift
+//  FareAttribute.swift
 //  
 //
 //  Created by Vashishtha Jogi on 6/20/20.
 //
 
 import Foundation
-import CSV
 import GRDB
 
-struct FareAttributes {
+struct FareAttribute {
     enum PaymentMethod: Int, Codable {
         case paidOnBoard = 0
         case paidBeforeBoarding = 1
@@ -24,15 +23,15 @@ struct FareAttributes {
     var price: Float
     var currencyType: String
     var paymentMethod: PaymentMethod
-    var transfers: AllowedTransfers
+    var transfers: AllowedTransfers = .unlimited
     var agencyIdentifier: String?
     var transferDuration: UInt?
 }
 
 // For diffing
-extension FareAttributes: Hashable {}
+extension FareAttribute: Hashable {}
 
-extension FareAttributes: Codable, PersistableRecord {
+extension FareAttribute: Codable, PersistableRecord {
     static var databaseTableName = "fare_attributes"
     
     private enum Columns {
@@ -56,40 +55,7 @@ extension FareAttributes: Codable, PersistableRecord {
     }
 }
 
-extension FareAttributes: ImporterImporting {
-    // MARK: - ImporterImporting
-    static var fileName: String {
-        return "fare_attributes.txt"
-    }
-    
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
-    // MARK:- DatabaseCreating
-    static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: "fare_attributes")
-            } catch {
-                print("Table fare_attributes does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: "fare_attributes") { t in
-                t.column("fare_id", .text).notNull().indexed()
-                t.column("price", .double).notNull()
-                t.column("currency_type", .text).notNull()
-                t.column("payment_method", .integer).notNull()
-                t.column("transfers", .integer).notNull().defaults(to: -1)
-                t.column("agency_id", .text)
-                t.column("transfer_duration", .integer)
-            }
-        }
-    }
-}
-
-extension FareAttributes: CustomStringConvertible {
+extension FareAttribute: CustomStringConvertible {
     var description: String {
         return "\(identifier): \(price) - \(currencyType)"
     }
