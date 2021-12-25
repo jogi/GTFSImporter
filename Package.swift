@@ -9,7 +9,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.5"),
         .package(name: "GRDB", url: "https://github.com/groue/GRDB.swift.git", from: "4.13.0"),
-        .package(url: "https://github.com/yaslab/CSV.swift.git", .upToNextMinor(from: "2.4.3"))
+        .package(url: "https://github.com/yaslab/CSV.swift.git", .upToNextMinor(from: "2.4.3")),
+        .package(url: "https://github.com/jogi/GTFSModel", .branch("main"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -19,10 +20,11 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "CSV", package: "CSV.swift"),
-                "GRDB"
+                "GRDB",
+                "GTFSModel"
             ]),
         .testTarget(
             name: "gtfs-importerTests",
-            dependencies: ["gtfs-importer"]),
+            dependencies: ["gtfs-importer", "GTFSModel"]),
     ]
 )

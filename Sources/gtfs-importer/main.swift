@@ -1,4 +1,5 @@
 import ArgumentParser
+import GTFSModel
 
 struct GTFSImporter: ParsableCommand {
     @Option(name: .shortAndLong, help: "The path where the GTFS CSV files are")

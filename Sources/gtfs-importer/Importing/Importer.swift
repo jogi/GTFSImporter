@@ -8,6 +8,7 @@
 import Foundation
 import CSV
 import GRDB
+import GTFSModel
 
 enum ImporterError: LocalizedError {
     case invalidStream(path: String)

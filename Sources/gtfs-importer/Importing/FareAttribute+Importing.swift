@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import GTFSModel
 
 extension FareAttribute: ImporterImporting {
     // MARK: - ImporterImporting
@@ -19,7 +20,7 @@ extension FareAttribute: ImporterImporting {
     }
     
     // MARK:- DatabaseCreating
-    static func createTable() throws {
+    public static func createTable() throws {
         try dbQueue?.write { db in
             do {
                 try db.drop(table: FareAttribute.databaseTableName)

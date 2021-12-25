@@ -8,6 +8,7 @@
 import Foundation
 import CSV
 import GRDB
+import GTFSModel
 
 extension CalendarDate: ImporterImporting {
     // MARK: - ImporterImporting
@@ -29,7 +30,7 @@ extension CalendarDate: ImporterImporting {
     }
     
     // MARK:- DatabaseCreating
-    static func createTable() throws {
+    public static func createTable() throws {
         try dbQueue?.write { db in
             do {
                 try db.drop(table: CalendarDate.databaseTableName)

@@ -8,6 +8,7 @@
 import Foundation
 import CSV
 import GRDB
+import GTFSModel
 
 extension StopTime: ImporterImporting {
     // MARK: - ImporterImporting
@@ -35,7 +36,7 @@ extension StopTime: ImporterImporting {
     }
     
     // MARK:- DatabaseCreating
-    static func createTable() throws {
+    public static func createTable() throws {
         try dbQueue?.write { db in
             do {
                 try db.drop(table: StopTime.databaseTableName)

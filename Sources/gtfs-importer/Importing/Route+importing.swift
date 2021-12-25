@@ -8,6 +8,7 @@
 import Foundation
 import CSV
 import GRDB
+import GTFSModel
 
 extension Route: ImporterImporting {
     // MARK: - ImporterImporting
@@ -33,7 +34,7 @@ extension Route: ImporterImporting {
     }
     
     // MARK:- DatabaseCreating
-    static func createTable() throws {
+    public static func createTable() throws {
         try dbQueue?.write { db in
             do {
                 try db.drop(table: Route.databaseTableName)

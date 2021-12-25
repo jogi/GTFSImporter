@@ -8,8 +8,9 @@
 import Foundation
 import CSV
 import GRDB
+import GTFSModel
 
-extension Calendar: ImporterImporting {
+extension GTFSModel.Calendar: ImporterImporting {
     // MARK: - ImporterImporting
     static var fileName: String {
         return "calendar.txt"
@@ -29,7 +30,7 @@ extension Calendar: ImporterImporting {
     }
     
     // MARK:- DatabaseCreating
-    static func createTable() throws {
+    public static func createTable() throws {
         try dbQueue?.write { db in
             do {
                 try db.drop(table: Calendar.databaseTableName)
