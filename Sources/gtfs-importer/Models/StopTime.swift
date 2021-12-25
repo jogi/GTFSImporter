@@ -47,6 +47,7 @@ extension StopTime: Hashable {}
 
 extension StopTime: Codable, PersistableRecord {
     static var databaseTableName = "stop_times"
+    static var databaseDateEncodingStrategy = DatabaseDateEncodingStrategy.formatted(DateFormatter.hhmmss)
     
     private enum Columns {
         static let tripIdentifier = Column(CodingKeys.tripIdentifier)
