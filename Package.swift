@@ -7,7 +7,7 @@ let package = Package(
     name: "gtfs-importer",
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.5"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
         .package(name: "GRDB", url: "https://github.com/groue/GRDB.swift.git", from: "4.13.0"),
         .package(url: "https://github.com/yaslab/CSV.swift.git", .upToNextMinor(from: "2.4.3")),
         .package(url: "https://github.com/jogi/GTFSModel", .branch("main"))
