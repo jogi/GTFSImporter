@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import GTFSModel
+import OSLog
 
 extension FareRule: ImporterImporting {
     // MARK: - ImporterImporting
@@ -25,7 +26,7 @@ extension FareRule: ImporterImporting {
             do {
                 try db.drop(table: FareRule.databaseTableName)
             } catch {
-                print("Table \(FareRule.databaseTableName) does not exist.")
+                Logger.model.log("Table \(FareRule.databaseTableName) does not exist.")
             }
             
             // now create new table

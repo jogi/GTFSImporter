@@ -9,6 +9,7 @@ import Foundation
 import CSV
 import GRDB
 import GTFSModel
+import OSLog
 
 extension Route: ImporterImporting {
     // MARK: - ImporterImporting
@@ -39,7 +40,7 @@ extension Route: ImporterImporting {
             do {
                 try db.drop(table: Route.databaseTableName)
             } catch {
-                print("Table \(Route.databaseTableName) does not exist.")
+                Logger.model.log("Table \(Route.databaseTableName) does not exist.")
             }
             
             // now create new table

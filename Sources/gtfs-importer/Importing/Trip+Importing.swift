@@ -9,6 +9,7 @@ import Foundation
 import CSV
 import GRDB
 import GTFSModel
+import OSLog
 
 extension Trip: ImporterImporting {
     // MARK: - ImporterImporting
@@ -36,7 +37,7 @@ extension Trip: ImporterImporting {
             do {
                 try db.drop(table: Trip.databaseTableName)
             } catch {
-                print("Table \(Trip.databaseTableName) does not exist.")
+                Logger.model.log("Table \(Trip.databaseTableName) does not exist.")
             }
             
             // now create new table

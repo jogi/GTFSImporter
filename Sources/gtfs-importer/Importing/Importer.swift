@@ -9,6 +9,7 @@ import Foundation
 import CSV
 import GRDB
 import GTFSModel
+import OSLog
 
 enum ImporterError: LocalizedError {
     case invalidStream(path: String)
@@ -68,7 +69,7 @@ extension ImporterImporting {
             
             let endTime = Date()
 
-            print(String(format: "Imported \(count) records in %.3f seconds", endTime.timeIntervalSince(startTime)))
+            Logger.importer.log("Imported \(count) records in \(endTime.timeIntervalSince(startTime)) seconds")
         }
     }
 }

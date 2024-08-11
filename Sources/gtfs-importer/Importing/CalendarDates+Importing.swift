@@ -9,6 +9,7 @@ import Foundation
 import CSV
 import GRDB
 import GTFSModel
+import OSLog
 
 extension CalendarDate: ImporterImporting {
     // MARK: - ImporterImporting
@@ -35,7 +36,7 @@ extension CalendarDate: ImporterImporting {
             do {
                 try db.drop(table: CalendarDate.databaseTableName)
             } catch {
-                print("Table \(CalendarDate.databaseTableName) does not exist.")
+                Logger.model.log("Table \(CalendarDate.databaseTableName) does not exist.")
             }
             
             // now create new table

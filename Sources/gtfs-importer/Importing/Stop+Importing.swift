@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import GTFSModel
+import OSLog
 
 extension Stop: ImporterImporting {
     // MARK: - ImporterImporting
@@ -25,7 +26,7 @@ extension Stop: ImporterImporting {
             do {
                 try db.drop(table: Stop.databaseTableName)
             } catch {
-                print("Table \(Stop.databaseTableName) does not exist.")
+                Logger.model.log("Table \(Stop.databaseTableName) does not exist.")
             }
             
             // now create new table

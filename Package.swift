@@ -1,10 +1,14 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "gtfs-importer",
+    platforms: [
+        .macOS(SupportedPlatform.MacOSVersion.v11),
+        .iOS(SupportedPlatform.IOSVersion.v12)
+    ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
