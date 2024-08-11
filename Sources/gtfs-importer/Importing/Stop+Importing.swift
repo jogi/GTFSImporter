@@ -47,4 +47,8 @@ extension Stop: ImporterImporting {
             }
         }
     }
+    
+    public static func addStopRoutes() throws {
+        print("Adding stop routes is wip")
+    }
 }
