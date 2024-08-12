@@ -41,7 +41,7 @@ extension GTFSModel.Calendar: ImporterImporting {
             
             // now create new table
             try db.create(table: Calendar.databaseTableName) { t in
-                t.column(CodingKeys.serviceIdentifier.rawValue, .text).notNull().indexed()
+                t.column(CodingKeys.serviceIdentifier.rawValue, .text).notNull().primaryKey()
                 t.column(CodingKeys.startDate.rawValue, .date).notNull()
                 t.column(CodingKeys.endDate.rawValue, .date).notNull()
                 t.column(CodingKeys.monday.rawValue, .integer).notNull()

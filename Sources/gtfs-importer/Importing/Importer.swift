@@ -87,8 +87,8 @@ struct Importer {
         try Stop.importFile(from: path)
         try Route.importFile(from: path)
         try Shape.importFile(from: path)
-        try StopTime.importFile(from: path)
         try Trip.importFile(from: path)
+        try StopTime.importFile(from: path)
     }
 }
 

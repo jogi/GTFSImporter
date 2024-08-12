@@ -42,16 +42,24 @@ extension Trip: ImporterImporting {
             
             // now create new table
             try db.create(table: Trip.databaseTableName) { t in
-                t.column(CodingKeys.identifier.rawValue, .text).notNull().primaryKey()
-                t.column(CodingKeys.routeIdentifier.rawValue, .text).notNull()
-                t.column(CodingKeys.serviceIdentifier.rawValue, .text).notNull()
+                t.column(CodingKeys.identifier.rawValue, .text)
+                    .notNull()
+                    .primaryKey()
+                t.column(CodingKeys.routeIdentifier.rawValue, .text)
+                    .notNull()
+                    .references(Route.databaseTableName)
+                t.column(CodingKeys.serviceIdentifier.rawValue, .text)
+                    .notNull()
+                    .references(GTFSModel.Calendar.databaseTableName)
                 t.column(CodingKeys.headSign.rawValue, .text)
                 t.column(CodingKeys.shortName.rawValue, .text)
                 t.column(CodingKeys.directionIdentifier.rawValue, .integer)
                 t.column(CodingKeys.blockIdentifier.rawValue, .text)
                 t.column(CodingKeys.shapeIdentifier.rawValue, .text)
-                t.column(CodingKeys.wheelchairAccessible.rawValue, .integer).notNull()
-                t.column(CodingKeys.bikesAllowed.rawValue, .integer).notNull()
+                t.column(CodingKeys.wheelchairAccessible.rawValue, .integer)
+                    .notNull()
+                t.column(CodingKeys.bikesAllowed.rawValue, .integer)
+                    .notNull()
             }
         }
     }

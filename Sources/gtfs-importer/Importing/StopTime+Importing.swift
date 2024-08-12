@@ -47,10 +47,14 @@ extension StopTime: ImporterImporting {
             
             // now create new table
             try db.create(table: StopTime.databaseTableName) { t in
-                t.column(CodingKeys.tripIdentifier.rawValue, .text).notNull()
+                t.column(CodingKeys.tripIdentifier.rawValue, .text)
+                    .notNull()
+                    .references(Trip.databaseTableName)
                 t.column(CodingKeys.arrivalTime.rawValue, .date).notNull()
                 t.column(CodingKeys.departureTime.rawValue, .date).notNull()
-                t.column(CodingKeys.stopIdentifier.rawValue, .text).notNull()
+                t.column(CodingKeys.stopIdentifier.rawValue, .text)
+                    .notNull()
+                    .references(Stop.databaseTableName)
                 t.column(CodingKeys.stopSequence.rawValue, .integer).notNull()
                 t.column(CodingKeys.stopHeadsign.rawValue, .text)
                 t.column(CodingKeys.pickupType.rawValue, .integer).notNull()
