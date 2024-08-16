@@ -35,6 +35,7 @@ extension StopTime: ImporterImporting {
             record.continuousPickup = record.continuousPickup ?? .notContinuous
             record.continuousDropoff = record.continuousDropoff ?? .notContinuous
             record.timepoint = record.timepoint ?? .exact
+            record.isLastStop = false
             try record.insert(db)
         } catch {
             Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")

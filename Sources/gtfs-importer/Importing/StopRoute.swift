@@ -58,10 +58,9 @@ struct StopRoute {
         
         for (key, value) in stopsWithRoutes {
             try dbQueue?.write { db in
-                if var stop = try Stop.filter(Column(Stop.CodingKeys.identifier) == key).fetchOne(db) {
-                    stop.routes = value.joined(separator: ", ")
-                    try stop.update(db)
-                }
+                var stop = try Stop.find(db, key: key)
+                stop.routes = value.joined(separator: ", ")
+                try stop.update(db)
             }
         }
         
