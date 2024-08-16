@@ -12,7 +12,6 @@ import GTFSModel
 import OSLog
 
 extension StopTime: ImporterImporting {
-    // MARK: - ImporterImporting
     static var fileName: String {
         return "stop_times.txt"
     }
@@ -39,39 +38,6 @@ extension StopTime: ImporterImporting {
             try record.insert(db)
         } catch {
             Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
-        }
-    }
-    
-    // MARK:- DatabaseCreating
-    public static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: StopTime.databaseTableName)
-            } catch {
-                Logger.model.log("Table \(StopTime.databaseTableName) does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: StopTime.databaseTableName) { t in
-                t.column(CodingKeys.tripIdentifier.rawValue, .text)
-                    .notNull()
-                    .indexed()
-                    .references(Trip.databaseTableName)
-                t.column(CodingKeys.arrivalTime.rawValue, Database.ColumnType(rawValue: "TIME")).notNull()
-                t.column(CodingKeys.departureTime.rawValue, Database.ColumnType(rawValue: "TIME")).notNull()
-                t.column(CodingKeys.stopIdentifier.rawValue, .text)
-                    .notNull()
-                    .indexed()
-                    .references(Stop.databaseTableName)
-                t.column(CodingKeys.stopSequence.rawValue, .integer).notNull()
-                t.column(CodingKeys.stopHeadsign.rawValue, .text)
-                t.column(CodingKeys.pickupType.rawValue, .integer).notNull()
-                t.column(CodingKeys.dropoffType.rawValue, .integer).notNull()
-                t.column(CodingKeys.continuousPickup.rawValue, .integer).notNull()
-                t.column(CodingKeys.continuousDropoff.rawValue, .integer).notNull()
-                t.column(CodingKeys.shapeDistanceTraveled.rawValue, .double)
-                t.column(CodingKeys.timepoint.rawValue, .integer).notNull()
-            }
         }
     }
 }

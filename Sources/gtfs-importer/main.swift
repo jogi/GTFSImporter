@@ -12,7 +12,7 @@ struct GTFSImporter: ParsableCommand {
     func run() throws {
         let startTime = Date()
 
-        let databaseHelper = try DatabaseHelper()
+        let databaseHelper = try DatabaseHelper(path: "./gtfs.sqlite")
         
         print("Importing from \(path.yellow)\n")
         

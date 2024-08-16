@@ -40,14 +40,14 @@ extension ImporterReceiving where Self: Codable, Self: PersistableRecord {
     }
 }
 
-protocol ImporterImporting: ImporterReceiving, DatabaseCreating {
+protocol ImporterImporting: ImporterReceiving {
     static var fileName: String { get }
     static var dbQueue: DatabaseQueue? { get }
     
     static func importFile(from path: String) throws
 }
 
-extension ImporterImporting {
+extension ImporterImporting where Self: DatabaseCreating {
     static var dbQueue: DatabaseQueue? {
         var configuration = Configuration()
         configuration.publicStatementArguments = true
@@ -66,7 +66,9 @@ extension ImporterImporting {
             let startTime = Date()
             
             // First let's cleanup the table
-            try self.createTable()
+            try dbQueue?.write { db in
+                try self.createTable(db: db)
+            }
             
             let reader = try CSVReader(stream: stream, hasHeaderRow: true)
             

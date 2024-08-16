@@ -6,33 +6,10 @@
 //
 
 import Foundation
-import GRDB
 import GTFSModel
-import OSLog
 
 extension FareRule: ImporterImporting {
-    // MARK: - ImporterImporting
     static var fileName: String {
         return "fare_rules.txt"
-    }
-    
-    // MARK:- DatabaseCreating
-    public static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: FareRule.databaseTableName)
-            } catch {
-                Logger.model.log("Table \(FareRule.databaseTableName) does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: FareRule.databaseTableName) { t in
-                t.column(CodingKeys.fareIdentifier.rawValue, .text).notNull()
-                t.column(CodingKeys.routeIdentifier.rawValue, .text)
-                t.column(CodingKeys.originIdentifier.rawValue, .text)
-                t.column(CodingKeys.destinationIdentifier.rawValue, .text)
-                t.column(CodingKeys.containsIdentifier.rawValue, .text)
-            }
-        }
     }
 }

@@ -12,7 +12,6 @@ import GTFSModel
 import OSLog
 
 extension Route: ImporterImporting {
-    // MARK: - ImporterImporting
     static var fileName: String {
         return "routes.txt"
     }
@@ -29,33 +28,6 @@ extension Route: ImporterImporting {
             try record.insert(db)
         } catch {
             Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
-        }
-    }
-    
-    // MARK:- DatabaseCreating
-    public static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: Route.databaseTableName)
-            } catch {
-                Logger.model.log("Table \(Route.databaseTableName) does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: Route.databaseTableName) { t in
-                t.column(CodingKeys.identifier.rawValue, .text).notNull().primaryKey()
-                t.column(CodingKeys.type.rawValue, .integer).notNull()
-                t.column(CodingKeys.agencyIdentifier.rawValue, .text)
-                t.column(CodingKeys.shortName.rawValue, .text)
-                t.column(CodingKeys.longName.rawValue, .text)
-                t.column(CodingKeys.routeDescription.rawValue, .text)
-                t.column(CodingKeys.url.rawValue, .text)
-                t.column(CodingKeys.color.rawValue, .text).notNull()
-                t.column(CodingKeys.textColor.rawValue, .text).notNull()
-                t.column(CodingKeys.sortOrder.rawValue, .text).notNull()
-                t.column(CodingKeys.continuousPickup.rawValue, .text).notNull()
-                t.column(CodingKeys.continuousDropoff.rawValue, .text).notNull()
-            }
         }
     }
 }

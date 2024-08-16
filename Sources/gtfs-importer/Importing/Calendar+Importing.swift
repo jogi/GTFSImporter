@@ -12,7 +12,6 @@ import GTFSModel
 import OSLog
 
 extension GTFSModel.Calendar: ImporterImporting {
-    // MARK: - ImporterImporting
     static var fileName: String {
         return "calendar.txt"
     }
@@ -25,31 +24,6 @@ extension GTFSModel.Calendar: ImporterImporting {
             try record.insert(db)
         } catch {
             Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
-        }
-    }
-    
-    // MARK:- DatabaseCreating
-    public static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: Calendar.databaseTableName)
-            } catch {
-                Logger.model.log("Table \(Calendar.databaseTableName) does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: Calendar.databaseTableName) { t in
-                t.column(CodingKeys.serviceIdentifier.rawValue, .text).notNull().primaryKey()
-                t.column(CodingKeys.startDate.rawValue, .date).notNull()
-                t.column(CodingKeys.endDate.rawValue, .date).notNull()
-                t.column(CodingKeys.monday.rawValue, .integer).notNull()
-                t.column(CodingKeys.tuesday.rawValue, .integer).notNull()
-                t.column(CodingKeys.wednesday.rawValue, .integer).notNull()
-                t.column(CodingKeys.thursday.rawValue, .integer).notNull()
-                t.column(CodingKeys.friday.rawValue, .integer).notNull()
-                t.column(CodingKeys.saturday.rawValue, .integer).notNull()
-                t.column(CodingKeys.sunday.rawValue, .integer).notNull()
-            }
         }
     }
 }

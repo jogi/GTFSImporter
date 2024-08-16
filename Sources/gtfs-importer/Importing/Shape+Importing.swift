@@ -6,33 +6,10 @@
 //
 
 import Foundation
-import GRDB
 import GTFSModel
-import OSLog
 
 extension Shape: ImporterImporting {
-    // MARK: - ImporterImporting
     static var fileName: String {
         return "shapes.txt"
-    }
-    
-    // MARK:- DatabaseCreating
-    public static func createTable() throws {
-        try dbQueue?.write { db in
-            do {
-                try db.drop(table: Shape.databaseTableName)
-            } catch {
-                Logger.model.log("Table \(Shape.databaseTableName) does not exist.")
-            }
-            
-            // now create new table
-            try db.create(table: Shape.databaseTableName) { t in
-                t.column(CodingKeys.identifier.rawValue, .text).notNull().indexed()
-                t.column(CodingKeys.latitude.rawValue, .double).notNull()
-                t.column(CodingKeys.longitude.rawValue, .double).notNull()
-                t.column(CodingKeys.sequence.rawValue, .integer).notNull()
-                t.column(CodingKeys.distanceTraveled.rawValue, .double)
-            }
-        }
     }
 }
