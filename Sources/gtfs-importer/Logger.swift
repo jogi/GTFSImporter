@@ -12,5 +12,4 @@ extension Logger {
     private static var subsystem = "com.jogi.gtfs-importer"
 
     static let importer = Logger(subsystem: subsystem, category: "importer")
-    static let model = Logger(subsystem: subsystem, category: "model")
 }

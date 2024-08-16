@@ -16,6 +16,8 @@ struct StopRoute {
     }
     
     public static func addStopRoutes() throws {
+        let startTime = Date()
+
         var stopsWithRoutes: [String: [String]] = [:]
         
         let trips: [TripInfo] = try dbQueue?.read { db in
@@ -63,5 +65,9 @@ struct StopRoute {
             }
         }
         
+        let endTime = Date()
+        
+        let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
+        print("Updated \(String(stopsWithRoutes.count).green) stops with routes in \(duration.green) seconds")
     }
 }
