@@ -17,16 +17,14 @@ extension CalendarDate: ImporterImporting {
         return "calendar_dates.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     static func receiveImport(from reader: CSVReader, with db: Database) throws {
         do {
             let decoder = CSVRowDecoder()
             decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMdd)
             let record = try decoder.decode(Self.self, from: reader)
             try record.insert(db)
+        } catch {
+            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
     

@@ -31,6 +31,8 @@ extension ImporterReceiving where Self: Codable, Self: PersistableRecord {
         do {
             let record = try CSVRowDecoder().decode(Self.self, from: reader)
             try record.insert(db)
+        } catch {
+            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
 }
@@ -43,6 +45,12 @@ protocol ImporterImporting: ImporterReceiving, DatabaseCreating {
 }
 
 extension ImporterImporting {
+    static var dbQueue: DatabaseQueue? {
+        var configuration = Configuration()
+        configuration.publicStatementArguments = true
+        return try? DatabaseQueue(path: "./gtfs.sqlite", configuration: configuration)
+    }
+
     static func importFile(from path: String) throws {
         print("Importing from \(fileName)")
         

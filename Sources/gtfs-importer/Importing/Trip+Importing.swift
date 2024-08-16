@@ -17,10 +17,6 @@ extension Trip: ImporterImporting {
         return "trips.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     static func receiveImport(from reader: CSVReader, with db: Database) throws {
         do {
             let decoder = CSVRowDecoder()
@@ -28,6 +24,8 @@ extension Trip: ImporterImporting {
             record.wheelchairAccessible = record.wheelchairAccessible ?? .noInformation
             record.bikesAllowed = record.bikesAllowed ?? .noInformation
             try record.insert(db)
+        } catch {
+            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
     
@@ -50,7 +48,7 @@ extension Trip: ImporterImporting {
                     .references(Route.databaseTableName)
                 t.column(CodingKeys.serviceIdentifier.rawValue, .text)
                     .notNull()
-                    .references(GTFSModel.Calendar.databaseTableName)
+                    .indexed()
                 t.column(CodingKeys.headSign.rawValue, .text)
                 t.column(CodingKeys.shortName.rawValue, .text)
                 t.column(CodingKeys.directionIdentifier.rawValue, .integer)

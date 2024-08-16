@@ -17,10 +17,6 @@ extension StopTime: ImporterImporting {
         return "stop_times.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     static func receiveImport(from reader: CSVReader, with db: Database) throws {
         do {
             let decoder = CSVRowDecoder()
@@ -33,6 +29,8 @@ extension StopTime: ImporterImporting {
             record.continuousDropoff = record.continuousDropoff ?? .notContinuous
             record.timepoint = record.timepoint ?? .exact
             try record.insert(db)
+        } catch {
+            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
     

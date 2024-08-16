@@ -16,10 +16,6 @@ extension Shape: ImporterImporting {
         return "shapes.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     // MARK:- DatabaseCreating
     public static func createTable() throws {
         try dbQueue?.write { db in

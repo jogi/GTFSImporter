@@ -16,10 +16,6 @@ extension FareAttribute: ImporterImporting {
         return "fare_attributes.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     // MARK:- DatabaseCreating
     public static func createTable() throws {
         try dbQueue?.write { db in

@@ -17,10 +17,6 @@ extension Route: ImporterImporting {
         return "routes.txt"
     }
     
-    static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
-    }
-    
     static func receiveImport(from reader: CSVReader, with db: Database) throws {
         do {
             let decoder = CSVRowDecoder()
@@ -31,6 +27,8 @@ extension Route: ImporterImporting {
             record.continuousPickup = record.continuousPickup ?? .notContinuous
             record.continuousDropoff = record.continuousDropoff ?? .notContinuous
             try record.insert(db)
+        } catch {
+            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
     
