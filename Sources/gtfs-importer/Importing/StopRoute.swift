@@ -65,24 +65,3 @@ struct StopRoute {
         
     }
 }
-
-extension Route: FetchableRecord {
-    static let trips = hasMany(Trip.self)
-    var trips: QueryInterfaceRequest<Trip> { request(for: Route.trips) }
-}
-
-extension Trip: FetchableRecord {
-    static let route = belongsTo(Route.self)
-    var route: QueryInterfaceRequest<Route> { request(for: Trip.route) }
-}
-
-extension Stop: FetchableRecord {}
-
-extension StopTime: FetchableRecord {
-    public static var databaseDateDecodingStrategy = DatabaseDateDecodingStrategy.formatted(DateFormatter.hhmmss)
-}
-
-struct TripInfo: Decodable, FetchableRecord {
-    var route: Route
-    var trip: Trip
-}
