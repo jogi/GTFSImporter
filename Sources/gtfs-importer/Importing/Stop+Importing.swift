@@ -44,11 +44,8 @@ extension Stop: ImporterImporting {
                 t.column(CodingKeys.wheelchairBording.rawValue, .integer).notNull()
                 t.column(CodingKeys.levelIdentifier.rawValue, .text)
                 t.column(CodingKeys.platformCode.rawValue, .text)
+                t.column(CodingKeys.routes.rawValue, .text)
             }
         }
-    }
-    
-    public static func addStopRoutes() throws {
-        print("Adding stop routes is wip")
     }
 }

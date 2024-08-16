@@ -19,7 +19,7 @@ struct GTFSImporter: ParsableCommand {
         // Add routes to stops tables
         if addStopRoutes {
             print("Adding routes to stops")
-            try Stop.addStopRoutes()
+            try StopRoute.addStopRoutes()
         }
         
         // Vacuum
