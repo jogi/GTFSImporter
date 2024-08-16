@@ -1,3 +1,4 @@
+import Foundation
 import ArgumentParser
 import GTFSModel
 
@@ -9,9 +10,11 @@ struct GTFSImporter: ParsableCommand {
     var addStopRoutes: Bool = false
 
     func run() throws {
+        let startTime = Date()
+
         let databaseHelper = try DatabaseHelper()
         
-        print("Importing from \(path)")
+        print("Importing from \(path.yellow)\n")
         
         let importer = Importer(path: path)
         try importer.importAllFiles()
@@ -23,14 +26,17 @@ struct GTFSImporter: ParsableCommand {
         }
         
         // Vacuum
-        print("Vacuuming...")
+        print("\n🧹 Vacuuming...")
         try databaseHelper.vacuum()
         
         // Reindex
-        print("Reindexing...")
+        print("🗂️  Reindexing...")
         try databaseHelper.reindex()
         
-        print("Finished importing ✅")
+        let endTime = Date()
+        let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
+        
+        print("\n✅ Finished importing in \(duration.green) seconds")
     }
 }
 

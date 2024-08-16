@@ -55,7 +55,7 @@ extension ImporterImporting {
     }
 
     static func importFile(from path: String) throws {
-        print("Importing from \(fileName)")
+        print("Importing from \(fileName.magenta)")
         
         do {
             let fileURL = URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent(fileName)
@@ -80,7 +80,9 @@ extension ImporterImporting {
             
             let endTime = Date()
 
-            Logger.importer.log("Imported \(count) records in \(endTime.timeIntervalSince(startTime)) seconds")
+            let model = "\(Self.self)"
+            let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
+            print("Imported \(String(count).green) \(model.magenta) records in \(duration.green) seconds")
         }
     }
 }
