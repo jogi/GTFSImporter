@@ -12,7 +12,7 @@ import OSLog
 
 struct StopRoute {
     static var dbQueue: DatabaseQueue? {
-        return try? DatabaseQueue(path: "./gtfs.sqlite")
+        return try? DatabaseQueue(path: "./\(Importer.defaultDatabaseFileName)")
     }
     
     public static func addStopRoutes() throws {

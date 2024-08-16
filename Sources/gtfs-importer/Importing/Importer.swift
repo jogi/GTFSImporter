@@ -51,7 +51,7 @@ extension ImporterImporting where Self: DatabaseCreating {
     static var dbQueue: DatabaseQueue? {
         var configuration = Configuration()
         configuration.publicStatementArguments = true
-        return try? DatabaseQueue(path: "./gtfs.db", configuration: configuration)
+        return try? DatabaseQueue(path: "./\(Importer.defaultDatabaseFileName)", configuration: configuration)
     }
 
     static func importFile(from path: String) throws {
@@ -90,6 +90,7 @@ extension ImporterImporting where Self: DatabaseCreating {
 }
 
 struct Importer {
+    static var defaultDatabaseFileName = "gtfs.db"
     var path: String
     
     func importAllFiles() throws {
