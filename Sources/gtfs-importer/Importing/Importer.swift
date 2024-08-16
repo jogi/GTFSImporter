@@ -104,6 +104,7 @@ struct Importer {
         try Shape.importFile(from: path)
         try Trip.importFile(from: path)
         try StopTime.importFile(from: path)
+        try StopTime.updateLastStop()
     }
 }
 

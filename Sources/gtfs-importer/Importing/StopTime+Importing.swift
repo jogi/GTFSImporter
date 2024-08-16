@@ -41,4 +41,22 @@ extension StopTime: ImporterImporting {
             Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
         }
     }
+    
+    static func updateLastStop() throws {
+        do {
+            try dbQueue?.write { db in
+                try db.execute(sql: """
+                UPDATE \(StopTime.databaseTableName)
+                SET \(StopTime.CodingKeys.isLastStop.rawValue) = 1
+                WHERE (\(StopTime.CodingKeys.tripIdentifier.rawValue), \(StopTime.CodingKeys.stopSequence.rawValue)) IN (
+                    SELECT \(StopTime.CodingKeys.tripIdentifier.rawValue), MAX(\(StopTime.CodingKeys.stopSequence.rawValue))
+                    FROM \(StopTime.databaseTableName)
+                    GROUP BY \(StopTime.CodingKeys.tripIdentifier.rawValue)
+                )
+                """)
+            }
+        } catch {
+            Logger.importer.error("Error updating is_laststop - \(error)")
+        }
+    }
 }
