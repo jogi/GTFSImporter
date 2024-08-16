@@ -45,6 +45,7 @@ extension Trip: ImporterImporting {
                     .primaryKey()
                 t.column(CodingKeys.routeIdentifier.rawValue, .text)
                     .notNull()
+                    .indexed()
                     .references(Route.databaseTableName)
                 t.column(CodingKeys.serviceIdentifier.rawValue, .text)
                     .notNull()

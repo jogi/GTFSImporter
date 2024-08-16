@@ -19,27 +19,40 @@ struct StopRoute {
         var stopsWithRoutes: [String: [String]] = [:]
         
         let trips: [TripInfo] = try dbQueue?.read { db in
-            let request = Trip.including(required: Trip.route)
+            let request = Trip.including(required: Trip.route).group([Column(Trip.CodingKeys.routeIdentifier), Column(Trip.CodingKeys.serviceIdentifier), Column(Trip.CodingKeys.headSign), Column(Trip.CodingKeys.shapeIdentifier)])
             return try TripInfo.fetchAll(db, request)
         } ?? []
         
-        for trip in trips {
-            guard let route = trip.route.shortName else {
+        Logger.importer.log("Fetched \(trips.count) trips")
+        
+        let tripRoutes: [String: String] = {
+            var values: [String: String] = [:]
+            for trip in trips {
+                values[trip.trip.identifier] = trip.route.shortName
+            }
+            return values
+        }()
+        
+        let stopTimes: [StopTime] = try dbQueue?.read { db in
+            let tripIDs = tripRoutes.map { $0.0 }
+            return try StopTime.fetchAll(db, sql: """
+            SELECT * from \(StopTime.databaseTableName) WHERE \(StopTime.CodingKeys.tripIdentifier.rawValue) IN (\(databaseQuestionMarks(count: tripIDs.count)))
+            """, arguments: StatementArguments(tripIDs))
+        } ?? []
+        
+        Logger.importer.log("Fetched \(stopTimes.count) stop_times")
+        
+        for stopTime in stopTimes {
+            guard let route = tripRoutes[stopTime.tripIdentifier] else {
                 return
             }
-
-            try dbQueue?.read { db in
-                let stops = try StopTime
-                    .filter(Column(StopTime.CodingKeys.tripIdentifier.rawValue) == trip.trip.identifier)
-                    .fetchAll(db)
-
-                for stop in stops {
-                    if !(stopsWithRoutes[stop.stopIdentifier]?.contains(route) ?? false) {
-                        stopsWithRoutes[stop.stopIdentifier] = (stopsWithRoutes[stop.stopIdentifier] ?? []) + [route]
-                    }
-                }
+         
+            if !(stopsWithRoutes[stopTime.stopIdentifier]?.contains(route) ?? false) {
+                stopsWithRoutes[stopTime.stopIdentifier] = (stopsWithRoutes[stopTime.stopIdentifier] ?? []) + [route]
             }
         }
+
+        Logger.importer.log("Calculated \(stopTimes.count) stopsWithRoutes")
         
         for (key, value) in stopsWithRoutes {
             try dbQueue?.write { db in
