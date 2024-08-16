@@ -51,7 +51,7 @@ extension ImporterImporting where Self: DatabaseCreating {
     static var dbQueue: DatabaseQueue? {
         var configuration = Configuration()
         configuration.publicStatementArguments = true
-        return try? DatabaseQueue(path: "./gtfs.sqlite", configuration: configuration)
+        return try? DatabaseQueue(path: "./gtfs.db", configuration: configuration)
     }
 
     static func importFile(from path: String) throws {
