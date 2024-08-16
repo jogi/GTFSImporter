@@ -20,7 +20,15 @@ extension StopTime: ImporterImporting {
     static func receiveImport(from reader: CSVReader, with db: Database) throws {
         do {
             let decoder = CSVRowDecoder()
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.hhmmss)
+            decoder.dateDecodingStrategy = .custom({ value in
+                let sanitizedValue = value.sanitizedTimeString
+                
+                guard let date = DateFormatter.hhmmss.date(from: sanitizedValue) else {
+                    throw ImporterError.invalidTime(time: "value: \(value) sanitizedValue: \(sanitizedValue)")
+                }
+                
+                return date
+            })
             var record = try decoder.decode(Self.self, from: reader)
             
             record.pickupType = record.pickupType ?? .regularlyScheduled
@@ -47,11 +55,13 @@ extension StopTime: ImporterImporting {
             try db.create(table: StopTime.databaseTableName) { t in
                 t.column(CodingKeys.tripIdentifier.rawValue, .text)
                     .notNull()
+                    .indexed()
                     .references(Trip.databaseTableName)
-                t.column(CodingKeys.arrivalTime.rawValue, .date).notNull()
-                t.column(CodingKeys.departureTime.rawValue, .date).notNull()
+                t.column(CodingKeys.arrivalTime.rawValue, Database.ColumnType(rawValue: "TIME")).notNull()
+                t.column(CodingKeys.departureTime.rawValue, Database.ColumnType(rawValue: "TIME")).notNull()
                 t.column(CodingKeys.stopIdentifier.rawValue, .text)
                     .notNull()
+                    .indexed()
                     .references(Stop.databaseTableName)
                 t.column(CodingKeys.stopSequence.rawValue, .integer).notNull()
                 t.column(CodingKeys.stopHeadsign.rawValue, .text)

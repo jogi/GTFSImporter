@@ -13,11 +13,14 @@ import OSLog
 
 enum ImporterError: LocalizedError {
     case invalidStream(path: String)
+    case invalidTime(time: String)
     
     var errorDescription: String? {
         switch self {
         case let .invalidStream(path):
             return "Cannot create an InputStream for file at path \(path)"
+        case let .invalidTime(time):
+            return "Invalid time string: \(time)"
         }
     }
 }
