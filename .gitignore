@@ -21,3 +21,4 @@ gtfs.sqlite
 Package.resolved
 .build
 .swiftpm
+gtfs.db
