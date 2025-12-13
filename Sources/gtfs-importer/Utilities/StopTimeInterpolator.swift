@@ -84,6 +84,7 @@ enum StopTimeInterpolator {
     }
 
     /// Interpolate stop times for a single trip
+    /// Only returns stop times that actually needed interpolation (had missing arrival_time)
     private static func interpolateStopTimes(forTripId tripId: String, in db: Database) throws -> [InterpolatedStopTime] {
         let stopTimes = try getStopTimes(forTripId: tripId, in: db)
 
@@ -100,8 +101,9 @@ enum StopTimeInterpolator {
         for i in 0..<stopTimes.count {
             let st = stopTimes[i]
 
-            // Check if this stop has an arrival time (is a timepoint)
+            // Check if this stop has an arrival time
             if let arrivalTime = st.arrivalTime, !arrivalTime.isEmpty {
+                // This stop already has a time - don't touch it, preserve CSV timepoint value
                 currentTimepoint = st
                 distanceBetweenTimepoints = 0
                 distanceTraveledBetweenTimepoints = 0
@@ -133,14 +135,7 @@ enum StopTimeInterpolator {
                     }
                 }
 
-                // Add this timepoint
-                interpolated.append(InterpolatedStopTime(
-                    tripId: st.tripId,
-                    stopId: st.stopId,
-                    stopSequence: st.stopSequence,
-                    arrivalTime: timeToSecondsSinceMidnight(arrivalTime),
-                    isTimepoint: true
-                ))
+                // Don't add to interpolated array - leave this stop's CSV values as-is
             } else {
                 // This stop needs interpolation
                 guard let current = currentTimepoint,
@@ -168,6 +163,7 @@ enum StopTimeInterpolator {
                 let totalTime = nextTime - currentTime
                 let timeEstimate = Int(round(Double(totalTime) * distancePercent)) + currentTime
 
+                // Only add stops that actually needed interpolation
                 interpolated.append(InterpolatedStopTime(
                     tripId: st.tripId,
                     stopId: st.stopId,
