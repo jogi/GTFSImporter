@@ -24,14 +24,18 @@ struct GTFSImporter: ParsableCommand {
             print("Adding routes to stops")
             try StopRoute.addStopRoutes()
         }
-        
+
         // Vacuum
         print("\n🧹 Vacuuming...")
         try databaseHelper.vacuum()
-        
+
         // Reindex
         print("🗂️  Reindexing...")
         try databaseHelper.reindex()
+
+        // Interpolate stop times
+        print("\n⏱️  Interpolating stop times...")
+        try databaseHelper.interpolateStopTimes()
         
         let endTime = Date()
         let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
