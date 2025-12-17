@@ -12,13 +12,13 @@ struct GTFSImporter: ParsableCommand {
     func run() throws {
         let startTime = Date()
 
-        let databaseHelper = try DatabaseHelper(path: "./\(Importer.defaultDatabaseFileName)")
-        
+        let databaseHelper = try GTFSModel.DatabaseHelper(path: "./\(Importer.defaultDatabaseFileName)")
+
         print("Importing from \(path.yellow)\n")
-        
+
         let importer = Importer(path: path)
         try importer.importAllFiles()
-        
+
         // Add routes to stops tables
         if addStopRoutes {
             print("Adding routes to stops")
@@ -35,7 +35,9 @@ struct GTFSImporter: ParsableCommand {
 
         // Interpolate stop times
         print("\n⏱️  Interpolating stop times...")
-        try databaseHelper.interpolateStopTimes()
+        try databaseHelper.dbQueue?.write { db in
+            try StopTimeInterpolator.interpolateStopTimes(in: db)
+        }
         
         let endTime = Date()
         let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))

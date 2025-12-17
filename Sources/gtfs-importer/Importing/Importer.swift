@@ -96,12 +96,10 @@ struct Importer {
     func importAllFiles() throws {
         try Agency.importFile(from: path)
         try Calendar.importFile(from: path)
-        // Skip calendar_dates - not in legacy schema
-        // try CalendarDate.importFile(from: path)
+        try CalendarDate.importFile(from: path)
         try FareAttribute.importFile(from: path)
         try FareRule.importFile(from: path)
-        // Skip directions - not in legacy schema
-        // try Direction.importFile(from: path)
+        try Direction.importFile(from: path)
         try Stop.importFile(from: path)
         try Route.importFile(from: path)
         try Shape.importFile(from: path)
