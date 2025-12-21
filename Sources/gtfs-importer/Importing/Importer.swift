@@ -90,7 +90,7 @@ extension ImporterImporting where Self: DatabaseCreating {
 }
 
 struct Importer {
-    static var defaultDatabaseFileName = "gtfs.db"
+    static let defaultDatabaseFileName = "gtfs.db"
     var path: String
     
     func importAllFiles() throws {
