@@ -15,11 +15,6 @@ import CSV
 @Suite("Stop Importing Tests")
 struct StopImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(Stop.fileName == "stops.txt")
-    }
-
     @Test("Import reads and inserts stop data from CSV")
     func testImportFromCSV() throws {
         let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()

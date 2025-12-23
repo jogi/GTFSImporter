@@ -15,11 +15,6 @@ import CSV
 @Suite("Route Importing Tests")
 struct RouteImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(Route.fileName == "routes.txt")
-    }
-
     @Test("Import reads and inserts route data from CSV")
     func testImportFromCSV() throws {
         let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()

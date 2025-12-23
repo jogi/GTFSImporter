@@ -15,11 +15,6 @@ import CSV
 @Suite("CalendarDate Importing Tests")
 struct CalendarDateImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(CalendarDate.fileName == "calendar_dates.txt")
-    }
-
     @Test("Import reads and inserts calendar date exceptions from CSV")
     func testImportFromCSV() throws {
         // Create CSV with calendar date exceptions

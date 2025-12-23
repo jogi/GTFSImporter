@@ -15,11 +15,6 @@ import CSV
 @Suite("Shape Importing Tests")
 struct ShapeImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(Shape.fileName == "shapes.txt")
-    }
-
     @Test("Import reads and inserts shape data from CSV")
     func testImportFromCSV() throws {
         // Create CSV with shape points

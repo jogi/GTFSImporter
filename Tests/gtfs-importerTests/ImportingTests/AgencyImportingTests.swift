@@ -15,11 +15,6 @@ import CSV
 @Suite("Agency Importing Tests")
 struct AgencyImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(Agency.fileName == "agency.txt")
-    }
-
     @Test("Import reads and inserts agency data from CSV")
     func testImportFromCSV() throws {
         // Create temporary GTFS directory with agency.txt

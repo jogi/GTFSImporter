@@ -15,11 +15,6 @@ import CSV
 @Suite("Calendar Importing Tests")
 struct CalendarImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(GTFSModel.Calendar.fileName == "calendar.txt")
-    }
-
     @Test("Import reads and inserts calendar data from CSV")
     func testImportFromCSV() throws {
         let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()

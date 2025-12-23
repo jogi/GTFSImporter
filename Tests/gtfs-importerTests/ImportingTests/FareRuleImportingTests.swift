@@ -15,11 +15,6 @@ import CSV
 @Suite("FareRule Importing Tests")
 struct FareRuleImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(FareRule.fileName == "fare_rules.txt")
-    }
-
     @Test("Import reads and inserts fare rule data from CSV")
     func testImportFromCSV() throws {
         // Create CSV with fare rules

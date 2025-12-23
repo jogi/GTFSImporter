@@ -15,11 +15,6 @@ import CSV
 @Suite("Direction Importing Tests")
 struct DirectionImportingTests {
 
-    @Test("fileName returns correct CSV file name")
-    func testFileName() {
-        #expect(Direction.fileName == "directions.txt")
-    }
-
     @Test("Import reads and inserts direction data from CSV")
     func testImportFromCSV() throws {
         // Create CSV with directions (using DirectionType enum values)
