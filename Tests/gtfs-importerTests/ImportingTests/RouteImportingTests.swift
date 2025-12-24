@@ -15,10 +15,10 @@ import CSV
 @Suite("Route Importing Tests")
 struct RouteImportingTests {
 
-    @Test("Import reads and inserts route data from CSV")
+    @Test("Import reads and inserts route data from CSV using real data")
     func testImportFromCSV() throws {
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
+        // Use real small dataset
+        let gtfsDir = URL(fileURLWithPath: TestDataHelper.smallRealTestDataPath())
 
         let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
         defer { try? FileManager.default.removeItem(at: dbPath) }
@@ -41,25 +41,25 @@ struct RouteImportingTests {
             }
         }
 
-        // Verify import (minimal dataset has 2 routes)
+        // Verify import (small real dataset has 1 route: Blue Line)
         let count = try db.read { db in
             try Route.fetchCount(db)
         }
-        #expect(count == 2, "Should import 2 routes from minimal dataset")
+        #expect(count == 1, "Should import 1 route from small real dataset")
 
-        // Verify data
+        // Verify real VTA data
         let route = try db.read { db in
-            try Route.fetchOne(db, key: "ROUTE1")
+            try Route.fetchOne(db, key: "Blue")
         }
         #expect(route != nil)
-        #expect(route?.shortName == "22")
-        #expect(route?.longName == "Palo Alto - San Jose")
-        #expect(route?.type == .bus)
+        #expect(route?.shortName == "Blue Line")
+        #expect(route?.longName == "Baypointe - Santa Teresa")
+        #expect(route?.type == .tram) // Light rail = type 0
     }
 
     @Test("Import applies default values for missing optional fields")
     func testDefaultValues() throws {
-        // Create CSV without optional color/sortOrder fields
+        // Create CSV without optional color/sortOrder fields to test defaults
         let csvContent = """
         route_id,agency_id,route_short_name,route_long_name,route_type
         TEST1,AGENCY1,1,Test Route,3

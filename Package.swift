@@ -29,6 +29,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "gtfs-importerTests",
-            dependencies: ["gtfs-importer", "GTFSModel"]),
+            dependencies: ["gtfs-importer", "GTFSModel"],
+            resources: [.copy("testData")]),
     ]
 )

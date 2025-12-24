@@ -14,28 +14,26 @@ import GTFSModel
 @Suite("Performance Tests", .serialized, .tags(.integrationTests))
 struct PerformanceTests {
 
-    @Test("Minimal dataset imports in reasonable time")
-    func testMinimalDatasetPerformance() throws {
+    @Test("Small real dataset imports in reasonable time")
+    func testSmallRealDatasetPerformance() throws {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
-            Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
+            Thread.sleep(forTimeInterval: 0.1)
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
         let startTime = Date()
 
-        let importer = Importer(path: gtfsDir.path)
+        // Use real small dataset (130 stop_times)
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         let duration = Date().timeIntervalSince(startTime)
 
-        // Minimal dataset should import very quickly (< 5 seconds)
-        #expect(duration < 5.0, "Minimal dataset should import in under 5 seconds (took \(String(format: "%.2f", duration))s)")
+        // Small real dataset should import very quickly (< 5 seconds)
+        #expect(duration < 5.0, "Small real dataset should import in under 5 seconds (took \(String(format: "%.2f", duration))s)")
 
         // Verify data was imported
         do {
@@ -43,24 +41,22 @@ struct PerformanceTests {
             let count = try db.read { db in
                 try StopTime.fetchCount(db)
             }
-            #expect(count == 13, "Should have imported all stop_times")
+            #expect(count == 130, "Should have imported all 130 stop_times from small real dataset")
         }  // db closes here
     }
 
-    @Test("Database operations complete efficiently")
+    @Test("Database operations complete efficiently with real data")
     func testDatabaseOperationsPerformance() throws {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
-            Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
+            Thread.sleep(forTimeInterval: 0.1)
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        let importer = Importer(path: gtfsDir.path)
+        // Use real small dataset
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         do {
@@ -105,6 +101,8 @@ struct PerformanceTests {
             try StopTime.createTable(db: db)
 
             // Create test data with many stops needing interpolation
+            // This synthetic data is necessary to test interpolation performance
+            // with a controlled scenario (48 stops needing interpolation)
             try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
             try db.execute(sql: "INSERT INTO routes (route_id, route_type) VALUES ('R1', 3)")
             try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")

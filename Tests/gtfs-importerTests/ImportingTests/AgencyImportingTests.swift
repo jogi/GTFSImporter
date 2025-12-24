@@ -15,17 +15,14 @@ import CSV
 @Suite("Agency Importing Tests")
 struct AgencyImportingTests {
 
-    @Test("Import reads and inserts agency data from CSV")
+    @Test("Import reads and inserts agency data from CSV using real data")
     func testImportFromCSV() throws {
-        // Create temporary GTFS directory with agency.txt
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
+        // Use real small dataset
+        let gtfsDir = URL(fileURLWithPath: TestDataHelper.smallRealTestDataPath())
 
-        // Create temporary database
         let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
         defer { try? FileManager.default.removeItem(at: dbPath) }
 
-        // Create database and import
         let db = try DatabaseQueue(path: dbPath.path)
         try db.write { db in
             try Agency.createTable(db: db)
@@ -49,21 +46,21 @@ struct AgencyImportingTests {
         let count = try db.read { db in
             try Agency.fetchCount(db)
         }
-        #expect(count == 1, "Should import 1 agency from minimal dataset")
+        #expect(count == 1, "Should import 1 agency from small real dataset")
 
-        // Verify data
+        // Verify real VTA data
         let agency = try db.read { db in
-            try Agency.fetchOne(db, key: "AGENCY1")
+            try Agency.fetchOne(db, key: "VTA")
         }
         #expect(agency != nil)
-        #expect(agency?.name == "Test Transit")
-        #expect(agency?.url.absoluteString == "https://test.example.com")
+        #expect(agency?.name == "VTA")
+        #expect(agency?.url.absoluteString == "https://www.vta.org")
         #expect(agency?.timezone == "America/Los_Angeles")
     }
 
     @Test("Import handles all fields correctly")
     func testAllFields() throws {
-        // Create CSV with all fields
+        // Create CSV with all fields to test complete field handling
         let csvContent = """
         agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email
         VTA,Santa Clara VTA,https://www.vta.org,America/Los_Angeles,en,408-321-2300,https://www.vta.org/fares,service@vta.org

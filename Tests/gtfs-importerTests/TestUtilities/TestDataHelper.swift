@@ -9,16 +9,24 @@ import Foundation
 
 enum TestDataHelper {
 
-    /// Returns the path to the full VTA test data
+    /// Returns the path to the full VTA test data (~428K stop_times, real production data)
     static func fullTestDataPath() -> String {
-        // Tests/testData/ directory
-        let currentFile = URL(fileURLWithPath: #file)
-        let testsDir = currentFile
-            .deletingLastPathComponent()  // TestUtilities
-            .deletingLastPathComponent()  // gtfs-importerTests
-            .deletingLastPathComponent()  // Tests
+        // Access test data from the test bundle resources
+        guard let resourcePath = Bundle.module.resourcePath else {
+            fatalError("Unable to find test bundle resource path")
+        }
+        return URL(fileURLWithPath: resourcePath).appendingPathComponent("testData").path
+    }
 
-        return testsDir.appendingPathComponent("testData").path
+    /// Returns the path to the small real VTA test data subset
+    /// Contains 5 trips, 130 stop_times, 26 stops from real VTA data
+    /// Maintains full referential integrity, suitable for fast integration tests
+    static func smallRealTestDataPath() -> String {
+        // Access test data from the test bundle resources
+        guard let resourcePath = Bundle.module.resourcePath else {
+            fatalError("Unable to find test bundle resource path")
+        }
+        return URL(fileURLWithPath: resourcePath).appendingPathComponent("testData").appendingPathComponent("small").path
     }
 
     /// Creates a temporary CSV file with given headers and rows

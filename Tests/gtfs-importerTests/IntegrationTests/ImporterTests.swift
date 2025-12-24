@@ -19,16 +19,13 @@ struct ImporterTests {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
             Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        // Run the full import
-        let importer = Importer(path: gtfsDir.path)
+        // Run the full import with real small dataset
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         // Verify all entities were imported
@@ -46,11 +43,11 @@ struct ImporterTests {
             }
 
             #expect(counts.agency == 1, "Should import 1 agency")
-            #expect(counts.route == 2, "Should import 2 routes")
-            #expect(counts.stop == 5, "Should import 5 stops")
-            #expect(counts.calendar == 1, "Should import 1 calendar")
-            #expect(counts.trip == 3, "Should import 3 trips")
-            #expect(counts.stopTime == 13, "Should import 13 stop times")
+            #expect(counts.route == 1, "Should import 1 route")
+            #expect(counts.stop == 26, "Should import 26 stops")
+            #expect(counts.calendar == 3, "Should import 3 calendar entries")
+            #expect(counts.trip == 5, "Should import 5 trips")
+            #expect(counts.stopTime == 130, "Should import 130 stop times")
         }  // db closes here
     }
 
@@ -59,15 +56,12 @@ struct ImporterTests {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
             Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        let importer = Importer(path: gtfsDir.path)
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         do {
@@ -90,32 +84,23 @@ struct ImporterTests {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
             Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        let importer = Importer(path: gtfsDir.path)
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         // Verify last stops are marked
         do {
             let db = try DatabaseQueue(path: "./gtfs.db")
-            let (lastStopCount, trip1LastStop) = try db.read { db in
-                (
-                    try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM stop_times WHERE is_laststop = 1") ?? 0,
-                    try Bool.fetchOne(db, sql: "SELECT is_laststop FROM stop_times WHERE trip_id = 'TRIP1' AND stop_sequence = 5") ?? false
-                )
+            let lastStopCount = try db.read { db in
+                try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM stop_times WHERE is_laststop = 1") ?? 0
             }
 
-            // Should have at least 3 last stops (one per trip: TRIP1, TRIP2, TRIP3)
-            #expect(lastStopCount >= 3, "Should have at least 3 last stops marked")
-
-            // Verify TRIP1's last stop (sequence 5, STOP5)
-            #expect(trip1LastStop == true, "TRIP1's last stop should be marked")
+            // Should have 5 last stops (one per trip in small real dataset)
+            #expect(lastStopCount == 5, "Should have 5 last stops marked")
         }  // db closes here
     }
 
@@ -124,15 +109,12 @@ struct ImporterTests {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
             Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        let importer = Importer(path: gtfsDir.path)
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         do {

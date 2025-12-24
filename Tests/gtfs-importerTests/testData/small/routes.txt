@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,ext_route_type
+Blue,VTA,Blue Line,Baypointe - Santa Teresa,,0,https://www.vta.org/go/routes/blue-line,4cb4e7,000000,1,900

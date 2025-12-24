@@ -20,17 +20,13 @@ struct StopRouteTests {
         // Clean up any leftover databases
         try? FileManager.default.removeItem(atPath: "./gtfs.db")
         Thread.sleep(forTimeInterval: 0.2)  // Allow time for file system to release lock
-
-        // Create a complete test dataset with routes and trips
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
         defer {
             Thread.sleep(forTimeInterval: 0.1)  // Wait before cleanup
             try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
-        // Import all entities
-        let importer = Importer(path: gtfsDir.path)
+        // Import real data using the importer
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
         try importer.importAllFiles()
 
         // Call the actual StopRoute.addStopRoutes() method to test it
@@ -39,137 +35,104 @@ struct StopRouteTests {
         // Verify stops have routes populated
         do {
             let stopRouteDB = try DatabaseQueue(path: "./gtfs.db")
-            let (stopsWithRoutesCount, stop1Routes) = try stopRouteDB.read { db in
+            let (stopsWithRoutesCount, stop4736Routes) = try stopRouteDB.read { db in
                 (
                     try Stop.fetchAll(db, sql: "SELECT * FROM stops WHERE routes IS NOT NULL").count,
-                    try Stop.fetchOne(db, key: "STOP1")?.routes
+                    try Stop.fetchOne(db, key: "4736")?.routes
                 )
             }
 
             #expect(stopsWithRoutesCount > 0, "At least some stops should have routes")
-            #expect(stop1Routes != nil, "STOP1 should have routes")
+            #expect(stop4736Routes != nil, "Stop 4736 should have routes")
 
-            // Routes should be comma-separated or single route
-            if let routes = stop1Routes {
-                #expect(routes.contains(",") || routes.count > 0, "Routes should be comma-separated or single route")
+            // Routes should contain "Blue" for real VTA data
+            if let routes = stop4736Routes {
+                #expect(routes.contains("Blue"), "Routes should contain Blue line")
             }
         }  // stopRouteDB goes out of scope and closes here
     }
 
     @Test("Stops with no trips have null routes field")
     func testStopsWithNoTrips() throws {
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try Stop.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // Insert test data
-            try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name) VALUES ('R1', 3, '22')")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP1', 37.3347, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP_NO_TRIPS', 37.9999, -122.9999, 0, 0)")
-            try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('TRIP1', 'R1', 'S1')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('TRIP1', 'STOP1', 1, '08:00:00', '08:00:00')")
-
-            // Build stop-route mapping (only STOP1 should get routes)
-            var stopsWithRoutes: [String: Set<String>] = [:]
-            let stopTimes = try StopTime.fetchAll(db)
-
-            for stopTime in stopTimes {
-                if let trip = try Trip.fetchOne(db, key: stopTime.tripIdentifier) {
-                    if let route = try Route.fetchOne(db, key: trip.routeIdentifier), let shortName = route.shortName {
-                        if stopsWithRoutes[stopTime.stopIdentifier] == nil {
-                            stopsWithRoutes[stopTime.stopIdentifier] = Set<String>()
-                        }
-                        stopsWithRoutes[stopTime.stopIdentifier]?.insert(shortName)
-                    }
-                }
-            }
-
-            // Update stops
-            for (stopID, routes) in stopsWithRoutes {
-                var stop = try Stop.fetchOne(db, key: stopID)!
-                stop.routes = routes.sorted().joined(separator: ", ")
-                try stop.update(db)
-            }
+        // Clean up any leftover databases
+        try? FileManager.default.removeItem(atPath: "./gtfs.db")
+        Thread.sleep(forTimeInterval: 0.2)
+        defer {
+            Thread.sleep(forTimeInterval: 0.1)
+            try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
 
+        // Import real data first
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
+        try importer.importAllFiles()
+
+        // Now add a stop that has no trips
+        let db = try DatabaseQueue(path: "./gtfs.db")
+        try db.write { db in
+            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP_NO_TRIPS', 37.9999, -122.9999, 0, 0)")
+        }
+
+        // Run addStopRoutes
+        try StopRoute.addStopRoutes()
+
         // Verify
-        let (stop1Routes, stopNoTripsRoutes) = try db.read { db in
+        let (stop4736Routes, stopNoTripsRoutes) = try db.read { db in
             (
-                try Stop.fetchOne(db, key: "STOP1")?.routes,
+                try Stop.fetchOne(db, key: "4736")?.routes,
                 try Stop.fetchOne(db, key: "STOP_NO_TRIPS")?.routes
             )
         }
 
-        #expect(stop1Routes != nil, "STOP1 should have routes")
+        #expect(stop4736Routes != nil, "Stop 4736 should have routes")
         #expect(stopNoTripsRoutes == nil, "STOP_NO_TRIPS should have null routes")
     }
 
     @Test("Multiple routes per stop are comma-separated")
     func testMultipleRoutesPerStop() throws {
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try Stop.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // Insert test data with multiple routes serving same stop
-            try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name) VALUES ('R1', 3, '22')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name) VALUES ('R2', 3, '23')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name) VALUES ('R3', 3, '24')")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP1', 37.3347, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('TRIP1', 'R1', 'S1')")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('TRIP2', 'R2', 'S1')")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('TRIP3', 'R3', 'S1')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('TRIP1', 'STOP1', 1, '08:00:00', '08:00:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('TRIP2', 'STOP1', 1, '09:00:00', '09:00:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('TRIP3', 'STOP1', 1, '10:00:00', '10:00:00')")
-
-            // Build stop-route mapping
-            var stopsWithRoutes: [String: Set<String>] = [:]
-            let stopTimes = try StopTime.fetchAll(db)
-
-            for stopTime in stopTimes {
-                if let trip = try Trip.fetchOne(db, key: stopTime.tripIdentifier) {
-                    if let route = try Route.fetchOne(db, key: trip.routeIdentifier), let shortName = route.shortName {
-                        if stopsWithRoutes[stopTime.stopIdentifier] == nil {
-                            stopsWithRoutes[stopTime.stopIdentifier] = Set<String>()
-                        }
-                        stopsWithRoutes[stopTime.stopIdentifier]?.insert(shortName)
-                    }
-                }
-            }
-
-            // Update stops
-            for (stopID, routes) in stopsWithRoutes {
-                var stop = try Stop.fetchOne(db, key: stopID)!
-                stop.routes = routes.sorted().joined(separator: ", ")
-                try stop.update(db)
-            }
+        // Clean up any leftover databases
+        try? FileManager.default.removeItem(atPath: "./gtfs.db")
+        Thread.sleep(forTimeInterval: 0.2)
+        defer {
+            Thread.sleep(forTimeInterval: 0.1)
+            try? FileManager.default.removeItem(atPath: "./gtfs.db")
         }
+
+        // Import real data first
+        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
+        try importer.importAllFiles()
+
+        // Add additional routes and trips to create multiple routes for same stop
+        let db = try DatabaseQueue(path: "./gtfs.db")
+        try db.write { db in
+            // Add more routes
+            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name, agency_id) VALUES ('Green', 0, 'Green Line', 'VTA')")
+            try db.execute(sql: "INSERT INTO routes (route_id, route_type, route_short_name, agency_id) VALUES ('Orange', 0, 'Orange Line', 'VTA')")
+
+            // Add trips for these routes using existing service
+            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('GREEN_TRIP', 'Green', '268.2969.1')")
+            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('ORANGE_TRIP', 'Orange', '268.2969.1')")
+
+            // Add stop_times for the same stop (4736) on different routes
+            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('GREEN_TRIP', '4736', 1, '08:00:00', '08:00:00')")
+            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('ORANGE_TRIP', '4736', 1, '09:00:00', '09:00:00')")
+        }
+
+        // Run addStopRoutes
+        try StopRoute.addStopRoutes()
 
         // Verify
-        let stop1Routes = try db.read { db in
-            try Stop.fetchOne(db, key: "STOP1")?.routes
+        let stop4736Routes = try db.read { db in
+            try Stop.fetchOne(db, key: "4736")?.routes
         }
 
-        #expect(stop1Routes == "22, 23, 24", "STOP1 should have all three routes comma-separated and sorted")
+        #expect(stop4736Routes != nil, "Stop 4736 should have routes")
+
+        // Should contain all three routes (Blue from import + Green + Orange we added)
+        if let routes = stop4736Routes {
+            #expect(routes.contains("Blue"), "Should contain Blue Line")
+            #expect(routes.contains("Green"), "Should contain Green Line")
+            #expect(routes.contains("Orange"), "Should contain Orange Line")
+            #expect(routes.contains(","), "Multiple routes should be comma-separated")
+        }
     }
 }
