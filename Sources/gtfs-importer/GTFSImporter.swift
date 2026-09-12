@@ -17,15 +17,23 @@ struct GTFSImporter: ParsableCommand {
 
         let database = try DatabaseQueue(path: "./\(Importer.defaultDatabaseFileName)")
         defer { try? database.close() }
-        try run(database: database)
+        let summaries = try run(database: database)
 
         let endTime = Date()
         let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
 
-        print("\n✅ Finished importing in \(duration.green) seconds")
+        let accepted = summaries.reduce(0) { $0 + $1.accepted }
+        let rejected = summaries.reduce(0) { $0 + $1.rejected }
+        for summary in summaries where summary.rejected > 0 {
+            let message = "\(summary.fileName): \(summary.accepted) imported, \(summary.rejected) rejected\n"
+            FileHandle.standardError.write(Data(message.utf8))
+        }
+        let status = rejected == 0 ? "✅ Finished importing" : "⚠️ Finished importing with row errors"
+        print("\n\(status) in \(duration.green) seconds: \(accepted) imported, \(rejected) rejected")
     }
 
-    func run(database: DatabaseQueue) throws {
+    @discardableResult
+    func run(database: DatabaseQueue) throws -> [FileImportSummary] {
         try Importer(path: path, database: database).run(addStopRoutes: addStopRoutes)
     }
 }

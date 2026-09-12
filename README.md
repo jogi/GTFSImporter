@@ -57,3 +57,20 @@ For typical transit agency feeds (~390K stop_times):
 ## Documentation
 
 See [CLAUDE.md](CLAUDE.md) for detailed architecture and implementation notes.
+
+## Import results
+
+Invalid rows are reported to stderr and skipped; later valid rows are still imported.
+The final summary reports accepted and rejected row counts, with per-file rejection
+counts on stderr. Row rejections do not change the successful exit status. Unreadable
+required files, CSV stream errors, and database workflow failures still throw errors;
+file failures during replacement roll back the feed transaction.
+
+GTFS service-day hours are retained in the database: `24:10:00` remains `24:10:00`,
+so clients can filter and sort overnight service correctly. Empty fare `transfers`
+values mean unlimited transfers and are stored using GTFSModel's `-1` sentinel.
+
+For paired local changes to this importer and a sibling GTFSModel checkout, use
+`swift package edit GTFSModel --path /absolute/path/to/GTFSModel`. Publish the model
+changes first, then update and commit the importer's dependency resolution before
+releasing the importer. `swift package unedit GTFSModel` removes the local override.

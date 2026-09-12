@@ -16,14 +16,17 @@ extension GTFSModel.Calendar: ImporterImporting {
         return "calendar.txt"
     }
     
-    static func receiveImport(from reader: CSVReader, with db: Database) throws {
+    @discardableResult
+    static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool {
         do {
             let decoder = CSVRowDecoder()
             decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMdd)
             let record = try decoder.decode(Self.self, from: reader)
             try record.insert(db)
+            return true
         } catch {
-            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
+            ImportDiagnostics.rejected(Self.self, error: error, row: reader.currentRow)
+            return false
         }
     }
 }

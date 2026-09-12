@@ -25,14 +25,38 @@ struct EndToEndImportTests {
             let rows = try Row.fetchAll(db, sql: "SELECT * FROM stop_times ORDER BY stop_sequence")
             #expect(
                 rows.map { $0["arrival_time"] as String }
-                    == (overnight ? ["23:50:00", "23:55:00", "00:10:00"] : ["08:00:00", "08:05:00", "08:20:00"]))
+                    == (overnight ? ["23:50:00", "23:55:00", "24:10:00"] : ["08:00:00", "08:05:00", "08:20:00"]))
             #expect(
                 rows.map { $0["departure_time"] as String }
-                    == (overnight ? ["23:51:00", "23:55:00", "00:11:00"] : ["08:01:00", "08:05:00", "08:21:00"]))
+                    == (overnight ? ["23:51:00", "23:55:00", "24:11:00"] : ["08:01:00", "08:05:00", "08:21:00"]))
             #expect(rows.map { $0["timepoint"] as Int } == [1, 0, 1])
             #expect(rows.map { $0["is_laststop"] as Bool } == [false, false, true])
             let routes = try Stop.fetchAll(db).map(\.routes)
             #expect(routes == Array(repeating: addRoutes ? "Red" : nil, count: 3))
+        }
+    }
+
+    @Test("Legacy late-night queries retain departures after midnight")
+    func lateNightQuery() throws {
+        let directory = try TestDataHelper.createMinimalGTFSDataset()
+        defer { TemporaryFileHelper.cleanup(directory: directory) }
+        try """
+            trip_id,stop_id,stop_sequence,arrival_time,departure_time
+            T,A,1,23:50:00,23:51:00
+            T,B,2,24:03:14,24:04:00
+            T,C,3,24:10:00,24:10:00
+            """.write(to: directory.appendingPathComponent("stop_times.txt"), atomically: true, encoding: .utf8)
+        let database = try DatabaseQueue()
+        defer { try? database.close() }
+        try Importer(path: directory.path, database: database).run(addStopRoutes: false)
+        try database.read { db in
+            #expect(try String.fetchAll(db, sql: """
+                SELECT arrival_time FROM stop_times
+                WHERE arrival_time >= '23:00:00' AND is_laststop = 0
+                ORDER BY arrival_time
+                """) == ["23:50:00", "24:03:14"])
+            let times = try StopTime.fetchAll(db, sql: "SELECT * FROM stop_times ORDER BY stop_sequence")
+            #expect(times[1].arrivalTime > times[0].departureTime)
         }
     }
 

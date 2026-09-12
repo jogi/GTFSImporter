@@ -21,3 +21,6 @@ gtfs.sqlite
 .build
 .swiftpm
 gtfs.db
+
+# Local SwiftPM editable dependency links
+/Packages/

@@ -25,7 +25,6 @@ struct StopTimeImportingTests {
                     "trip_id,stop_id,stop_sequence,arrival_time,departure_time\(header)\nT,A,1,25:30:00,25:31:00\(fields)",
                 in: db)
             #expect(try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times") == "25:30:00")
-            try StopTime.normalizeServiceDayTimes(in: db)
             let stop = try #require(try StopTime.fetchOne(db))
             #expect(
                 [
@@ -34,8 +33,8 @@ struct StopTimeImportingTests {
                     stop.timepoint?.rawValue,
                 ] == expected.map(Optional.some))
             #expect(stop.isLastStop == false)
-            #expect(try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times") == "01:30:00")
-            #expect(try String.fetchOne(db, sql: "SELECT departure_time FROM stop_times") == "01:31:00")
+            #expect(try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times") == "25:30:00")
+            #expect(try String.fetchOne(db, sql: "SELECT departure_time FROM stop_times") == "25:31:00")
         }
     }
 

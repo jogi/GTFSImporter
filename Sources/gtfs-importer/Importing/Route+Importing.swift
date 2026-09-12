@@ -16,7 +16,8 @@ extension Route: ImporterImporting {
         return "routes.txt"
     }
     
-    static func receiveImport(from reader: CSVReader, with db: Database) throws {
+    @discardableResult
+    static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool {
         do {
             let decoder = CSVRowDecoder()
             var record = try decoder.decode(Self.self, from: reader)
@@ -26,8 +27,10 @@ extension Route: ImporterImporting {
             record.continuousPickup = record.continuousPickup ?? .notContinuous
             record.continuousDropoff = record.continuousDropoff ?? .notContinuous
             try record.insert(db)
+            return true
         } catch {
-            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
+            ImportDiagnostics.rejected(Self.self, error: error, row: reader.currentRow)
+            return false
         }
     }
 }

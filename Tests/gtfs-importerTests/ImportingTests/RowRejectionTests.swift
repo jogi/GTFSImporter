@@ -25,4 +25,22 @@ struct RowRejectionTests {
                 ])
         }
     }
+    @Test("File summaries count rejections while retaining later valid rows")
+    func summary() throws {
+        let directory = try TestDataHelper.createMinimalGTFSDataset()
+        defer { TemporaryFileHelper.cleanup(directory: directory) }
+        try """
+            agency_id,agency_name,agency_url,agency_timezone
+            A,Original,https://example.com,America/Los_Angeles
+            A,Duplicate,https://example.com,America/Los_Angeles
+            B,Later,https://example.com,America/Los_Angeles
+            """.write(to: directory.appendingPathComponent("agency.txt"), atomically: true, encoding: .utf8)
+        let queue = try DatabaseQueue()
+        defer { try? queue.close() }
+        try queue.write { db in
+            let summary = try Agency.importFile(from: directory.path, into: db)
+            #expect(summary == FileImportSummary(fileName: "agency.txt", accepted: 2, rejected: 1))
+            #expect(try Agency.fetchCount(db) == 2)
+        }
+    }
 }

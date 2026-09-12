@@ -16,7 +16,8 @@ extension StopTime: ImporterImporting {
         return "stop_times.txt"
     }
 
-    static func receiveImport(from reader: CSVReader, with db: Database) throws {
+    @discardableResult
+    static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool {
         do {
             var record = try CSVRowDecoder().decode(ImportRecord.self, from: reader)
             record.arrivalTime = try validatedTime(record.arrivalTime)
@@ -29,22 +30,19 @@ extension StopTime: ImporterImporting {
             record.timepoint = record.timepoint ?? .exact
             record.isLastStop = false
             try record.insert(db)
+            return true
         } catch {
-            Logger.importer.error("Error importing \(Self.self) - \(error)\n\(reader.currentRow ?? [])")
+            ImportDiagnostics.rejected(Self.self, error: error, row: reader.currentRow)
+            return false
         }
     }
 
     private static func validatedTime(_ value: String?) throws -> String {
         guard let value, !value.isEmpty else { return "" }
-        guard let sanitized = value.sanitizedTimeString,
-            let date = DateFormatter.hhmmss.date(from: sanitized),
-            let hour = Int(value.prefix(while: { $0 != ":" }))
-        else {
-            throw ImporterError.invalidTime(time: value)
-        }
-        // Retain service-day hours until interpolation has finished across midnight.
-        let hours = hour < 10 ? "0\(hour)" : String(hour)
-        return hours + DateFormatter.hhmmss.string(from: date).suffix(6)
+        guard let date = ServiceDayTime.date(from: value),
+            let normalized = ServiceDayTime.string(from: date)
+        else { throw ImporterError.invalidTime(time: value) }
+        return normalized
     }
 
     // A GTFS row may be untimed until interpolation. Keep that staging state
@@ -66,20 +64,6 @@ extension StopTime: ImporterImporting {
         var shapeDistanceTraveled: Double?
         var timepoint: TimepointType?
         var isLastStop: Bool?
-    }
-
-    /// The public model stores times of day. Fold extended hours only after
-    /// interpolation so a 23:50 -> 24:10 interval remains twenty minutes.
-    static func normalizeServiceDayTimes(in db: Database) throws {
-        for column in ["arrival_time", "departure_time"] {
-            try db.execute(
-                sql: """
-                    UPDATE stop_times
-                    SET \(column) = printf('%02d', CAST(substr(\(column), 1, instr(\(column), ':') - 1) AS INTEGER) % 24)
-                        || substr(\(column), instr(\(column), ':'))
-                    WHERE CAST(substr(\(column), 1, instr(\(column), ':') - 1) AS INTEGER) >= 24
-                    """)
-        }
     }
 
     static func updateLastStop(in db: Database) throws {
