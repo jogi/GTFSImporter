@@ -1,3 +1,4 @@
+import CSV
 import Foundation
 import GRDB
 import GTFSModel
@@ -119,6 +120,40 @@ struct EndToEndImportTests {
             #expect(stop.stopIdentifier == "C")
             #expect(stop.stopSequence == 10)
             #expect(stop.isLastStop == true)
+        }
+    }
+
+    @Test("A decoding error after valid rows rolls back the entire replacement feed")
+    func decodingFailureRollsBack() throws {
+        let directory = try TestDataHelper.createMinimalGTFSDataset()
+        defer { TemporaryFileHelper.cleanup(directory: directory) }
+        let database = try DatabaseQueue()
+        defer { try? database.close() }
+        let importer = Importer(path: directory.path, database: database)
+        try importer.importAllFiles()
+        try database.write { try $0.execute(sql: "UPDATE agency SET agency_name = 'Previous feed'") }
+        let originalRows = try database.read { db in
+            try Row.fetchAll(db, sql: "SELECT * FROM stop_times ORDER BY stop_sequence")
+        }
+
+        // A valid header and changed row precede the invalid UTF-8 byte. Trailing
+        // bytes distinguish a decoding failure from CSV.swift's normal EOF sentinel.
+        var contents = Data("trip_id,stop_id,stop_sequence,arrival_time,departure_time\nT,A,1,09:00:00,09:01:00\n".utf8)
+        contents.append(0xFF)
+        contents.append(contentsOf: "invalid UTF-8\n".utf8)
+        try contents.write(to: directory.appendingPathComponent("stop_times.txt"))
+
+        #expect {
+            try importer.importAllFiles()
+        } throws: { error in
+            if case CSVError.unicodeDecoding = error { return true }
+            return false
+        }
+        try database.read { (db: Database) throws -> Void in
+            let agencyName = try String.fetchOne(db, sql: "SELECT agency_name FROM agency")
+            let rows = try Row.fetchAll(db, sql: "SELECT * FROM stop_times ORDER BY stop_sequence")
+            #expect(agencyName == "Previous feed")
+            #expect(rows == originalRows)
         }
     }
 }

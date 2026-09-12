@@ -43,4 +43,25 @@ struct RouteImportingTests {
             #expect(route.continuousDropoff == .coordinateWithDriver)
         }
     }
+
+    @Test("Route receiver skips invalid and duplicate rows without losing valid routes")
+    func rejectedRows() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                Route.self,
+                csv: """
+                    route_id,route_type,route_short_name
+                    FIRST,3,Original
+                    FIRST,3,Duplicate
+                    BAD,999,Invalid
+                    LAST,0,Later
+                    """, in: db)
+            let routes = try Route.fetchAll(db, sql: "SELECT * FROM routes WHERE route_id != 'R' ORDER BY route_id")
+            #expect(routes.map(\.identifier) == ["FIRST", "LAST"])
+            #expect(routes.map(\.shortName) == ["Original", "Later"])
+            #expect(routes.map(\.type) == [.bus, .tram])
+        }
+    }
 }

@@ -53,7 +53,8 @@ in GTFSModel's suite.
 
 Malformed rows are logged and skipped; subsequent valid rows still import.
 Missing optional files produce empty tables. Missing or unreadable required files
-abort the transaction and preserve the previous feed. Reimporting replaces the
+and file-decoding failures abort the transaction and preserve the previous feed,
+even when valid rows were read before the failure. Reimporting replaces the
 feed atomically, dropping child tables before parents.
 
 ### Stop times
