@@ -77,6 +77,14 @@ repeat execution.
 Every trip contributes its stops. Route names are deduplicated and sorted, and
 recomputing the routes clears stale values.
 
+### Console output
+
+Colors are enabled only for a terminal when `GTFSIMPORTER_NO_COLOR` is absent.
+The presence of that variable disables colors even when its value is empty or
+`"0"`. Tests supply the policy inputs explicitly, verify every named foreground
+with colors enabled and disabled, and check preservation of empty, Unicode,
+multiline, and already-styled text.
+
 ## Writing tests
 
 - Use Swift Testing's `@Test`, `#expect`, and `#require` APIs.

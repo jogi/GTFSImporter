@@ -19,36 +19,36 @@ struct Console {
     public static let cyan = "\u{001B}[0;36m"
     public static let white = "\u{001B}[0;37m"
 
-    public static func black(string: String) -> String {
-        return wrap(colorCode: Console.black, string: string)
+    public static func black(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.black, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func red(string: String) -> String {
-        return wrap(colorCode: Console.red, string: string)
+    public static func red(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.red, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func green(string: String) -> String {
-        return wrap(colorCode: Console.green, string: string)
+    public static func green(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.green, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func yellow(string: String) -> String {
-        return wrap(colorCode: Console.yellow, string: string)
+    public static func yellow(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.yellow, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func blue(string: String) -> String {
-        return wrap(colorCode: Console.blue, string: string)
+    public static func blue(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.blue, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func magenta(string: String) -> String {
-        return wrap(colorCode: Console.magenta, string: string)
+    public static func magenta(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.magenta, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func cyan(string: String) -> String {
-        return wrap(colorCode: Console.cyan, string: string)
+    public static func cyan(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.cyan, string: string, colorsDisabled: colorsDisabled)
     }
 
-    public static func white(string: String) -> String {
-        return wrap(colorCode: Console.white, string: string)
+    public static func white(string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        return wrap(colorCode: Console.white, string: string, colorsDisabled: colorsDisabled)
     }
 
     static func wrap(colorCode: String, string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
@@ -59,15 +59,16 @@ struct Console {
         return colorCode + string + Console.resetAttributes
     }
 
-    public static let colorsDisabled: Bool = {
-        if ProcessInfo.processInfo.environment["GTFSIMPORTER_NO_COLOR"] != nil {
-            return true
-        }
-        if isatty(STDOUT_FILENO) == 0 {
-            return true
-        }
-        return false
-    }()
+    public static let colorsDisabled = shouldDisableColors(
+        noColorValue: ProcessInfo.processInfo.environment["GTFSIMPORTER_NO_COLOR"],
+        isTerminal: isatty(STDOUT_FILENO) != 0
+    )
+
+    /// The override disables color by presence, including an empty or "0" value.
+    static func shouldDisableColors(noColorValue: String?, isTerminal: Bool) -> Bool {
+        noColorValue != nil || !isTerminal
+    }
+
 }
 
 // string extension which makes ansi codes easier
