@@ -1,6 +1,6 @@
 //
 //  Console.swift
-//  
+//
 //
 //  Created by Vashishtha Jogi on 8/16/24.
 //
@@ -51,8 +51,8 @@ struct Console {
         return wrap(colorCode: Console.white, string: string)
     }
 
-    private static func wrap(colorCode: String, string: String) -> String {
-        if Console.colorsDisabled {
+    static func wrap(colorCode: String, string: String, colorsDisabled: Bool = Console.colorsDisabled) -> String {
+        if colorsDisabled {
             return string
         }
 

@@ -1,80 +1,85 @@
-//
-//  StopTimeImportingTests.swift
-//  gtfs-importerTests
-//
-//  Tests for StopTime CSV importing
-//
-
-import Foundation
 import GRDB
-import Testing
 import GTFSModel
-import CSV
+import Testing
+
 @testable import gtfs_importer
 
-@Suite("StopTime Importing Tests", .serialized)
 struct StopTimeImportingTests {
-
-    @Test("Import reads and inserts stop time data from CSV using real data")
-    func testImportFromCSV() throws {
-        // Clean up any leftover databases
-        try? FileManager.default.removeItem(atPath: "./gtfs.db")
-        Thread.sleep(forTimeInterval: 0.2)
-        defer {
-            Thread.sleep(forTimeInterval: 0.1)
-            try? FileManager.default.removeItem(atPath: "./gtfs.db")
+    @Test(
+        "Stop-time defaults preserve explicit values",
+        arguments: [
+            ("", "", [0, 0, 1, 1, 1]),
+            (",pickup_type,drop_off_type,continuous_pickup,continuous_drop_off,timepoint", ",,,,,", [0, 0, 1, 1, 1]),
+            (
+                ",pickup_type,drop_off_type,continuous_pickup,continuous_drop_off,timepoint", ",2,3,0,2,0",
+                [2, 3, 0, 2, 0]
+            ),
+        ])
+    func defaults(header: String, fields: String, expected: [Int]) throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                StopTime.self,
+                csv:
+                    "trip_id,stop_id,stop_sequence,arrival_time,departure_time\(header)\nT,A,1,25:30:00,25:31:00\(fields)",
+                in: db)
+            #expect(try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times") == "25:30:00")
+            try StopTime.normalizeServiceDayTimes(in: db)
+            let stop = try #require(try StopTime.fetchOne(db))
+            #expect(
+                [
+                    stop.pickupType?.rawValue, stop.dropoffType?.rawValue,
+                    stop.continuousPickup?.rawValue, stop.continuousDropoff?.rawValue,
+                    stop.timepoint?.rawValue,
+                ] == expected.map(Optional.some))
+            #expect(stop.isLastStop == false)
+            #expect(try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times") == "01:30:00")
+            #expect(try String.fetchOne(db, sql: "SELECT departure_time FROM stop_times") == "01:31:00")
         }
-
-        // Use real small dataset
-        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
-        try importer.importAllFiles()
-
-        // Verify import (small dataset has 130 stop_times)
-        let db = try DatabaseQueue(path: "./gtfs.db")
-        let count = try db.read { db in
-            try StopTime.fetchCount(db)
-        }
-        #expect(count == 130, "Should import 130 stop times from small real dataset")
-
-        // Verify data structure from real VTA data
-        let stopTimes = try db.read { db in
-            try StopTime.fetchAll(db, sql: "SELECT * FROM stop_times WHERE trip_id = '3640965' ORDER BY stop_sequence")
-        }
-        #expect(stopTimes.count == 26, "Trip 3640965 has 26 stops")
-        #expect(stopTimes[0].stopIdentifier == "4736")
-        #expect(stopTimes[0].stopSequence == 1)
-        #expect(stopTimes[0].timepoint == .exact) // Real data has timepoint=1
     }
 
-    @Test("updateLastStop marks final stops in each trip")
-    func testUpdateLastStop() throws {
-        // Clean up any leftover databases
-        try? FileManager.default.removeItem(atPath: "./gtfs.db")
-        Thread.sleep(forTimeInterval: 0.2)
-        defer {
-            Thread.sleep(forTimeInterval: 0.1)
-            try? FileManager.default.removeItem(atPath: "./gtfs.db")
+    @Test(
+        "Bad time rows are skipped without losing later valid rows",
+        arguments: ["garbage", "12:30", "12:60:00", "-1:00:00"])
+    func invalidRows(time: String) throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                StopTime.self,
+                csv: """
+                    trip_id,stop_id,stop_sequence,arrival_time,departure_time
+                    T,A,1,08:00:00,08:00:00
+                    T,B,2,\(time),08:10:00
+                    T,C,3,08:20:00,08:20:00
+                    """, in: db)
+            #expect(try Int.fetchAll(db, sql: "SELECT stop_sequence FROM stop_times ORDER BY stop_sequence") == [1, 3])
         }
+    }
 
-        // Import real data using the importer
-        let importer = Importer(path: TestDataHelper.smallRealTestDataPath())
-        try importer.importAllFiles()
-
-        // Verify last stops are marked (5 trips in small dataset)
-        let db = try DatabaseQueue(path: "./gtfs.db")
-        let lastStopsCount = try db.read { db in
-            try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM stop_times WHERE is_laststop = 1") ?? 0
-        }
-        #expect(lastStopsCount == 5, "Should have 5 last stops marked (one per trip)")
-
-        // Verify specific trip's last stop
-        try db.read { db in
-            let trip1LastStop = try Bool.fetchOne(db, sql: "SELECT is_laststop FROM stop_times WHERE trip_id = '3640965' ORDER BY stop_sequence DESC LIMIT 1") ?? false
-            #expect(trip1LastStop == true, "Trip 3640965's last stop should be marked")
-
-            // Verify first stop is NOT marked
-            let trip1FirstStop = try Bool.fetchOne(db, sql: "SELECT is_laststop FROM stop_times WHERE trip_id = '3640965' ORDER BY stop_sequence ASC LIMIT 1") ?? false
-            #expect(trip1FirstStop == false, "Trip 3640965's first stop should not be marked")
+    @Test("Last-stop marking uses each trip's maximum sequence and resets stale flags")
+    func lastStops() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('U','R','S')")
+            try ImportTestSupport.receive(
+                StopTime.self,
+                csv: """
+                    trip_id,stop_id,stop_sequence,arrival_time,departure_time
+                    T,C,20,08:20:00,08:20:00
+                    U,A,9,09:00:00,09:00:00
+                    T,A,2,08:00:00,08:00:00
+                    T,B,7,08:10:00,08:10:00
+                    """, in: db)
+            try db.execute(sql: "UPDATE stop_times SET is_laststop = 1")
+            try StopTime.updateLastStop(in: db)
+            #expect(
+                try String.fetchAll(
+                    db,
+                    sql: "SELECT trip_id || ':' || stop_sequence FROM stop_times WHERE is_laststop = 1 ORDER BY trip_id"
+                ) == ["T:20", "U:9"])
         }
     }
 }

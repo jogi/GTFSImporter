@@ -1,103 +1,46 @@
-//
-//  RouteImportingTests.swift
-//  gtfs-importerTests
-//
-//  Tests for Route CSV importing
-//
-
-import Foundation
 import GRDB
-import Testing
 import GTFSModel
-import CSV
+import Testing
+
 @testable import gtfs_importer
 
-@Suite("Route Importing Tests")
 struct RouteImportingTests {
-
-    @Test("Import reads and inserts route data from CSV using real data")
-    func testImportFromCSV() throws {
-        // Use real small dataset
-        let gtfsDir = URL(fileURLWithPath: TestDataHelper.smallRealTestDataPath())
-
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try Route.createTable(db: db)
+    @Test("Missing and empty route fields receive defaults", arguments: [false, true])
+    func defaults(emptyColumns: Bool) throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            let csv =
+                emptyColumns
+                ? "route_id,route_type,route_color,route_text_color,route_sort_order,continuous_pickup,continuous_drop_off\nX,3,,,,,"
+                : "route_id,route_type\nX,3"
+            try ImportTestSupport.receive(Route.self, csv: csv, in: db)
+            let route = try #require(try Route.fetchOne(db, key: "X"))
+            #expect(route.color == "FFFFFF")
+            #expect(route.textColor == "000000")
+            #expect(route.sortOrder == 0)
+            #expect(route.continuousPickup == .notContinuous)
+            #expect(route.continuousDropoff == .notContinuous)
         }
-
-        let fileURL = gtfsDir.appendingPathComponent("routes.txt")
-        guard let stream = InputStream(url: fileURL) else {
-            throw ImporterError.invalidStream(path: fileURL.path)
-        }
-
-        let reader = try CSVReader(stream: stream, hasHeaderRow: true)
-
-        try db.write { db in
-            while reader.next() != nil {
-                try Route.receiveImport(from: reader, with: db)
-            }
-        }
-
-        // Verify import (small real dataset has 1 route: Blue Line)
-        let count = try db.read { db in
-            try Route.fetchCount(db)
-        }
-        #expect(count == 1, "Should import 1 route from small real dataset")
-
-        // Verify real VTA data
-        let route = try db.read { db in
-            try Route.fetchOne(db, key: "Blue")
-        }
-        #expect(route != nil)
-        #expect(route?.shortName == "Blue Line")
-        #expect(route?.longName == "Baypointe - Santa Teresa")
-        #expect(route?.type == .tram) // Light rail = type 0
     }
 
-    @Test("Import applies default values for missing optional fields")
-    func testDefaultValues() throws {
-        // Create CSV without optional color/sortOrder fields to test defaults
-        let csvContent = """
-        route_id,agency_id,route_short_name,route_long_name,route_type
-        TEST1,AGENCY1,1,Test Route,3
-        """
-
-        let tempDir = try TemporaryFileHelper.createTemporaryDirectory()
-        defer { TemporaryFileHelper.cleanup(directory: tempDir) }
-
-        let csvPath = tempDir.appendingPathComponent("routes.txt")
-        try csvContent.write(to: csvPath, atomically: true, encoding: .utf8)
-
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try Route.createTable(db: db)
+    @Test("Explicit route values survive defaulting")
+    func explicitValues() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                Route.self,
+                csv: """
+                    route_id,route_type,route_color,route_text_color,route_sort_order,continuous_pickup,continuous_drop_off
+                    X,3,112233,AABBCC,7,2,3
+                    """, in: db)
+            let route = try #require(try Route.fetchOne(db, key: "X"))
+            #expect(route.color == "112233")
+            #expect(route.textColor == "AABBCC")
+            #expect(route.sortOrder == 7)
+            #expect(route.continuousPickup == .phoneAgencyToArrange)
+            #expect(route.continuousDropoff == .coordinateWithDriver)
         }
-
-        guard let stream = InputStream(url: csvPath) else {
-            throw ImporterError.invalidStream(path: csvPath.path)
-        }
-
-        let reader = try CSVReader(stream: stream, hasHeaderRow: true)
-
-        try db.write { db in
-            while reader.next() != nil {
-                try Route.receiveImport(from: reader, with: db)
-            }
-        }
-
-        // Verify default values are applied
-        let route = try db.read { db in
-            try Route.fetchOne(db, key: "TEST1")
-        }
-
-        #expect(route != nil)
-        // Note: Default values are applied in Route+Importing.swift
-        // If no custom decoder, defaults come from GTFSModel.Route init
     }
 }

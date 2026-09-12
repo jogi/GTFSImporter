@@ -12,7 +12,7 @@ import OSLog
 
 enum StopTimeInterpolator {
     /// Earth radius in meters
-    private static let earthRadius: Double = 6378135
+    private static let earthRadius: Double = 6_378_135
 
     /// Compute approximate distance between two points in meters using Haversine formula.
     /// Assumes the Earth is a sphere.
@@ -74,9 +74,11 @@ enum StopTimeInterpolator {
         Logger.importer.info("Starting stop time interpolation...")
 
         // Get all trip IDs
-        let tripIds = try String.fetchAll(db, sql: """
-            SELECT DISTINCT trip_id FROM stop_times ORDER BY trip_id
-        """)
+        let tripIds = try String.fetchAll(
+            db,
+            sql: """
+                    SELECT DISTINCT trip_id FROM stop_times ORDER BY trip_id
+                """)
 
         Logger.importer.info("Interpolating stop times for \(tripIds.count) trips")
 
@@ -100,24 +102,27 @@ enum StopTimeInterpolator {
 
     /// Get stop times for a trip with stop coordinates
     private static func getStopTimes(forTripId tripId: String, in db: Database) throws -> [StopTimeRecord] {
-        return try StopTimeRecord.fetchAll(db, sql: """
-            SELECT
-                stops.stop_lat,
-                stops.stop_lon,
-                stop_times.trip_id,
-                stop_times.arrival_time,
-                stop_times.stop_id,
-                stop_times.stop_sequence
-            FROM stop_times
-            JOIN stops ON stops.stop_id = stop_times.stop_id
-            WHERE stop_times.trip_id = ?
-            ORDER BY stop_times.stop_sequence
-        """, arguments: [tripId])
+        return try StopTimeRecord.fetchAll(
+            db,
+            sql: """
+                    SELECT
+                        stops.stop_lat,
+                        stops.stop_lon,
+                        stop_times.trip_id,
+                        stop_times.arrival_time,
+                        stop_times.stop_id,
+                        stop_times.stop_sequence
+                    FROM stop_times
+                    JOIN stops ON stops.stop_id = stop_times.stop_id
+                    WHERE stop_times.trip_id = ?
+                    ORDER BY stop_times.stop_sequence
+                """, arguments: [tripId])
     }
 
     /// Interpolate stop times for a single trip
     /// Only returns stop times that actually needed interpolation (had missing arrival_time)
-    private static func interpolateStopTimes(forTripId tripId: String, in db: Database) throws -> [InterpolatedStopTime] {
+    private static func interpolateStopTimes(forTripId tripId: String, in db: Database) throws -> [InterpolatedStopTime]
+    {
         let stopTimes = try getStopTimes(forTripId: tripId, in: db)
 
         guard !stopTimes.isEmpty else {
@@ -137,6 +142,7 @@ enum StopTimeInterpolator {
             if let arrivalTime = st.arrivalTime, !arrivalTime.isEmpty {
                 // This stop already has a time - don't touch it, preserve CSV timepoint value
                 currentTimepoint = st
+                nextTimepoint = nil
                 distanceBetweenTimepoints = 0
                 distanceTraveledBetweenTimepoints = 0
 
@@ -144,18 +150,19 @@ enum StopTimeInterpolator {
                 if i + 1 < stopTimes.count {
                     var k = i + 1
                     distanceBetweenTimepoints += approximateDistance(
-                        lat1: stopTimes[k-1].stopLat,
-                        lon1: stopTimes[k-1].stopLon,
+                        lat1: stopTimes[k - 1].stopLat,
+                        lon1: stopTimes[k - 1].stopLon,
                         lat2: stopTimes[k].stopLat,
                         lon2: stopTimes[k].stopLon
                     )
 
-                    while k < stopTimes.count && (stopTimes[k].arrivalTime == nil || stopTimes[k].arrivalTime!.isEmpty) {
+                    while k < stopTimes.count && (stopTimes[k].arrivalTime == nil || stopTimes[k].arrivalTime!.isEmpty)
+                    {
                         k += 1
                         if k < stopTimes.count {
                             distanceBetweenTimepoints += approximateDistance(
-                                lat1: stopTimes[k-1].stopLat,
-                                lon1: stopTimes[k-1].stopLon,
+                                lat1: stopTimes[k - 1].stopLat,
+                                lon1: stopTimes[k - 1].stopLon,
                                 lat2: stopTimes[k].stopLat,
                                 lon2: stopTimes[k].stopLon
                             )
@@ -171,22 +178,24 @@ enum StopTimeInterpolator {
             } else {
                 // This stop needs interpolation
                 guard let current = currentTimepoint,
-                      let next = nextTimepoint,
-                      i > 0 else {
+                    let next = nextTimepoint,
+                    i > 0
+                else {
                     // Can't interpolate without surrounding timepoints
                     continue
                 }
 
                 // Calculate distance from previous stop
                 distanceTraveledBetweenTimepoints += approximateDistance(
-                    lat1: stopTimes[i-1].stopLat,
-                    lon1: stopTimes[i-1].stopLon,
+                    lat1: stopTimes[i - 1].stopLat,
+                    lon1: stopTimes[i - 1].stopLon,
                     lat2: st.stopLat,
                     lon2: st.stopLon
                 )
 
                 // Calculate interpolated time
-                let distancePercent = distanceBetweenTimepoints > 0
+                let distancePercent =
+                    distanceBetweenTimepoints > 0
                     ? distanceTraveledBetweenTimepoints / distanceBetweenTimepoints
                     : 0
 
@@ -196,13 +205,14 @@ enum StopTimeInterpolator {
                 let timeEstimate = Int(round(Double(totalTime) * distancePercent)) + currentTime
 
                 // Only add stops that actually needed interpolation
-                interpolated.append(InterpolatedStopTime(
-                    tripId: st.tripId,
-                    stopId: st.stopId,
-                    stopSequence: st.stopSequence,
-                    arrivalTime: timeEstimate,
-                    isTimepoint: false
-                ))
+                interpolated.append(
+                    InterpolatedStopTime(
+                        tripId: st.tripId,
+                        stopId: st.stopId,
+                        stopSequence: st.stopSequence,
+                        arrivalTime: timeEstimate,
+                        isTimepoint: false
+                    ))
             }
         }
 
@@ -212,22 +222,24 @@ enum StopTimeInterpolator {
     /// Update stop times in database with interpolated values
     private static func updateStopTimes(_ interpolated: [InterpolatedStopTime], in db: Database) throws {
         for stopTime in interpolated {
-            try db.execute(sql: """
-                UPDATE stop_times
-                SET arrival_time = ?,
-                    departure_time = ?,
-                    timepoint = ?
-                WHERE trip_id = ?
-                AND stop_id = ?
-                AND stop_sequence = ?
-            """, arguments: [
-                formatSecondsSinceMidnight(stopTime.arrivalTime),
-                formatSecondsSinceMidnight(stopTime.arrivalTime),
-                stopTime.isTimepoint ? 1 : 0,
-                stopTime.tripId,
-                stopTime.stopId,
-                stopTime.stopSequence
-            ])
+            try db.execute(
+                sql: """
+                        UPDATE stop_times
+                        SET arrival_time = ?,
+                            departure_time = ?,
+                            timepoint = ?
+                        WHERE trip_id = ?
+                        AND stop_id = ?
+                        AND stop_sequence = ?
+                    """,
+                arguments: [
+                    formatSecondsSinceMidnight(stopTime.arrivalTime),
+                    formatSecondsSinceMidnight(stopTime.arrivalTime),
+                    stopTime.isTimepoint ? 1 : 0,
+                    stopTime.tripId,
+                    stopTime.stopId,
+                    stopTime.stopSequence,
+                ])
         }
     }
 

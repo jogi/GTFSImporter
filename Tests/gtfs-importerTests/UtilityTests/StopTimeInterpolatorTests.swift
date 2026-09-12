@@ -1,193 +1,95 @@
-//
-//  StopTimeInterpolatorTests.swift
-//  gtfs-importerTests
-//
-//  Tests for StopTimeInterpolator utility
-//
-
-import Foundation
 import GRDB
 import Testing
-import GTFSModel
+
 @testable import gtfs_importer
 
-@Suite("StopTimeInterpolator Tests")
 struct StopTimeInterpolatorTests {
+    struct Scenario: Sendable, CustomTestStringConvertible {
+        let name: String
+        let latitudes: [Double]
+        let input: [String]
+        let expected: [String]
+        var testDescription: String { name }
+    }
 
-    @Test("Interpolation fills missing times based on distance")
-    func testBasicInterpolation() throws {
-        let db = try DatabaseTestHelper.createTemporaryDatabase()
-        defer { try? DatabaseTestHelper.cleanup(database: db) }
-
-        try db.write { db in
-            // Create schema
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try Stop.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // Insert test data
-            try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type) VALUES ('R1', 3)")
-            try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('T1', 'R1', 'S1')")
-
-            // Create 5 stops roughly evenly spaced (each ~0.001 degrees apart ~= 111 meters)
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP1', 37.3347, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP2', 37.3357, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP3', 37.3367, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP4', 37.3377, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP5', 37.3387, -121.8906, 0, 0)")
-
-            // Create stop_times with only first and last having times
-            // First stop at 08:00:00, last at 08:20:00 (20 minutes total)
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP1', 1, '08:00:00', '08:00:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP2', 2, '', '')")  // Empty time
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP3', 3, '', '')")  // Empty time
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP4', 4, '', '')")  // Empty time
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP5', 5, '08:20:00', '08:20:00')")
-
-            // Run interpolation
+    @Test(
+        "Interpolation respects distance and surrounding anchors",
+        arguments: [
+            Scenario(
+                name: "unequal distances", latitudes: [0, 1, 4], input: ["08:00:00", "", "08:20:00"],
+                expected: ["08:00:00", "08:05:00", "08:20:00"]),
+            Scenario(
+                name: "midnight", latitudes: [0, 1, 2], input: ["23:50:00", "", "24:10:00"],
+                expected: ["23:50:00", "24:00:00", "24:10:00"]),
+            Scenario(
+                name: "multiple segments", latitudes: [0, 1, 4, 5, 8],
+                input: ["08:00:00", "", "08:20:00", "", "08:40:00"],
+                expected: ["08:00:00", "08:05:00", "08:20:00", "08:25:00", "08:40:00"]),
+            Scenario(
+                name: "trailing gap", latitudes: [0, 1, 4, 5], input: ["08:00:00", "", "08:20:00", ""],
+                expected: ["08:00:00", "08:05:00", "08:20:00", ""]),
+            Scenario(
+                name: "leading gap", latitudes: [-1, 0, 1, 4], input: ["", "08:00:00", "", "08:20:00"],
+                expected: ["", "08:00:00", "08:05:00", "08:20:00"]),
+            Scenario(
+                name: "coincident stops", latitudes: [0, 0, 0], input: ["08:00:00", "", "08:20:00"],
+                expected: ["08:00:00", "08:00:00", "08:20:00"]),
+            Scenario(name: "no anchors", latitudes: [0, 1, 4], input: ["", "", ""], expected: ["", "", ""]),
+        ])
+    func interpolation(scenario: Scenario) throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            for index in scenario.input.indices {
+                try db.execute(
+                    sql:
+                        "INSERT INTO stops (stop_id,stop_lat,stop_lon,location_type,wheelchair_boarding) VALUES (?, ?, 0, 0, 0)",
+                    arguments: ["S\(index)", scenario.latitudes[index]])
+                let arrival = scenario.input[index]
+                // Distinct departure and timepoint values make preservation observable.
+                let departure = arrival.isEmpty ? "" : "09:59:00"
+                try db.execute(
+                    sql:
+                        "INSERT INTO stop_times (trip_id,stop_id,stop_sequence,arrival_time,departure_time,timepoint) VALUES ('T', ?, ?, ?, ?, 1)",
+                    arguments: ["S\(index)", index + 1, arrival, departure])
+            }
             try StopTimeInterpolator.interpolateStopTimes(in: db)
-
-            // Verify all stop_times now have times
-            let stopTimesWithNullTimes = try Int.fetchOne(db, sql: """
-                SELECT COUNT(*) FROM stop_times WHERE trip_id = 'T1' AND arrival_time IS NULL
-            """) ?? 0
-            #expect(stopTimesWithNullTimes == 0, "All stop times should have arrival times after interpolation")
-
-            // Verify timepoint field is set correctly
-            // Original timepoints should still have timepoint value (or it was set during import)
-            // Interpolated stops should have timepoint=0
-            let interpolatedStops = try Int.fetchOne(db, sql: """
-                SELECT COUNT(*) FROM stop_times
-                WHERE trip_id = 'T1'
-                AND stop_sequence IN (2, 3, 4)
-                AND timepoint = 0
-            """) ?? 0
-            #expect(interpolatedStops == 3, "Interpolated stops should have timepoint=0")
-
-            // Verify times are between start and end
-            let stop2Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 2")
-            let stop3Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 3")
-            let stop4Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 4")
-
-            #expect(stop2Time != nil)
-            #expect(stop3Time != nil)
-            #expect(stop4Time != nil)
-
-            // Times should be ordered
-            #expect(stop2Time! > "08:00:00" && stop2Time! < "08:20:00")
-            #expect(stop3Time! > stop2Time! && stop3Time! < "08:20:00")
-            #expect(stop4Time! > stop3Time! && stop4Time! < "08:20:00")
+            let rows = try Row.fetchAll(db, sql: "SELECT * FROM stop_times ORDER BY stop_sequence")
+            #expect(rows.map { $0["arrival_time"] as String } == scenario.expected)
+            let departures = scenario.input.indices.map { index in
+                scenario.input[index].isEmpty ? scenario.expected[index] : "09:59:00"
+            }
+            #expect(rows.map { $0["departure_time"] as String } == departures)
+            let timepoints = scenario.input.indices.map { index in
+                scenario.input[index].isEmpty && !scenario.expected[index].isEmpty ? 0 : 1
+            }
+            #expect(rows.map { $0["timepoint"] as Int } == timepoints)
         }
     }
 
-    @Test("Interpolation preserves existing times")
-    func testPreservesExistingTimes() throws {
-        let db = try DatabaseTestHelper.createTemporaryDatabase()
-        defer { try? DatabaseTestHelper.cleanup(database: db) }
-
-        try db.write { db in
-            // Create schema
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try Stop.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // Insert test data
-            try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type) VALUES ('R1', 3)")
-            try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('T1', 'R1', 'S1')")
-
-            // Create stops
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP1', 37.3347, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP2', 37.3357, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP3', 37.3367, -121.8906, 0, 0)")
-
-            // All stops have times already
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP1', 1, '08:00:00', '08:00:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP2', 2, '08:10:00', '08:10:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP3', 3, '08:20:00', '08:20:00')")
-
-            // Run interpolation
+    @Test("Updates distinguish trips and repeated visits to a stop; a second run is unchanged")
+    func updateIdentity() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try db.execute(
+                sql: """
+                    INSERT INTO trips (trip_id,route_id,service_id) VALUES ('U','R','S');
+                    INSERT INTO stop_times (trip_id,stop_id,stop_sequence,arrival_time,departure_time,timepoint) VALUES
+                    ('T','A',1,'08:00:00','08:01:00',1),
+                    ('T','B',2,'','',1),
+                    ('T','A',3,'08:20:00','08:21:00',0),
+                    ('U','B',2,'10:00:00','10:01:00',1);
+                    """)
             try StopTimeInterpolator.interpolateStopTimes(in: db)
-
-            // Verify times remain unchanged
-            let stop1Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 1")
-            let stop2Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 2")
-            let stop3Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 3")
-
-            #expect(stop1Time == "08:00:00")
-            #expect(stop2Time == "08:10:00")
-            #expect(stop3Time == "08:20:00")
-        }
-    }
-
-    @Test("Interpolation handles overnight times")
-    func testOvernightTimes() throws {
-        let db = try DatabaseTestHelper.createTemporaryDatabase()
-        defer { try? DatabaseTestHelper.cleanup(database: db) }
-
-        try db.write { db in
-            // Create schema
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try Stop.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // Insert test data
-            try db.execute(sql: "INSERT INTO agency (agency_id, agency_name, agency_url, agency_timezone) VALUES ('A1', 'Test', 'http://test.com', 'America/Los_Angeles')")
-            try db.execute(sql: "INSERT INTO routes (route_id, route_type) VALUES ('R1', 3)")
-            try db.execute(sql: "INSERT INTO calendar (service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('S1', '2024-01-01', '2024-12-31', 1, 1, 1, 1, 1, 0, 0)")
-            try db.execute(sql: "INSERT INTO trips (trip_id, route_id, service_id) VALUES ('T1', 'R1', 'S1')")
-
-            // Create stops
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP1', 37.3347, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP2', 37.3357, -121.8906, 0, 0)")
-            try db.execute(sql: "INSERT INTO stops (stop_id, stop_lat, stop_lon, location_type, wheelchair_boarding) VALUES ('STOP3', 37.3367, -121.8906, 0, 0)")
-
-            // Times span midnight (23:50:00 to 00:10:00, represented as 24:10:00 in GTFS)
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP1', 1, '23:50:00', '23:50:00')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP2', 2, '', '')")
-            try db.execute(sql: "INSERT INTO stop_times (trip_id, stop_id, stop_sequence, arrival_time, departure_time) VALUES ('T1', 'STOP3', 3, '24:10:00', '24:10:00')")
-
-            // Run interpolation
+            let sql =
+                "SELECT trip_id,stop_sequence,arrival_time,departure_time,timepoint FROM stop_times ORDER BY trip_id,stop_sequence"
+            let first = try Row.fetchAll(db, sql: sql)
+            #expect(first.map { $0["arrival_time"] as String } == ["08:00:00", "08:10:00", "08:20:00", "10:00:00"])
+            #expect(first.map { $0["departure_time"] as String } == ["08:01:00", "08:10:00", "08:21:00", "10:01:00"])
+            #expect(first.map { $0["timepoint"] as Int } == [1, 0, 0, 1])
             try StopTimeInterpolator.interpolateStopTimes(in: db)
-
-            // Verify interpolated time is between start and end
-            let stop2Time = try String.fetchOne(db, sql: "SELECT arrival_time FROM stop_times WHERE trip_id = 'T1' AND stop_sequence = 2")
-            #expect(stop2Time != nil)
-            // Should be around 00:00:00 (midnight), represented as 24:00:00 in GTFS
-            #expect(stop2Time! > "23:50:00")
-        }
-    }
-
-    @Test("Interpolation handles empty trip gracefully")
-    func testEmptyTrip() throws {
-        let db = try DatabaseTestHelper.createTemporaryDatabase()
-        defer { try? DatabaseTestHelper.cleanup(database: db) }
-
-        try db.write { db in
-            // Create schema
-            try Agency.createTable(db: db)
-            try Route.createTable(db: db)
-            try GTFSModel.Calendar.createTable(db: db)
-            try Trip.createTable(db: db)
-            try Stop.createTable(db: db)
-            try StopTime.createTable(db: db)
-
-            // No stop_times inserted
-
-            // Run interpolation - should not crash
-            try StopTimeInterpolator.interpolateStopTimes(in: db)
+            #expect(try Row.fetchAll(db, sql: sql) == first)
         }
     }
 }

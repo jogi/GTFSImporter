@@ -1,107 +1,68 @@
-//
-//  CalendarImportingTests.swift
-//  gtfs-importerTests
-//
-//  Tests for Calendar CSV importing
-//
-
-import Foundation
 import GRDB
-import Testing
 import GTFSModel
-import CSV
+import Testing
+
 @testable import gtfs_importer
 
-@Suite("Calendar Importing Tests")
 struct CalendarImportingTests {
-
-    @Test("Import reads and inserts calendar data from CSV")
-    func testImportFromCSV() throws {
-        let gtfsDir = try TestDataHelper.createMinimalGTFSDataset()
-        defer { TemporaryFileHelper.cleanup(directory: gtfsDir) }
-
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try GTFSModel.Calendar.createTable(db: db)
+    @Test("Calendar CSV dates use the model's persisted date format")
+    func dates() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                GTFSModel.Calendar.self,
+                csv: """
+                    service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+                    S,1,0,1,0,1,0,1,20240229,20241231
+                    """, in: db)
+            #expect(
+                try String.fetchOne(db, sql: "SELECT start_date || '/' || end_date FROM calendar")
+                    == "2024-02-29/2024-12-31")
+            let calendar = try #require(try GTFSModel.Calendar.fetchOne(db))
+            #expect(
+                [
+                    calendar.monday, calendar.tuesday, calendar.wednesday, calendar.thursday,
+                    calendar.friday, calendar.saturday, calendar.sunday,
+                ].map(\.rawValue) == [1, 0, 1, 0, 1, 0, 1])
         }
-
-        let fileURL = gtfsDir.appendingPathComponent("calendar.txt")
-        guard let stream = InputStream(url: fileURL) else {
-            throw ImporterError.invalidStream(path: fileURL.path)
-        }
-
-        let reader = try CSVReader(stream: stream, hasHeaderRow: true)
-
-        try db.write { db in
-            while reader.next() != nil {
-                try GTFSModel.Calendar.receiveImport(from: reader, with: db)
-            }
-        }
-
-        // Verify import (minimal dataset has 1 calendar)
-        let count = try db.read { db in
-            try GTFSModel.Calendar.fetchCount(db)
-        }
-        #expect(count == 1, "Should import 1 calendar from minimal dataset")
-
-        // Verify data
-        let calendar = try db.read { db in
-            try GTFSModel.Calendar.fetchOne(db, key: "WEEKDAY")
-        }
-        #expect(calendar != nil)
-        #expect(calendar?.monday == .available)
-        #expect(calendar?.saturday == .unavailable)
-        #expect(calendar?.sunday == .unavailable)
     }
 
-    @Test("Import parses dates in yyyyMMdd format correctly")
-    func testDateParsing() throws {
-        // Create CSV with yyyyMMdd date format
-        let csvContent = """
-        service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
-        WEEKDAY,1,1,1,1,1,0,0,20240101,20241231
-        WEEKEND,0,0,0,0,0,1,1,20240615,20240915
-        """
-
-        let tempDir = try TemporaryFileHelper.createTemporaryDirectory()
-        defer { TemporaryFileHelper.cleanup(directory: tempDir) }
-
-        let csvPath = tempDir.appendingPathComponent("calendar.txt")
-        try csvContent.write(to: csvPath, atomically: true, encoding: .utf8)
-
-        let dbPath = TemporaryFileHelper.createTemporaryDatabasePath()
-        defer { try? FileManager.default.removeItem(at: dbPath) }
-
-        let db = try DatabaseQueue(path: dbPath.path)
-        try db.write { db in
-            try GTFSModel.Calendar.createTable(db: db)
+    @Test("Calendar exceptions preserve dates and exception types")
+    func exceptions() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                CalendarDate.self,
+                csv: """
+                    service_id,date,exception_type
+                    S,20240229,1
+                    S,20241231,2
+                    """, in: db)
+            #expect(
+                try String.fetchAll(db, sql: "SELECT date || ':' || exception_type FROM calendar_dates ORDER BY date")
+                    == ["2024-02-29:1", "2024-12-31:2"])
         }
+    }
 
-        guard let stream = InputStream(url: csvPath) else {
-            throw ImporterError.invalidStream(path: csvPath.path)
-        }
-
-        let reader = try CSVReader(stream: stream, hasHeaderRow: true)
-
-        try db.write { db in
-            while reader.next() != nil {
-                try GTFSModel.Calendar.receiveImport(from: reader, with: db)
+    @Test("Invalid dates are skipped and later rows still import", arguments: [false, true])
+    func invalidDates(exceptions: Bool) throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            if exceptions {
+                try ImportTestSupport.receive(
+                    CalendarDate.self, csv: "service_id,date,exception_type\nBAD,invalid,1\nOK,20240101,2", in: db)
+                #expect(try String.fetchAll(db, sql: "SELECT service_id FROM calendar_dates") == ["OK"])
+            } else {
+                try ImportTestSupport.receive(
+                    GTFSModel.Calendar.self,
+                    csv:
+                        "service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date\nBAD,1,1,1,1,1,0,0,invalid,20241231\nOK,1,1,1,1,1,0,0,20240101,20241231",
+                    in: db)
+                #expect(try String.fetchAll(db, sql: "SELECT service_id FROM calendar") == ["OK"])
             }
         }
-
-        // Verify dates were parsed and stored correctly
-        // Query database directly as strings since dates are Date objects in Swift
-        let startDate = try db.read { db in
-            try String.fetchOne(db, sql: "SELECT start_date FROM calendar WHERE service_id = 'WEEKDAY'")
-        }
-        let endDate = try db.read { db in
-            try String.fetchOne(db, sql: "SELECT end_date FROM calendar WHERE service_id = 'WEEKDAY'")
-        }
-
-        #expect(startDate == "2024-01-01", "Start date should be stored as 2024-01-01")
-        #expect(endDate == "2024-12-31", "End date should be stored as 2024-12-31")
     }
 }

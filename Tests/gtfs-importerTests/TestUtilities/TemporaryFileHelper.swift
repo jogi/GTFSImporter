@@ -22,9 +22,4 @@ enum TemporaryFileHelper {
         try? FileManager.default.removeItem(at: directory)
     }
 
-    /// Creates a temporary database path
-    static func createTemporaryDatabasePath() -> URL {
-        let tempDir = FileManager.default.temporaryDirectory
-        return tempDir.appendingPathComponent("test-\(UUID().uuidString).db")
-    }
 }
