@@ -1,22 +1,15 @@
-//
-//  String.swift
-//  
-//
-//  Created by Vashishtha Jogi on 8/16/24.
-//
-
 import Foundation
 
 extension String {
-    var sanitizedTimeString: String {
-        get {
-            let originalComponents = self.components(separatedBy: ":")
-            var hour = Int(originalComponents[0])!
-            if hour >= 24 {
-                hour = hour - 24
-            }
-            
-            return "\(hour):\(originalComponents[1]):\(originalComponents[2])"
-        }
+    /// Normalize a GTFS service-day hour for the model's time-of-day formatter.
+    /// Reject malformed input instead of trapping while importing a row.
+    var sanitizedTimeString: String? {
+        let parts = split(separator: ":", omittingEmptySubsequences: false)
+        guard parts.count == 3,
+            parts.allSatisfy({ !$0.isEmpty && $0.allSatisfy { $0.isASCII && $0.isNumber } }),
+            let hour = Int(parts[0]), let minute = Int(parts[1]), let second = Int(parts[2]),
+            (0..<60).contains(minute), (0..<60).contains(second)
+        else { return nil }
+        return "\(hour % 24):\(parts[1]):\(parts[2])"
     }
 }

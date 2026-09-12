@@ -1,25 +1,25 @@
 //
 //  Importer.swift
-//  
+//
 //
 //  Created by Vashishtha Jogi on 6/14/20.
 //
 
-import Foundation
 import CSV
+import Foundation
 import GRDB
 import GTFSModel
 import OSLog
 
-enum ImporterError: LocalizedError {
+enum ImporterError: LocalizedError, Equatable {
     case invalidStream(path: String)
     case invalidTime(time: String)
-    
+
     var errorDescription: String? {
         switch self {
-        case let .invalidStream(path):
+        case .invalidStream(let path):
             return "Cannot create an InputStream for file at path \(path)"
-        case let .invalidTime(time):
+        case .invalidTime(let time):
             return "Invalid time string: \(time)"
         }
     }
@@ -40,51 +40,35 @@ extension ImporterReceiving where Self: Codable, Self: PersistableRecord {
     }
 }
 
-protocol ImporterImporting: ImporterReceiving {
+protocol ImporterImporting: ImporterReceiving, DatabaseCreating {
     static var fileName: String { get }
-    static var dbQueue: DatabaseQueue? { get }
-    
-    static func importFile(from path: String) throws
 }
 
-extension ImporterImporting where Self: DatabaseCreating {
-    static var dbQueue: DatabaseQueue? {
-        var configuration = Configuration()
-        configuration.publicStatementArguments = true
-        return try? DatabaseQueue(path: "./\(Importer.defaultDatabaseFileName)", configuration: configuration)
-    }
-
-    static func importFile(from path: String) throws {
-        print("Importing from \(fileName.magenta)")
-        
-        do {
-            let fileURL = URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent(fileName)
-            guard let stream = InputStream(url: fileURL) else {
-                throw ImporterError.invalidStream(path: fileURL.path)
+extension ImporterImporting {
+    static func importFile(from path: String, into db: Database, optional: Bool = false) throws {
+        let fileURL = URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent(fileName)
+        if optional && !FileManager.default.fileExists(atPath: fileURL.path) {
+            try createTable(db: db)
+            return
+        }
+        guard (try? fileURL.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
+            FileManager.default.isReadableFile(atPath: fileURL.path),
+            let stream = InputStream(url: fileURL)
+        else {
+            throw ImporterError.invalidStream(path: fileURL.path)
+        }
+        let reader = try CSVReader(stream: stream, hasHeaderRow: true)
+        try createTable(db: db)
+        while reader.next() != nil {
+            try receiveImport(from: reader, with: db)
+        }
+        if let error = reader.error {
+            // CSV.swift 2.5 reports a short byte read at normal EOF as cannotReadFile.
+            // Preserve real stream/decoding errors without treating EOF as a failure.
+            switch error {
+            case CSVError.cannotReadFile where stream.streamStatus == .atEnd: break
+            default: throw error
             }
-            
-            let startTime = Date()
-            
-            // First let's cleanup the table
-            try dbQueue?.write { db in
-                try self.createTable(db: db)
-            }
-            
-            let reader = try CSVReader(stream: stream, hasHeaderRow: true)
-            
-            var count = 0
-            try dbQueue?.write { db in
-                while reader.next() != nil {
-                    try receiveImport(from: reader, with: db)
-                    count += 1
-                }
-            }
-            
-            let endTime = Date()
-
-            let model = "\(Self.self)"
-            let duration = String(format: "%.2f", endTime.timeIntervalSince(startTime))
-            print("Imported \(String(count).green) \(model.magenta) records in \(duration.green) seconds")
         }
     }
 }
@@ -92,20 +76,43 @@ extension ImporterImporting where Self: DatabaseCreating {
 struct Importer {
     static let defaultDatabaseFileName = "gtfs.db"
     var path: String
-    
+    let database: DatabaseQueue
+
+    /// Replace a feed atomically. Malformed rows are logged and skipped; file errors
+    /// abort the import and preserve the previously committed feed.
     func importAllFiles() throws {
-        try Agency.importFile(from: path)
-        try Calendar.importFile(from: path)
-        try CalendarDate.importFile(from: path)
-        try FareAttribute.importFile(from: path)
-        try FareRule.importFile(from: path)
-        try Direction.importFile(from: path)
-        try Stop.importFile(from: path)
-        try Route.importFile(from: path)
-        try Shape.importFile(from: path)
-        try Trip.importFile(from: path)
-        try StopTime.importFile(from: path)
-        try StopTime.updateLastStop()
+        try database.write { db in
+            // Drop children before parents so a second import respects foreign keys.
+            for table in [
+                "stop_times", "trips", "shapes", "routes", "stops", "directions",
+                "fare_rules", "fare_attributes", "calendar_dates", "calendar", "agency",
+            ] {
+                try db.execute(sql: "DROP TABLE IF EXISTS \(table)")
+            }
+            try Agency.importFile(from: path, into: db)
+            try Calendar.importFile(from: path, into: db)
+            try CalendarDate.importFile(from: path, into: db, optional: true)
+            try FareAttribute.importFile(from: path, into: db, optional: true)
+            try FareRule.importFile(from: path, into: db, optional: true)
+            try Direction.importFile(from: path, into: db, optional: true)
+            try Stop.importFile(from: path, into: db)
+            try Route.importFile(from: path, into: db)
+            try Shape.importFile(from: path, into: db, optional: true)
+            try Trip.importFile(from: path, into: db)
+            try StopTime.importFile(from: path, into: db)
+            try StopTime.updateLastStop(in: db)
+            try StopTimeInterpolator.interpolateStopTimes(in: db)
+            try StopTime.normalizeServiceDayTimes(in: db)
+        }
+    }
+
+    /// The command workflow, with storage supplied by the caller.
+    func run(addStopRoutes: Bool) throws {
+        try importAllFiles()
+        try database.write { db in
+            if addStopRoutes { try StopRoute.addStopRoutes(in: db) }
+        }
+        try database.vacuum()
+        try database.writeWithoutTransaction { try $0.execute(sql: "REINDEX") }
     }
 }
-

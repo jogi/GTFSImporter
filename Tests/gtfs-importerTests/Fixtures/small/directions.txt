@@ -1,0 +1,3 @@
+route_id,direction_id,direction,direction_name
+Blue,0,North,Northbound
+Blue,1,South,Southbound

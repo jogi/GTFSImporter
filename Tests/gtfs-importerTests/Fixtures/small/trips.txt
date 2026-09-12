@@ -1,0 +1,6 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed
+Blue,268.2969.1,3640965,BAYPOINTE,0,9009,114664,0,0
+Blue,268.2964.1,3660395,BAYPOINTE,0,9404,114657,0,0
+Blue,268.2969.1,3640966,BAYPOINTE,0,9002,114664,0,0
+Blue,268.2964.1,3660396,BAYPOINTE,0,9406,114657,0,0
+Blue,268.2969.2,3641377,BAYPOINTE,0,9003,114664,0,0

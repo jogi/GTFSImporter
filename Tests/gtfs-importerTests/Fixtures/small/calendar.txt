@@ -1,0 +1,4 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+268.2964.1,1,1,1,1,1,0,0,20240829,20240924
+268.2969.1,1,1,1,1,1,0,0,20240814,20241025
+268.2969.2,0,0,0,0,0,1,0,20240817,20241026
