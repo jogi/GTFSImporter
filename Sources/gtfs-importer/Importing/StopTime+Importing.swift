@@ -70,9 +70,18 @@ extension StopTime: ImporterImporting {
         try db.execute(
             sql: """
                 UPDATE stop_times
-                SET is_laststop = ((trip_id, stop_sequence) IN (
-                    SELECT trip_id, MAX(stop_sequence) FROM stop_times GROUP BY trip_id
-                ))
+                SET is_laststop = 0
+                WHERE is_laststop != 0 OR is_laststop IS NULL;
+
+                UPDATE stop_times
+                SET is_laststop = 1
+                FROM (
+                    SELECT trip_id, MAX(stop_sequence) AS max_sequence
+                    FROM stop_times
+                    GROUP BY trip_id
+                ) AS last_stops
+                WHERE stop_times.trip_id = last_stops.trip_id
+                  AND stop_times.stop_sequence = last_stops.max_sequence;
                 """)
     }
 }
