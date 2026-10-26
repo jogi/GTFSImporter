@@ -101,6 +101,9 @@ enum StopTimeInterpolator {
         }
 
         Logger.importer.info("Interpolated \(interpolatedCount) stop times for \(tripCount) trips")
+        if interpolatedCount > 0 {
+            print("Interpolated \(String(interpolatedCount).green) stop times for \(String(tripCount).green) trips")
+        }
     }
 
     /// Get stop times for a trip with stop coordinates

@@ -72,7 +72,7 @@ extension ImporterReceiving where Self: Codable, Self: PersistableRecord {
     }
 }
 
-protocol ImporterImporting: ImporterReceiving, DatabaseCreating {
+protocol ImporterImporting: ImporterReceiving, DatabaseCreating, TableRecord {
     static var fileName: String { get }
 }
 
@@ -83,6 +83,7 @@ extension ImporterImporting {
         let fileURL = URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent(fileName)
         if optional && !FileManager.default.fileExists(atPath: fileURL.path) {
             try createTable(db: db)
+            print("Skipping \(fileName.magenta) (optional file not found)".yellow)
             return summary
         }
         guard (try? fileURL.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
@@ -107,6 +108,13 @@ extension ImporterImporting {
             case CSVError.cannotReadFile where stream.streamStatus == .atEnd: break
             default: throw error
             }
+        }
+        if summary.rejected > 0 {
+            print(
+                "Imported \(String(summary.accepted).green) rows into \(databaseTableName.magenta) (\(String(summary.rejected).yellow) rejected)"
+            )
+        } else {
+            print("Imported \(String(summary.accepted).green) rows into \(databaseTableName.magenta)")
         }
         return summary
     }
@@ -152,7 +160,10 @@ struct Importer {
     func run(addStopRoutes: Bool) throws -> [FileImportSummary] {
         let summaries = try importAllFiles()
         try database.write { db in
-            if addStopRoutes { try StopRoute.addStopRoutes(in: db) }
+            if addStopRoutes {
+                try StopRoute.addStopRoutes(in: db)
+                print("Added stop routes to \("stops".magenta)")
+            }
         }
         try database.vacuum()
         return summaries
