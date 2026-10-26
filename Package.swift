@@ -13,7 +13,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.2"),
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "7.9.0"),
-        .package(url: "https://github.com/yaslab/CSV.swift.git", .upToNextMinor(from: "2.5.2")),
+        .package(url: "https://github.com/jogi/CSV.swift.git", branch: "main"),
         .package(url: "https://github.com/jogi/GTFSModel", branch: "main"),
     ],
     targets: [
