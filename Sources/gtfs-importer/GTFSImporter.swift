@@ -7,6 +7,11 @@ struct GTFSImporter: ParsableCommand {
     @Option(name: .shortAndLong, help: "The path where the GTFS CSV files are")
     var path: String
 
+    @Option(
+        name: .shortAndLong,
+        help: "The output directory path for the SQLite database. Defaults to the input path.")
+    var outputPath: String?
+
     @Flag(
         name: .shortAndLong,
         help: "Should a comma-separated column with routes passing through stops be added. Defaults to false.")
@@ -15,7 +20,9 @@ struct GTFSImporter: ParsableCommand {
     func run() throws {
         let startTime = Date()
 
-        let database = try DatabaseQueue(path: "./\(Importer.defaultDatabaseFileName)")
+        let databaseURL = URL(fileURLWithPath: outputPath ?? path, isDirectory: true)
+            .appendingPathComponent(Importer.defaultDatabaseFileName)
+        let database = try DatabaseQueue(path: databaseURL.path)
         defer { try? database.close() }
         let summaries = try run(database: database)
 
