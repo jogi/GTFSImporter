@@ -69,15 +69,18 @@ enum StopTimeInterpolator {
         var isTimepoint: Bool
     }
 
-    /// Interpolate stop times for all trips
+    /// Interpolate stop times for all trips that have missing arrival times
     static func interpolateStopTimes(in db: Database) throws {
         Logger.importer.info("Starting stop time interpolation...")
 
-        // Get all trip IDs
+        // Only inspect trips that contain at least one untimed stop
         let tripIds = try String.fetchAll(
             db,
             sql: """
-                    SELECT DISTINCT trip_id FROM stop_times ORDER BY trip_id
+                    SELECT DISTINCT trip_id
+                    FROM stop_times
+                    WHERE arrival_time = '' OR arrival_time IS NULL
+                    ORDER BY trip_id
                 """)
 
         Logger.importer.info("Interpolating stop times for \(tripIds.count) trips")
@@ -102,8 +105,7 @@ enum StopTimeInterpolator {
 
     /// Get stop times for a trip with stop coordinates
     private static func getStopTimes(forTripId tripId: String, in db: Database) throws -> [StopTimeRecord] {
-        return try StopTimeRecord.fetchAll(
-            db,
+        let statement = try db.cachedStatement(
             sql: """
                     SELECT
                         stops.stop_lat,
@@ -116,7 +118,8 @@ enum StopTimeInterpolator {
                     JOIN stops ON stops.stop_id = stop_times.stop_id
                     WHERE stop_times.trip_id = ?
                     ORDER BY stop_times.stop_sequence
-                """, arguments: [tripId])
+                """)
+        return try StopTimeRecord.fetchAll(statement, arguments: [tripId])
     }
 
     /// Interpolate stop times for a single trip
@@ -221,20 +224,23 @@ enum StopTimeInterpolator {
 
     /// Update stop times in database with interpolated values
     private static func updateStopTimes(_ interpolated: [InterpolatedStopTime], in db: Database) throws {
+        guard !interpolated.isEmpty else { return }
+        let statement = try db.cachedStatement(
+            sql: """
+                    UPDATE stop_times
+                    SET arrival_time = ?,
+                        departure_time = ?,
+                        timepoint = ?
+                    WHERE trip_id = ?
+                    AND stop_id = ?
+                    AND stop_sequence = ?
+                """)
         for stopTime in interpolated {
-            try db.execute(
-                sql: """
-                        UPDATE stop_times
-                        SET arrival_time = ?,
-                            departure_time = ?,
-                            timepoint = ?
-                        WHERE trip_id = ?
-                        AND stop_id = ?
-                        AND stop_sequence = ?
-                    """,
+            let formattedTime = formatSecondsSinceMidnight(stopTime.arrivalTime)
+            try statement.execute(
                 arguments: [
-                    formatSecondsSinceMidnight(stopTime.arrivalTime),
-                    formatSecondsSinceMidnight(stopTime.arrivalTime),
+                    formattedTime,
+                    formattedTime,
                     stopTime.isTimepoint ? 1 : 0,
                     stopTime.tripId,
                     stopTime.stopId,

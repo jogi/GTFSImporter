@@ -38,9 +38,29 @@ struct StopTimeImportingTests {
         }
     }
 
+    @Test("Single-digit hours normalize to HH:MM:SS and optional fields round-trip")
+    func timeNormalizationAndOptionals() throws {
+        let queue = try ImportTestSupport.database()
+        defer { try? queue.close() }
+        try queue.write { (db: Database) throws -> Void in
+            try ImportTestSupport.receive(
+                StopTime.self,
+                csv: """
+                    stop_sequence,stop_id,trip_id,arrival_time,departure_time,stop_headsign,shape_dist_traveled
+                    1,A,T,8:05:09,8:05:09,Downtown,12.5
+                    """, in: db)
+            #expect(
+                try String.fetchOne(db, sql: "SELECT arrival_time || '/' || departure_time FROM stop_times")
+                    == "08:05:09/08:05:09")
+            let stop = try #require(try StopTime.fetchOne(db))
+            #expect(stop.stopHeadsign == "Downtown")
+            #expect(stop.shapeDistanceTraveled == 12.5)
+        }
+    }
+
     @Test(
         "Bad time rows are skipped without losing later valid rows",
-        arguments: ["garbage", "12:30", "12:60:00", "-1:00:00"])
+        arguments: ["garbage", "12:30", "12:60:00", "12:00:60", "-1:00:00"])
     func invalidRows(time: String) throws {
         let queue = try ImportTestSupport.database()
         defer { try? queue.close() }
@@ -51,9 +71,10 @@ struct StopTimeImportingTests {
                     trip_id,stop_id,stop_sequence,arrival_time,departure_time
                     T,A,1,08:00:00,08:00:00
                     T,B,2,\(time),08:10:00
-                    T,C,3,08:20:00,08:20:00
+                    T,B,3,08:10:00,\(time)
+                    T,C,4,08:20:00,08:20:00
                     """, in: db)
-            #expect(try Int.fetchAll(db, sql: "SELECT stop_sequence FROM stop_times ORDER BY stop_sequence") == [1, 3])
+            #expect(try Int.fetchAll(db, sql: "SELECT stop_sequence FROM stop_times ORDER BY stop_sequence") == [1, 4])
         }
     }
 

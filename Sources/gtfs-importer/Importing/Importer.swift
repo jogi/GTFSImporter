@@ -39,6 +39,20 @@ enum ImportDiagnostics {
     }
 }
 
+private enum SharedCSVDecoders {
+    nonisolated(unsafe) static let standard = CSVRowDecoder()
+    nonisolated(unsafe) static let yyyyMMdd: CSVRowDecoder = {
+        let decoder = CSVRowDecoder()
+        decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMdd)
+        return decoder
+    }()
+}
+
+extension CSVRowDecoder {
+    static var shared: CSVRowDecoder { SharedCSVDecoders.standard }
+    static var sharedYYYYMMdd: CSVRowDecoder { SharedCSVDecoders.yyyyMMdd }
+}
+
 protocol ImporterReceiving {
     @discardableResult
     static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool
@@ -48,7 +62,7 @@ extension ImporterReceiving where Self: Codable, Self: PersistableRecord {
     @discardableResult
     static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool {
         do {
-            let record = try CSVRowDecoder().decode(Self.self, from: reader)
+            let record = try CSVRowDecoder.shared.decode(Self.self, from: reader)
             try record.insert(db)
             return true
         } catch {
@@ -141,7 +155,6 @@ struct Importer {
             if addStopRoutes { try StopRoute.addStopRoutes(in: db) }
         }
         try database.vacuum()
-        try database.writeWithoutTransaction { try $0.execute(sql: "REINDEX") }
         return summaries
     }
 }

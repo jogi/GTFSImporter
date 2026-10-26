@@ -19,9 +19,13 @@ extension StopTime: ImporterImporting {
     @discardableResult
     static func receiveImport(from reader: CSVReader, with db: Database) throws -> Bool {
         do {
-            var record = try CSVRowDecoder().decode(ImportRecord.self, from: reader)
-            record.arrivalTime = try validatedTime(record.arrivalTime)
-            record.departureTime = try validatedTime(record.departureTime)
+            var record = try CSVRowDecoder.shared.decode(ImportRecord.self, from: reader)
+            let arrivalTime = try validatedTime(record.arrivalTime)
+            record.departureTime =
+                record.departureTime == record.arrivalTime
+                ? arrivalTime
+                : try validatedTime(record.departureTime)
+            record.arrivalTime = arrivalTime
 
             record.pickupType = record.pickupType ?? .regularlyScheduled
             record.dropoffType = record.dropoffType ?? .regularlyScheduled
